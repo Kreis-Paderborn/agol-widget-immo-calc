@@ -1,0 +1,5 @@
+{
+    "environment": {
+        "fmeServerBaseUrl" : "${FME_SERVER_BASE_URL}"
+    }
+}
