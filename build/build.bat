@@ -21,6 +21,19 @@ goto :continue1
     xcopy "..\source\%WIDGET_NAME%" "%APP_TARGET_DIR%" /Y /s
     xcopy "..\source\%WIDGET_NAME%" "%BUILDER_TARGET_DIR%" /Y /s
 
+    REM -------------------------
+    REM Konfig-Datei kopieren
+    SET CONFIG_TARGET_FILE=%APPLICATION_FOLDER%configs\%WIDGET_NAME%\config_%WIDGET_NAME%.json
+    REM ensure the file exists, because xcopy should not promt for creating the file
+    IF NOT EXIST "%CONFIG_TARGET_FILE%" (
+        echo dummy > "%CONFIG_TARGET_FILE%"
+    )
+    xcopy "..\source\%WIDGET_NAME%\config.json" "%CONFIG_TARGET_FILE%" /y /i
+
+    REM -------------------------
+    REM Platzhalter in der kopierten Konfig-Datei ersetzen
+     call replace.bat "%CONFIG_TARGET_FILE%" ${FME_SERVER_BASE_URL} %FME_SERVER_BASE_URL%
+
 :continue1    
 
 

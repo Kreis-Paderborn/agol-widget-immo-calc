@@ -22,27 +22,39 @@ define([
 			baseClass: 'jimu-widget-widget-kpb-immo-calc',
 			engine: null,
 			view: null,
+			featureLayers: null,
 
 
 			startup: function () {
 				this.inherited(arguments);
+				this.featureLayers = this.collectFeatureLayersFromMap();
 
-				var aFeatureLayer = new FeatureLayer("https://giscloud.gkdpb.de/geodienste/rest/services/open/KPB_Gebietsgrenzen/MapServer/2");
-				this.map.on('click', function (mouseEvent) {
-					var query = new esri.tasks.Query();
-					query.geometry = mouseEvent.mapPoint;
-					query.outFields = ["*"];
+				// Testweises Ausgeben der Koeffizienten für STST (Standard) mit einem gemappten Daten-Array
+				propMap = {
+					"KOEFF": "value",
+					"INTNAME": "id",
+					"EXTNAME": "name"
+				}
 
-					aFeatureLayer.queryFeatures(query, function (featureSet) {
-						alert(featureSet.features[0].attributes.GEMEINDE);
-						test = featureSet.features[0].attributes;
-						
-					});
-				});
+				this.convertCoeffLayerToDataArray("EFH", 2020, "STST", propMap, function (dataArray) {
+					console.log("Koeffizienten für Standard:");
+					// Ausgabe von Überschriften und Attributen mit Padding
+					console.log("NAME".padStart(8, ' ') + " | " + "INTERNER NAME".padStart(13, ' ') + " | " + "KOEFFIZIENT".padStart(11, ' ') + " | ");
+					for (const item of dataArray) {
+						console.log(item.name.padStart(8, ' ') + " | " + item.id.padStart(13, ' ') + " | " + item.value.toString().padStart(11, ' ') + " | ");
+					}
+				})
 
+				// var aFeatureLayer = new FeatureLayer("https://giscloud.gkdpb.de/geodienste/rest/services/open/KPB_Gebietsgrenzen/MapServer/2");
+				// this.map.on('click', function (mouseEvent) {
+				// 	var query = new esri.tasks.Query();
+				// 	query.geometry = mouseEvent.mapPoint;
+				// 	query.outFields = ["*"];
 
-
-
+				// 	aFeatureLayer.queryFeatures(query, function (featureSet) {
+				// 		test = featureSet.features[0].attributes;
+				// 	});
+				// });
 
 				this.engine = new ImmoCalcEngine({ dummyOption: "Hello World!" });
 				this.view = new ImmoCalcView(this.engine);
@@ -60,6 +72,72 @@ define([
 					window.removeEventListener('touchstart', onFirstTouch, false);
 				}, false);
 
+			},
+
+			/**
+			 * Auf Grundlage der konfigurierten Layernamen werden die Layer des Map-Objektes untersucht 
+			 * und falls vorhanden die passenden zurück gegeben.
+			 */
+			collectFeatureLayersFromMap: function () {
+				var featureLayers = {};
+
+				for (const configLayerName in this.config.featureLayersFromMap) {
+
+					// Das Konfig-Objekt enthält den Dienstnamen und die Layer-ID aus der REST-Schnittstelle
+					var aLayerConfig = this.config.featureLayersFromMap[configLayerName];
+
+					// Wir untersuchen nur die GraphicsLayer der Map, da nur diese FeatureLayer enthalten können.
+					for (const graphicsLayerId of this.map.graphicsLayerIds) {
+						var aGraphicsLayer = this.map.getLayer(graphicsLayerId);
+
+						// Die ID aus dem GraphicsLayer besteht aus dem Dienstnamen ergänzt
+						// um eine temporäre System-ID. Daher suchen wir hier mit "startWith".
+						// Da im Dienst auch mehrere Layer enthalten sein können prüfen wir
+						// zusätzlich auf die Layer-ID aus der REST-Schnittstelle.
+						if (graphicsLayerId.startsWith(aLayerConfig.serviceName)
+							&& aGraphicsLayer.layerId === aLayerConfig.layerId) {
+							featureLayers[configLayerName] = aGraphicsLayer;
+						}
+					}
+
+				}
+
+				return featureLayers;
+			},
+
+			/**
+			 * Die Koeffizienten für den Immobilien-Preis-Rechner werden per FeatureLayer bereitgestellt.
+			 * In der Oberfläche werden Sie aber in Form von Daten-Objekten oder Arrays benötigt (z.B. als Auswahlliste für eine Combobox)
+			 * Diese Methode soll helfen die Attribute aus dem FeatureLayer in ein Objekt-Array zu wandeln.
+			 * 
+			 * @param {*} subsegment 
+			 * @param {*} year 
+			 * @param {*} category 
+			 * @param {*} propertyMapping 
+			 * @param {*} callback 
+			 */
+			convertCoeffLayerToDataArray: function (subsegment, year, category, propertyMapping, callback) {
+				var dataArray = new Array();
+
+				var aQuery = new esri.tasks.Query();
+				aQuery.where = "TEILMA = '" + subsegment + "'" + " AND JAHR = " + year + " AND KAT = '" + category + "'";
+				aQuery.outFields = ["*"];
+				this.featureLayers.IRW_IMMOCALC_KOEFFIZIENTEN.queryFeatures(aQuery, function (featureSet) {
+
+					// Wir holen uns die Features in ein lokales Array, um sie nach Koeffizent sortieren zu können
+					var arr = featureSet.features;
+					arr.sort(function (a, b) { return a.attributes.KOEFF - b.attributes.KOEFF });
+
+					for (const feature of arr) {
+						var obj = {};
+						obj[propertyMapping.EXTNAME] = feature.attributes.EXTNAME;
+						obj[propertyMapping.INTNAME] = feature.attributes.INTNAME;
+						obj[propertyMapping.KOEFF] = feature.attributes.KOEFF;
+						dataArray.push(obj);
+					}
+
+					callback(dataArray);
+				});
 			},
 
 

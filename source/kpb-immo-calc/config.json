@@ -1,5 +1,12 @@
 {
-    "environment": {
-        "fmeServerBaseUrl" : "${FME_SERVER_BASE_URL}"
+    "featureLayersFromMap": {
+        "IRW_IMMOCALC_KOEFFIZIENTEN": {
+            "serviceName": "KPB_Immobilienrichtwerte",
+            "layerId": 0
+        },
+        "Gemeindegrenzen": {
+            "serviceName": "KPB_Gebietsgrenzen",
+            "layerId": 0
+        }
     }
 }
