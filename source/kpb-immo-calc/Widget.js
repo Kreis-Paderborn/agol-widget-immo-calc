@@ -122,22 +122,26 @@ define([
 				var aQuery = new esri.tasks.Query();
 				aQuery.where = "TEILMA = '" + subsegment + "'" + " AND JAHR = " + year + " AND KAT = '" + category + "'";
 				aQuery.outFields = ["*"];
-				this.featureLayers.IRW_IMMOCALC_KOEFFIZIENTEN.queryFeatures(aQuery, function (featureSet) {
+				var aKoeffFeatureLayer = this.featureLayers.IRW_IMMOCALC_KOEFFIZIENTEN;
+				if (aKoeffFeatureLayer !== undefined) {
+					aKoeffFeatureLayer.queryFeatures(aQuery, function (featureSet) {
 
-					// Wir holen uns die Features in ein lokales Array, um sie nach Koeffizent sortieren zu können
-					var arr = featureSet.features;
-					arr.sort(function (a, b) { return a.attributes.KOEFF - b.attributes.KOEFF });
+						// Wir holen uns die Features in ein lokales Array, um sie nach Koeffizent sortieren zu können
+						var arr = featureSet.features;
+						arr.sort(function (a, b) { return a.attributes.KOEFF - b.attributes.KOEFF });
 
-					for (const feature of arr) {
-						var obj = {};
-						obj[propertyMapping.EXTNAME] = feature.attributes.EXTNAME;
-						obj[propertyMapping.INTNAME] = feature.attributes.INTNAME;
-						obj[propertyMapping.KOEFF] = feature.attributes.KOEFF;
-						dataArray.push(obj);
-					}
+						for (const feature of arr) {
+							var obj = {};
+							obj[propertyMapping.EXTNAME] = feature.attributes.EXTNAME;
+							obj[propertyMapping.INTNAME] = feature.attributes.INTNAME;
+							obj[propertyMapping.KOEFF] = feature.attributes.KOEFF;
+							dataArray.push(obj);
+						}
 
-					callback(dataArray);
-				});
+						callback(dataArray);
+					});
+				}
+
 			},
 
 
