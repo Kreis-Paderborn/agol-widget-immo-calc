@@ -30,10 +30,7 @@ goto :continue1
     )
     xcopy "..\source\%WIDGET_NAME%\config.json" "%CONFIG_TARGET_FILE%" /y /i
 
-    REM -------------------------
-    REM Platzhalter in der kopierten Konfig-Datei ersetzen
-     call replace.bat "%CONFIG_TARGET_FILE%" ${FME_SERVER_BASE_URL} %FME_SERVER_BASE_URL%
-
+   
 :continue1    
 
 
