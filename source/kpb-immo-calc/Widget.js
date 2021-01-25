@@ -4,7 +4,9 @@ define([
 	'jimu/BaseWidget',
 	'esri/layers/FeatureLayer',
 	'classes/ImmoCalcEngine',
-	'classes/ImmoCalcView'
+	'classes/ImmoCalcView',
+	'dijit/layout/TabContainer',
+    'dijit/layout/ContentPane'
 ],
 	function (
 		declare,
@@ -56,7 +58,7 @@ define([
 				// 	});
 				// });
 
-				this.engine = new ImmoCalcEngine({ dummyOption: "Hello World!" });
+				this.engine = new ImmoCalcEngine({ dummyOption: "Hello World!",myLayers: this.collectFeatureLayersFromMap() });
 				this.view = new ImmoCalcView(this.engine);
 
 				// Definiere eine globale Variable, um festzustellen ob
