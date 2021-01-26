@@ -3,8 +3,8 @@ define([
 	"dojo/_base/lang",
 	'jimu/BaseWidget',
 	'esri/layers/FeatureLayer',
-	'classes/ImmoCalcEngine',
-	'classes/ImmoCalcView',
+	'./classes/ImmoCalcEngine',
+	'./classes/ImmoCalcView',
 	'dijit/layout/TabContainer',
     'dijit/layout/ContentPane'
 ],
