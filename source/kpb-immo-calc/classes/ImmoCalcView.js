@@ -47,22 +47,31 @@ define([
                 var me = this;
 
                 var tmBBRadioButton = new dijitFormRadioButton({
-                    checked: true,
+                    checked: false,
                     value: "BB",
                     name: "teilmarkt",
                 }, "tmBBRadioButton").startup();
 
                 var tmEIRadioButton = new dijitFormRadioButton({
-                    checked: false,
+                    checked: true,
                     value: "EI",
                     name: "teilmarkt",
                     // onChange: function(newValue){alert(newValue);},
                     onChange: function(newValue){
-                        var aElement = document.getElementById('rowAnbauweise');
+                        var AnbauweiseElement = document.getElementById('rowAnbauweise');
+                        var FlaecheElement = document.getElementById('rowFlaeche');
+                        var StandardElement = document.getElementById('rowStandard');
+                        var AnzahlElement = document.getElementById('rowAnzahl');
                                                     if (newValue) {
-                                                        aElement.style = "display: true;";
+                                                        AnbauweiseElement.style = "display: none;";
+                                                        FlaecheElement.style = "display: none;";
+                                                        StandardElement.style = "display: none;";
+                                                        AnzahlElement.style = "display: true;";
                                                     } else {
-                                                        aElement.style = "display: none;";
+                                                        AnbauweiseElement.style = "display: true;";
+                                                        FlaecheElement.style = "display: true;";
+                                                        StandardElement.style = "display: true;";
+                                                        AnzahlElement.style = "display: none;";
                                                     };
                                                 },
                 }, "tmEIRadioButton").startup();
@@ -160,6 +169,34 @@ define([
                                     value: 'aus DB'
                                 }, "brwIRWundUF").startup();                
                                 
+                var anzahlNorm = new dijitSimpleTextarea({
+                                    id: anzahlNorm,
+                                    name: anzahlNorm,
+                                    rows: "1",
+                                    cols: "15",
+                                    style: "width:150px",
+                                    value: '(5,10]'
+                                }, "anzahlNorm").startup();
+
+            
+                var anzahlBWO = new dijitNumberSpinner({
+                                    value: 2020,
+                                    smallDelta: 1,
+                                    constraints: { min:0, max:100, places:0 },
+                                    id: anzahlBWO,
+                                    style: "width:150px"
+                                }, "anzahlBWO").startup();
+
+
+                var anzahlIRWundUF = new dijitSimpleTextarea({
+                                    id: anzahlIRWundUF,
+                                    name: anzahlIRWundUF,
+                                    rows: "1",
+                                    cols: "15",
+                                    style: "width:150px",
+                                    value: 'aus DB'
+                                }, "anzahlIRWundUF").startup();
+
 
                 var flaecheNorm = new dijitSimpleTextarea({
                                     id: flaecheNorm,
