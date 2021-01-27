@@ -76,13 +76,24 @@ define([
                                                 },
                 }, "tmEIRadioButton").startup();
 
+                var zoneBWO = new FormComboBox({
+                    id: zoneBWO,
+                    name: zoneBWO,
+                    value: "Aus Karte vorbelegt",
+                    store: this.engine.getOrte(),
+                    searchAttr: "name",
+                    cols: "20",
+                    style: "width:150px"
+                }, "zoneBWO").startup();
+
+
                 var anbWNorm = new dijitSimpleTextarea({
                                         id: anbWNorm,
                                         name: anbWNorm,
                                         rows: "1",
-                                        cols: "15",
+                                        cols: "20",
                                         style: "width:150px",
-                                        value: '1'
+                                        value: "freistehendes EFH"
                                     }, "anbWNorm").startup();
 
                 var anbWStore = new Memory({
@@ -91,12 +102,13 @@ define([
                                             {name:"DoppelHH/Reihenhaus", id:"2"}
                                         ]
                     });
-                var anbWBWO = aComboBox = new FormComboBox({
+                var anbWBWO = new FormComboBox({
                                         id: anbWBWO,
                                         name: anbWBWO,
                                         value: "Bitte wählen",
                                         store: anbWStore,
                                         searchAttr: "name",
+                                        cols: "20",
                                         style: "width:150px"
                                     }, "anbWBWO").startup();
 
@@ -117,7 +129,7 @@ define([
                                         rows: "1",
                                         cols: "15",
                                         style: "width:150px",
-                                        value: '(0,1959]'
+                                        value: '1-1959'
                                     }, "baujNorm").startup();
 
                 
@@ -146,7 +158,7 @@ define([
                                     rows: "1",
                                     cols: "15",
                                     style: "width:150px",
-                                    value: '(50,100]'
+                                    value: '51-100'
                                 }, "brwNorm").startup();
 
             
@@ -175,12 +187,12 @@ define([
                                     rows: "1",
                                     cols: "15",
                                     style: "width:150px",
-                                    value: '(5,10]'
+                                    value: '6-10'
                                 }, "anzahlNorm").startup();
 
             
                 var anzahlBWO = new dijitNumberSpinner({
-                                    value: 2020,
+                                    value: 5,
                                     smallDelta: 1,
                                     constraints: { min:0, max:100, places:0 },
                                     id: anzahlBWO,
@@ -204,7 +216,7 @@ define([
                                     rows: "1",
                                     cols: "15",
                                     style: "width:150px",
-                                    value: '(799,10000]'
+                                    value: '800-10000'
                                 }, "flaecheNorm").startup();
 
                 // var flaecheStore = new Memory({
@@ -260,7 +272,7 @@ define([
                                     ]
                                 });
 
-                var stdBWO = aComboBox = new FormComboBox({
+                var stdBWO = new FormComboBox({
                                 id: stdBWO,
                                 name: stdBWO,
                                 value: "Bitte wählen",
@@ -285,7 +297,7 @@ define([
                             rows: "1",
                             cols: "15",
                             style: "width:150px",
-                            value: '(119,160]'
+                            value: '120-160'
                         }, "wflNorm").startup();
 
     
@@ -307,33 +319,51 @@ define([
                             value: 'aus DB'
                         }, "wflIRWundUF").startup();
 
-                        var wesNorm = new dijitSimpleTextarea({
+                var wesNorm = new dijitSimpleTextarea({
                             id: wesNorm,
                             name: wesNorm,
                             rows: "1",
                             cols: "15",
                             style: "width:150px",
-                            value: '2020'
+                            value: '2021'
                         }, "wesNorm").startup();
 
     
-    var wesBWO = new dijitNumberSpinner({
-                            value: 2020,
+                var wesBWO = new dijitNumberSpinner({
+                            value: 2021,
                             smallDelta: 1,
-                            constraints: { min:2015, max:2020, places:0 },
+                            constraints: { min:2021, max:2021, places:0 },
                             id: wesBWO,
                             style: "width:150px"
                             }, "wesBWO").startup();
 
 
-    var wesIRWundUF = new dijitSimpleTextarea({
-                        id: wesIRWundUF,
-                        name: wesIRWundUF,
+                var wesIRWundUF = new dijitSimpleTextarea({
+                            id: wesIRWundUF,
+                            name: wesIRWundUF,
+                            rows: "1",
+                            cols: "15",
+                            style: "width:150px",
+                            value: 'aus DB'
+                        }, "wesIRWundUF").startup();
+
+                var angIRWBWO = new dijitSimpleTextarea({
+                        id: angIRWBWO,
+                        name: angIRWBWO,
                         rows: "1",
                         cols: "15",
                         style: "width:150px",
-                        value: 'aus DB'
-                    }, "wesIRWundUF").startup();
+                        value: 'berechneter Wert'
+                    }, "angIRWBWO").startup();
+
+                var wertBWO = new dijitSimpleTextarea({
+                        id: wertBWO,
+                        name: wertBWO,
+                        rows: "1",
+                        cols: "15",
+                        style: "width:150px",
+                        value: 'berechneter Wert'
+                    }, "wertBWO").startup();
 
                 console.log(this.engine.getFeatureLayer());
 
