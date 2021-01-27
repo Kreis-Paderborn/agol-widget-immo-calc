@@ -56,7 +56,15 @@ define([
                     checked: false,
                     value: "EI",
                     name: "teilmarkt",
-                    onChange: function(newValue){alert(newValue);},
+                    // onChange: function(newValue){alert(newValue);},
+                    onChange: function(newValue){
+                        var aElement = document.getElementById('rowAnbauweise');
+                                                    if (newValue) {
+                                                        aElement.style = "display: true;";
+                                                    } else {
+                                                        aElement.style = "display: none;";
+                                                    };
+                                                },
                 }, "tmEIRadioButton").startup();
 
                 var anbWNorm = new dijitSimpleTextarea({
