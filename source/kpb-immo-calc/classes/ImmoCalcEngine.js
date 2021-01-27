@@ -17,7 +17,7 @@ define([
             constructor: function (options) {
 
                 this.dummyOption = options.dummyOption;
-                this.myLayers = options.myLayers
+                this.myWidget = options.myWidget
 
             },
 
@@ -61,9 +61,21 @@ define([
                 return aSchulnotenStore;
             },
 
-            getFeatureLayer: function () {
-                return this.myLayers;
-            }
-        });
+            getStdFromFeatureLayer: function (StandardBWO) {
+                var res = this.myWidget.getStdValueFromLayer(StandardBWO);
+                console.log("in Engine",res);
+               return res;
+            //     var stdStore = new Memory({
+            //                         data: [
+            //                             {name:"sehr einfach", id:"1"},
+            //                             {name:"einfach", id:"2"},
+            //                             {name:"normal", id:"3"},
+            //                             {name:"gehoben/Neubau", id:"4"}
+            //                             ]
+            //                         });
+            //     return stdStore;
+            },
+        })
+        
     }
 );

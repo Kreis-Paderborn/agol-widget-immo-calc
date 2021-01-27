@@ -1,6 +1,7 @@
 define([
 	'dojo/_base/declare',
 	"dojo/_base/lang",
+	'dojo/store/Memory',
 	'jimu/BaseWidget',
 	'esri/layers/FeatureLayer',
 	'./classes/ImmoCalcEngine',
@@ -11,6 +12,7 @@ define([
 	function (
 		declare,
 		lang,
+		Memory,
 		BaseWidget,
 		FeatureLayer,
 		ImmoCalcEngine,
@@ -58,11 +60,11 @@ define([
 				// 	});
 				// });
 
-				this.engine = new ImmoCalcEngine({ dummyOption: "Hello World!",myLayers: this.collectFeatureLayersFromMap() });
+				this.engine = new ImmoCalcEngine({ dummyOption: "Hello World!",myWidget: this });
 				this.view = new ImmoCalcView(this.engine);
 
 				// Definiere eine globale Variable, um festzustellen ob
-				// der Anwender ein Gerät mit Touch benutzt. 
+				// der Anwender ein Gerät mit Touch benutzt.
 				// Achtung: der Wert kann frühestens nach der ersten Benutzerinteraktion
 				// auf TRUE gesetzt sein.
 				window.userIsTouching = false;
@@ -77,7 +79,7 @@ define([
 			},
 
 			/**
-			 * Auf Grundlage der konfigurierten Layernamen werden die Layer des Map-Objektes untersucht 
+			 * Auf Grundlage der konfigurierten Layernamen werden die Layer des Map-Objektes untersucht
 			 * und falls vorhanden die passenden zurück gegeben.
 			 */
 			collectFeatureLayersFromMap: function () {
@@ -111,12 +113,12 @@ define([
 			 * Die Koeffizienten für den Immobilien-Preis-Rechner werden per FeatureLayer bereitgestellt.
 			 * In der Oberfläche werden Sie aber in Form von Daten-Objekten oder Arrays benötigt (z.B. als Auswahlliste für eine Combobox)
 			 * Diese Methode soll helfen die Attribute aus dem FeatureLayer in ein Objekt-Array zu wandeln.
-			 * 
-			 * @param {*} subsegment 
-			 * @param {*} year 
-			 * @param {*} category 
-			 * @param {*} propertyMapping 
-			 * @param {*} callback 
+			 *
+			 * @param {*} subsegment
+			 * @param {*} year
+			 * @param {*} category
+			 * @param {*} propertyMapping
+			 * @param {*} callback
 			 */
 			convertCoeffLayerToDataArray: function (subsegment, year, category, propertyMapping, callback) {
 				var dataArray = new Array();
@@ -145,8 +147,32 @@ define([
 				}
 
 			},
+			getStdValueFromLayer: function(StandardBWO) {
+				
+				propMap = {
+				"KOEFF": "value",
+				"INTNAME": "id",
+				"EXTNAME": "name"
+					}
 
+				var res = this.convertCoeffLayerToDataArray("EFH", 2020, "STST", propMap, function (dataArray) {
+													console.log(dataArray);
+													// StandardBWO.store = dataArray
+											});
+				console.log(res);			
+				// return res;			
+				var stdStore = new Memory({
+					                        data: [
+					                            {name:"sehr einfach", id:"1"},
+					                            {name:"einfach", id:"2"},
+					                            {name:"normal", id:"3"},
+					                            {name:"gehoben/Neubau", id:"4"}
+					                            ]
+					                        });
+				return stdStore;		
 
+			},
+			
 
 			/**
 			 * Wird beim Schließen des Panels aufgerufen.

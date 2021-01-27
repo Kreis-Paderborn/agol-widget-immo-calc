@@ -13,7 +13,9 @@ define([
     'dojo/domReady!',
     'dojox/form/BusyButton',
     "dijit/_WidgetBase", 
-    "dijit/_Container"
+    "dijit/_Container",
+    'dijit/registry',
+    'jimu/loaderplugins/jquery-loader!https://code.jquery.com/jquery-git1.min.js'
 ], function (
     declare,
     lang,
@@ -29,14 +31,16 @@ define([
     dijitReady,
     BusyButton,
     _WidgetBase, 
-    _Container
+    _Container,
+    dijitRegistry,
+    $
 ) {
 
         return declare(null, {
 
             dummyOption: null,
             engine: null,
-
+    
             constructor: function (engine, options) {
 
                 this.engine = engine;
@@ -56,22 +60,25 @@ define([
                     checked: true,
                     value: "EI",
                     name: "teilmarkt",
-                    // onChange: function(newValue){alert(newValue);},
                     onChange: function(newValue){
-                        var AnbauweiseElement = document.getElementById('rowAnbauweise');
-                        var FlaecheElement = document.getElementById('rowFlaeche');
-                        var StandardElement = document.getElementById('rowStandard');
-                        var AnzahlElement = document.getElementById('rowAnzahl');
+                        var anbauweiseElement = document.getElementById('rowAnbauweise');
+                        var flaecheElement = document.getElementById('rowFlaeche');
+                        var standardElement = document.getElementById('rowStandard');
+                        var anzahlElement = document.getElementById('rowAnzahl');
+                        // var StandardBWO = document.getElementById('stdBWO');
+                        // var StandardBWO =dijitRegistry.byId("stdBWO");
                                                     if (newValue) {
-                                                        AnbauweiseElement.style = "display: none;";
-                                                        FlaecheElement.style = "display: none;";
-                                                        StandardElement.style = "display: none;";
-                                                        AnzahlElement.style = "display: true;";
+                                                        anbauweiseElement.style = "display: none;";
+                                                        flaecheElement.style = "display: none;";
+                                                        standardElement.style = "display: none;";
+                                                        anzahlElement.style = "display: true;";
                                                     } else {
-                                                        AnbauweiseElement.style = "display: true;";
-                                                        FlaecheElement.style = "display: true;";
-                                                        StandardElement.style = "display: true;";
-                                                        AnzahlElement.style = "display: none;";
+                                                        anbauweiseElement.style = "display: true;";
+                                                        flaecheElement.style = "display: true;";
+                                                        standardElement.style = "display: true;";
+                                                        console.log(me.engine.getStdFromFeatureLayer());
+                                                        // me.engine.getStdFromFeatureLayer(StandardBWO);
+                                                        anzahlElement.style = "display: none;";
                                                     };
                                                 },
                 }, "tmEIRadioButton").startup();
@@ -129,7 +136,7 @@ define([
                                         rows: "1",
                                         cols: "15",
                                         style: "width:150px",
-                                        value: '1-1959'
+                                        value: 'vor 1959'
                                     }, "baujNorm").startup();
 
                 
@@ -263,14 +270,8 @@ define([
                                 value: 'normal'
                             }, "stdNorm").startup();
 
-                var stdStore = new Memory({
-                                data: [
-                                    {name:"sehr einfach", id:"1"},
-                                    {name:"einfach", id:"2"},
-                                    {name:"normal", id:"3"},
-                                    {name:"gehoben/Neubau", id:"4"}
-                                    ]
-                                });
+               
+                var stdStore = this.engine.getStdFromFeatureLayer();
 
                 var stdBWO = new FormComboBox({
                                 id: stdBWO,
@@ -365,8 +366,9 @@ define([
                         value: 'berechneter Wert'
                     }, "wertBWO").startup();
 
-                console.log(this.engine.getFeatureLayer());
 
+                    // var StandardBWO = dijitRegistry.byId("stdBWO");
+                    // console.log(StandardBWO);
                 // tc.watch("selectedChildWidget", function(name, oval, nval){
                 //     console.log("selected child changed from ", oval, " to ", nval);
                 // });
