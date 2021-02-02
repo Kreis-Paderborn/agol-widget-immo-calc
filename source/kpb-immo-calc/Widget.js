@@ -33,8 +33,6 @@ define([
 				this.inherited(arguments);
 				this.featureLayers = this.collectFeatureLayersFromMap();
 
-				gMap = this.map;
-
 				// Testweises Ausgeben der Koeffizienten für STST (Standard) mit einem gemappten Daten-Array
 				propMap = {
 					"KOEFF": "value",
@@ -62,7 +60,7 @@ define([
 				// 	});
 				// });
 
-				this.engine = new ImmoCalcEngine({ dummyOption: "Hello World!", myWidget: this });
+				this.engine = new ImmoCalcEngine({ dummyOption: "Hello World!",myWidget: this });
 				this.view = new ImmoCalcView(this.engine);
 
 				// Definiere eine globale Variable, um festzustellen ob
@@ -89,13 +87,8 @@ define([
 
 				for (const configLayerName in this.config.featureLayersFromMap) {
 
-
-
 					// Das Konfig-Objekt enthält den Dienstnamen und die Layer-ID aus der REST-Schnittstelle
 					var aLayerConfig = this.config.featureLayersFromMap[configLayerName];
-
-					console.log(aLayerConfig.serviceName);
-					console.log(aLayerConfig.layerId);
 
 					// Wir untersuchen nur die GraphicsLayer der Map, da nur diese FeatureLayer enthalten können.
 					for (const graphicsLayerId of this.map.graphicsLayerIds) {
