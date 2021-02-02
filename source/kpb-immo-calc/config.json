@@ -1,8 +1,12 @@
 {
     "featureLayersFromMap": {
         "IRW_IMMOCALC_KOEFFIZIENTEN": {
-            "serviceName": "KPB_Immobilienrichtwerte",
-            "layerId": 0
+            "serviceName": "KPB_Immobilienrichtwerte_Secure",
+            "layerId": 4
+        },
+        "IRW_ANZEIGEWERTE": {
+            "serviceName": "KPB_Immobilienrichtwerte_Secure",
+            "layerId": 5
         },
         "Gemeindegrenzen": {
             "serviceName": "KPB_Gebietsgrenzen",

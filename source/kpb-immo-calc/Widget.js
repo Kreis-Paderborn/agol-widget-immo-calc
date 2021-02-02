@@ -7,7 +7,7 @@ define([
 	'./classes/ImmoCalcEngine',
 	'./classes/ImmoCalcView',
 	'dijit/layout/TabContainer',
-    'dijit/layout/ContentPane'
+	'dijit/layout/ContentPane'
 ],
 	function (
 		declare,
@@ -33,6 +33,8 @@ define([
 				this.inherited(arguments);
 				this.featureLayers = this.collectFeatureLayersFromMap();
 
+				gMap = this.map;
+
 				// Testweises Ausgeben der Koeffizienten für STST (Standard) mit einem gemappten Daten-Array
 				propMap = {
 					"KOEFF": "value",
@@ -40,12 +42,12 @@ define([
 					"EXTNAME": "name"
 				}
 
-				this.convertCoeffLayerToDataArray("EFH", 2020, "STST", propMap, function (dataArray) {
+				this.convertCoeffLayerToDataArray(2, "GSTAND", propMap, function (dataArray) {
 					console.log("Koeffizienten für Standard:");
 					// Ausgabe von Überschriften und Attributen mit Padding
-					console.log("NAME".padStart(8, ' ') + " | " + "INTERNER NAME".padStart(13, ' ') + " | " + "KOEFFIZIENT".padStart(11, ' ') + " | ");
+					console.log("NAME".padStart(12, ' ') + " | " + "INTERNER NAME".padStart(13, ' ') + " | " + "KOEFFIZIENT".padStart(11, ' ') + " | ");
 					for (const item of dataArray) {
-						console.log(item.name.padStart(8, ' ') + " | " + item.id.padStart(13, ' ') + " | " + item.value.toString().padStart(11, ' ') + " | ");
+						console.log(item.name.padStart(12, ' ') + " | " + item.id.padStart(13, ' ') + " | " + item.value.toFixed(7).padStart(11, ' ') + " | ");
 					}
 				})
 
@@ -60,7 +62,7 @@ define([
 				// 	});
 				// });
 
-				this.engine = new ImmoCalcEngine({ dummyOption: "Hello World!",myWidget: this });
+				this.engine = new ImmoCalcEngine({ dummyOption: "Hello World!", myWidget: this });
 				this.view = new ImmoCalcView(this.engine);
 
 				// Definiere eine globale Variable, um festzustellen ob
@@ -87,8 +89,13 @@ define([
 
 				for (const configLayerName in this.config.featureLayersFromMap) {
 
+
+
 					// Das Konfig-Objekt enthält den Dienstnamen und die Layer-ID aus der REST-Schnittstelle
 					var aLayerConfig = this.config.featureLayersFromMap[configLayerName];
+
+					console.log(aLayerConfig.serviceName);
+					console.log(aLayerConfig.layerId);
 
 					// Wir untersuchen nur die GraphicsLayer der Map, da nur diese FeatureLayer enthalten können.
 					for (const graphicsLayerId of this.map.graphicsLayerIds) {
@@ -115,64 +122,83 @@ define([
 			 * Diese Methode soll helfen die Attribute aus dem FeatureLayer in ein Objekt-Array zu wandeln.
 			 *
 			 * @param {*} subsegment
-			 * @param {*} year
 			 * @param {*} category
 			 * @param {*} propertyMapping
 			 * @param {*} callback
 			 */
-			convertCoeffLayerToDataArray: function (subsegment, year, category, propertyMapping, callback) {
+			convertCoeffLayerToDataArray: function (subsegment, category, propertyMapping, callback) {
 				var dataArray = new Array();
-
+				var displayNames = {};
 				var aQuery = new esri.tasks.Query();
-				aQuery.where = "TEILMA = '" + subsegment + "'" + " AND JAHR = " + year + " AND KAT = '" + category + "'";
-				aQuery.outFields = ["*"];
 				var aKoeffFeatureLayer = this.featureLayers.IRW_IMMOCALC_KOEFFIZIENTEN;
-				if (aKoeffFeatureLayer !== undefined) {
-					aKoeffFeatureLayer.queryFeatures(aQuery, function (featureSet) {
+				var aAnzeigeFeatureLayer = this.featureLayers.IRW_ANZEIGEWERTE;
 
-						// Wir holen uns die Features in ein lokales Array, um sie nach Koeffizent sortieren zu können
-						var arr = featureSet.features;
-						arr.sort(function (a, b) { return a.attributes.KOEFF - b.attributes.KOEFF });
+				// Frage die Anzeigenamen für "category" ab
+				aQuery.where = "EIGN_BORIS = '" + category + "'";
+				aQuery.outFields = ["*"];
+				if (aAnzeigeFeatureLayer !== undefined) {
+					aAnzeigeFeatureLayer.queryFeatures(aQuery, function (featureSet) {
 
-						for (const feature of arr) {
-							var obj = {};
-							obj[propertyMapping.EXTNAME] = feature.attributes.EXTNAME;
-							obj[propertyMapping.INTNAME] = feature.attributes.INTNAME;
-							obj[propertyMapping.KOEFF] = feature.attributes.KOEFF;
-							dataArray.push(obj);
+						for (const feature of featureSet.features) {
+							displayNames[feature.attributes.WERT_BORIS] = feature.attributes.TXT_REAL;
 						}
 
-						callback(dataArray);
+						// Frage die Einstellungen für "category" aus der Koeff-Tabelle ab
+						aQuery.where = "EIGN_BORIS = '" + category + "' AND TEILMA = '" + subsegment + "'";
+						aQuery.outFields = ["*"];
+						if (aKoeffFeatureLayer !== undefined) {
+							aKoeffFeatureLayer.queryFeatures(aQuery, function (featureSet) {
+
+								console.log(featureSet);
+
+								// Wir holen uns die Features in ein lokales Array, um sie nach Koeffizent sortieren zu können
+								var arr = featureSet.features;
+								arr.sort(function (a, b) { return a.attributes.KOEFF - b.attributes.KOEFF });
+
+								for (const feature of arr) {
+									var obj = {};
+									obj[propertyMapping.EXTNAME] = displayNames[feature.attributes.WERT_BORIS];
+									obj[propertyMapping.INTNAME] = feature.attributes.WERT_BORIS;
+									obj[propertyMapping.KOEFF] = feature.attributes.KOEFF;
+									dataArray.push(obj);
+								}
+
+								callback(dataArray);
+							});
+						}
 					});
 				}
-
 			},
-			getStdValueFromLayer: function(StandardBWO) {
-				
+
+
+			getStdValueFromLayer: function (StandardBWO) {
+
 				propMap = {
-				"KOEFF": "value",
-				"INTNAME": "id",
-				"EXTNAME": "name"
-					}
+					"KOEFF": "value",
+					"INTNAME": "id",
+					"EXTNAME": "name"
+				}
 
-				var res = this.convertCoeffLayerToDataArray("EFH", 2020, "STST", propMap, function (dataArray) {
-													console.log(dataArray);
-													// StandardBWO.store = dataArray
-											});
-				console.log(res);			
-				// return res;			
-				var stdStore = new Memory({
-					                        data: [
-					                            {name:"sehr einfach", id:"1"},
-					                            {name:"einfach", id:"2"},
-					                            {name:"normal", id:"3"},
-					                            {name:"gehoben/Neubau", id:"4"}
-					                            ]
-					                        });
-				return stdStore;		
+				this.convertCoeffLayerToDataArray(2, "GSTAND", propMap, function (dataArray) {
+					console.log(dataArray);
+					StandardBWO.store = new Memory({
+						data: dataArray
+					});
+				});
+				// console.log(res);			
+				// // return res;			
+				// var stdStore = new Memory({
+				// 	                        data: [
+				// 	                            {name:"sehr einfach", id:"1"},
+				// 	                            {name:"einfach", id:"2"},
+				// 	                            {name:"normal", id:"3"},
+				// 	                            {name:"gehoben/Neubau", id:"4"}
+				// 	                            ]
+				// 	                        });
+				// return stdStore;		
 
 			},
-			
+
 
 			/**
 			 * Wird beim Schließen des Panels aufgerufen.
