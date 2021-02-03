@@ -22,18 +22,18 @@ define([
 
         getHeaderConfig() {
             var headerConfig = {
-                "STAG" : [
+                "STAG": [
                     "01.01.2021"
                 ],
-                "TEILMA" : {
-                    "01.01.2021" : [
+                "TEILMA": {
+                    "01.01.2021": [
                         "Eigentumswohnungen",
                         "Ein- und Zweifamilienhäuser freistehend"
                     ]
                 },
-                "ZONEN" : {
-                    "01.01.2021" : {
-                        "Eigentumswohnungen" : [
+                "ZONEN": {
+                    "01.01.2021": {
+                        "Eigentumswohnungen": [
                             "Bad Lippspringe",
                             "Borchen",
                             "Delbrück",
@@ -41,7 +41,7 @@ define([
                             "Salzkotten",
                             "Südliches Kreisgebiet"
                         ],
-                        "Ein- und Zweifamilienhäuser freistehend" : [
+                        "Ein- und Zweifamilienhäuser freistehend": [
                             "Altenbeken",
                             "Bad Lippspringe",
                             "Bad Wünnenberg",
@@ -76,12 +76,31 @@ define([
                     ]
                 }
             };
+            uiControls = this.deriveUiControlConfig(stag, teilma);
 
             var tableConfig = {
                 "01.01.2021": { // Aus IRW_KOEFF (Komplett) mit DISTINCT auf JAHR + Ableitung von 2020 --> "01.01.2021"
                     "Eigentumswohnungen": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=1)
                         "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
                             "zonenIrw": "1550 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                            "Eigenschaften": {
+                                "BJ": { // Aus IRW_KOEFF 
+                                    "Titel": "Baujahr",
+                                    "Norm": 1955,
+                                    "Steuerelement": uiControls["BJ"],
+                                    "WertInSteuerelemet": 1955,
+                                    "Koeffizient": 1.7845
+                                }
+                            }
+                        },
+                        "Bad Lippspringe": {
+
+                        }
+
+                    },
+                    "Ein- und Zweifamilienhäuser freistehend": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=2
+                        "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
+                            "zonenIrw": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
                             "Eigenschaften": {
                                 "BJ": { // Aus IRW_KOEFF 
                                     "Titel": "Baujahr",
@@ -97,20 +116,6 @@ define([
                                     "WertInSteuerelemet": "Mittel"
                                 }
                             }
-                        },
-                        "Bad Lippspringe": {
-
-                        }
-
-                    },
-                    "Ein- und Zweifamilienhäuser freistehend": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=2
-                        "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
-                            "zonenIrw": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
-                            "Eigenschaften": {
-                                "BOWL": { // Aus IRW_KOEFF 
-
-                                }
-                            }
 
                         }
 
@@ -121,7 +126,105 @@ define([
             };
 
             gTableConfig = tableConfig;
-            return tableConfig[stag][teilma][zone];
+            var teilma_txt = this.mapDisplayNames("TEILMA", teilma.toString());
+            return tableConfig[stag][teilma_txt][zone];
+        },
+
+        deriveUiControlConfig: function (stag, teilma) {
+            var config = {};
+
+            console.log("coefficients");
+            console.log(this.coefficients);
+
+            for (const row of this.coefficients) {
+                if (row.STAG === stag && row.TEILMA === teilma) {
+                    if (config[row.EIGN_BORIS] === undefined) {
+                        config[row.EIGN_BORIS] = {};
+                    }
+
+                    // Behandlung von Zahleneingabe
+                    if (row.STEUERELEM.startsWith("ZAHLENEINGABE")) {
+                        config[row.EIGN_BORIS]["Typ"] = "ZAHLENEINGABE";
+                        var range = this.splitRange(row.WERT_BORIS);
+
+                        // Alle Spannen werden gemerkt
+                        // Diese kommen dann bei der Anwendung der Koeffizienten zum Einsatz
+                        if (config[row.EIGN_BORIS]["Spannen"] === undefined) {
+                            config[row.EIGN_BORIS]["Spannen"] = new Array();
+                        }
+                        var rangeObj = {};
+                        rangeObj["Min"] = range["Min"];
+                        rangeObj["Max"] = range["Max"];
+                        rangeObj["Koeffizient"] = row.KOEFF;
+                        config[row.EIGN_BORIS]["Spannen"].push(rangeObj);
+
+                        // Der niedrigste MIN als Gesamt-Min
+                        if (config[row.EIGN_BORIS]["Min"] === undefined) {
+                            config[row.EIGN_BORIS]["Min"] = range["Min"];
+                        } else {
+                            if (config[row.EIGN_BORIS]["Min"] > range["Min"]) {
+                                config[row.EIGN_BORIS]["Min"] = range["Min"];
+                            }
+                        }
+
+                        // Der höchste Max als Gesamt-Ma
+                        if (config[row.EIGN_BORIS]["Max"] === undefined) {
+                            config[row.EIGN_BORIS]["Max"] = range["Max"];
+                        } else {
+                            if (config[row.EIGN_BORIS]["Max"] < range["Max"]) {
+                                config[row.EIGN_BORIS]["Max"] = range["Max"];
+                            }
+                        }
+                    }
+
+                    // Behandlung von Zahleneingabe
+                    else if (row.STEUERELEM.startsWith("AUSWAHL")) {
+                        config[row.EIGN_BORIS]["Typ"] = "AUSWAHL";
+
+                        // Alle Listeeinträge werden samt Koeffizienten gemerkt
+                        if (config[row.EIGN_BORIS]["Liste"] === undefined) {
+                            config[row.EIGN_BORIS]["Liste"] = new Array();
+                        }
+                        var rangeObj = {};
+                        rangeObj["Name"] = this.mapDisplayNames(row.EIGN_BORIS, row.WERT_BORIS);
+                        rangeObj["id"] = row.WERT_BORIS;
+                        rangeObj["Koeffizient"] = row.KOEFF;
+                        config[row.EIGN_BORIS]["Liste"].push(rangeObj);
+                    }
+
+                }
+            }
+
+            console.log("uis");
+            console.log(config);
+
+            return config;
+        },
+
+        mapDisplayNames: function (eignBoris, wertBoris) {
+
+            // FIXME AT: die DisplayNames könnte man auch gleich zu Beginn in eine 
+            //           Struktur packen, wo man sie auf EIGN_BORIS aufschlüsselt.
+            //           Dann müsste man hier nicht immer über alle einträge loopen.
+
+            for (const row of this.displayNames) {
+                if (row.EIGN_BORIS === eignBoris
+                    && row.WERT_BORIS === wertBoris) {
+                    return row.TXT_REAL;
+                }
+            }
+        },
+
+
+
+        splitRange: function (range) {
+            var obj = {};
+
+            var stringArray = range.split('-');
+            obj["Min"] = parseInt(stringArray[0]);
+            obj["Max"] = parseInt(stringArray[1]);
+
+            return obj;
         },
 
 

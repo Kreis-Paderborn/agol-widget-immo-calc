@@ -212,7 +212,7 @@ define([
 
 				this.view.showTable(
 					"01.01.2021", 		   // Stichtag
-					"Eigentumswohnungen",  // Teilmarkt
+					2,  			       // Teilmarkt
 					"Altenbeken",          // Zone
 					true                   // Steuerelemente auf Norm?
 				)
@@ -323,6 +323,17 @@ define([
 				// 	                        });
 				// return stdStore;		
 
+			},
+
+			onReceiveData: function (name, widgetId, data, historyData) {
+
+				if (name === "Search"
+					&& data.selectResult
+					&& data.selectResult.result
+					&& data.selectResult.result.name) {
+					console.log(data.selectResult.result.name);
+					console.log(data.selectResult.result.feature.geometry);
+				}
 			},
 
 
