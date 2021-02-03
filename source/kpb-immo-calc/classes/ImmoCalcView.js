@@ -288,7 +288,7 @@ define([
                         var StandardIrw = dijitRegistry.byId("stdIRWundUF");
                         console.log(StandardIrw);
                         StandardIrw.textbox.value = object.value.toFixed(4);
-                      //  StandardIrw.set("value", object.value);
+                        //  StandardIrw.set("value", object.value);
                     });
                 }
             }, "stdBWO").startup();
@@ -456,8 +456,12 @@ define([
             // }, false);
         },
 
-        showTable: function(stag, teilma, zone, setControlsToNorm) {
+        initialiseHeader: function () {
+            var headerConfig = this.engine.getHeaderConfig();
 
+        },
+
+        showTable: function (stag, teilma, zone, setControlsToNorm) {
             var tableConfig = this.engine.getTableConfig(stag, teilma, zone);
 
             console.log("Table-Config:");

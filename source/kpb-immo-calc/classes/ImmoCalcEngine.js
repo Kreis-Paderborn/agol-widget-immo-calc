@@ -20,6 +20,43 @@ define([
             this.myWidget = options.myWidget;
         },
 
+        getHeaderConfig() {
+            var headerConfig = {
+                "STAG" : [
+                    "01.01.2021"
+                ],
+                "TEILMA" : {
+                    "01.01.2021" : [
+                        "Eigentumswohnungen",
+                        "Ein- und Zweifamilienhäuser freistehend"
+                    ]
+                },
+                "ZONEN" : {
+                    "01.01.2021" : {
+                        "Eigentumswohnungen" : [
+                            "Bad Lippspringe",
+                            "Borchen",
+                            "Delbrück",
+                            "Hövelhof",
+                            "Salzkotten",
+                            "Südliches Kreisgebiet"
+                        ],
+                        "Ein- und Zweifamilienhäuser freistehend" : [
+                            "Altenbeken",
+                            "Bad Lippspringe",
+                            "Bad Wünnenberg",
+                            "Borchen",
+                            "Büren",
+                            "Delbrück",
+                            "Hövelhof",
+                            "Lichtenau",
+                            "Salzkotten"
+                        ]
+                    }
+                }
+            }
+        },
+
         getTableConfig(stag, teilma, zone) {
 
             var uiControls = {

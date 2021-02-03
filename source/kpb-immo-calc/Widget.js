@@ -208,6 +208,8 @@ define([
 				console.log("Fertig!");
 				gEngine = this.engine;
 
+				this.view.initialiseHeader();
+
 				this.view.showTable(
 					"01.01.2021", 		   // Stichtag
 					"Eigentumswohnungen",  // Teilmarkt
