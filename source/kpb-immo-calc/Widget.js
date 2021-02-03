@@ -60,8 +60,10 @@ define([
 				// 	});
 				// });
 
-				this.engine = new ImmoCalcEngine({ dummyOption: "Hello World!",myWidget: this });
+				this.engine = new ImmoCalcEngine({ dummyOption: "Hello World!", myWidget: this });
 				this.view = new ImmoCalcView(this.engine);
+
+				this.readDefinitionsFromFeatureLayers();
 
 				// Definiere eine globale Variable, um festzustellen ob
 				// der Anwender ein Gerät mit Touch benutzt.
@@ -77,6 +79,7 @@ define([
 				}, false);
 
 			},
+
 
 			/**
 			 * Auf Grundlage der konfigurierten Layernamen werden die Layer des Map-Objektes untersucht
@@ -108,6 +111,136 @@ define([
 
 				return featureLayers;
 			},
+
+
+			readDefinitionsFromFeatureLayers: function () {
+
+				this.readExternalFieldnames();
+
+				this.readDisplayNames(
+					this.readCoefficientsHandler(
+						this.readyHandler()
+					)
+				);
+
+			},
+
+			readExternalFieldnames: function () {
+				var extFieldArray = new Array();
+
+				for (const field of this.featureLayers.IRW_ZONEN.fields) {
+					var obj = {};
+					obj["name"] = field.name;
+					obj["alias"] = field.alias;
+					extFieldArray.push(obj);
+				}
+
+				this.engine.externalFields = extFieldArray;
+			},
+
+
+			readDisplayNames: function (callback) {
+				var displayNameArray = new Array();
+				var aQuery = new esri.tasks.Query();
+				var aAnzeigeFeatureLayer = this.featureLayers.IRW_ANZEIGEWERTE;
+				var me = this;
+
+				// Frage die Anzeigenamen für "category" ab
+				aQuery.where = "VERWENDET = 'ja'";
+				aQuery.outFields = ["*"];
+				if (aAnzeigeFeatureLayer !== undefined) {
+					aAnzeigeFeatureLayer.queryFeatures(aQuery, function (featureSet) {
+
+						for (const feature of featureSet.features) {
+							var obj = {};
+							obj["EIGN_BORIS"] = feature.attributes.EIGN_BORIS;
+							obj["WERT_BORIS"] = feature.attributes.WERT_BORIS;
+							obj["TXT_REAL"] = feature.attributes.TXT_REAL;
+							displayNameArray.push(obj);
+						}
+						me.engine.displayNames = displayNameArray;
+						callback();
+					})
+				}
+			},
+
+
+			readCoefficients: function (callback) {
+				var coeffArray = new Array();
+				var aQuery = new esri.tasks.Query();
+				var aKoeffFeatureLayer = this.featureLayers.IRW_IMMOCALC_KOEFFIZIENTEN;
+				var me = this;
+
+				// Frage alle Koeffizienten ab
+				aQuery.where = "GASL is not null";
+				aQuery.outFields = ["*"];
+				if (aKoeffFeatureLayer !== undefined) {
+					aKoeffFeatureLayer.queryFeatures(aQuery, function (featureSet) {
+
+						for (const feature of featureSet.features) {
+							var obj = {};
+							obj["WERT_AKS"] = feature.attributes.WERT_AKS;
+							obj["EIGN_AKS"] = feature.attributes.EIGN_AKS;
+							obj["WERT_BORIS"] = feature.attributes.WERT_BORIS;
+							obj["EIGN_BORIS"] = feature.attributes.EIGN_BORIS;
+							obj["KOEFF"] = feature.attributes.KOEFF;
+							obj["GASL"] = feature.attributes.GASL;
+							obj["IRWTYP"] = feature.attributes.IRWTYP;
+							obj["TEILMA"] = feature.attributes.TEILMA;
+							obj["STAG"] = me.convertDate(feature.attributes.STAG);
+							obj["STEUERELEM"] = feature.attributes.STEUERELEM;
+							obj["NUMZ"] = feature.attributes.NUMZ;
+							coeffArray.push(obj);
+						}
+
+						me.engine.coefficients = coeffArray;
+						callback();
+
+					})
+				}
+			},
+			readCoefficientsHandler: function (callback) {
+				me = this;
+				return function () { me.readCoefficients(callback) }
+			},
+
+			ready: function () {
+				console.log("Fertig!");
+				gEngine = this.engine;
+
+				this.view.showTable(
+					"01.01.2021", 		   // Stichtag
+					"Eigentumswohnungen",  // Teilmarkt
+					"Altenbeken",          // Zone
+					true                   // Steuerelemente auf Norm?
+				)
+			},
+			readyHandler: function () {
+				me = this;
+				return function () { me.ready() }
+			},
+
+
+			convertDate: function (DateInMilliseconds) {
+				var date = new Date(DateInMilliseconds);
+				var returnStr = "";
+
+				var day = date.getDate();
+				returnStr += day.toString().padStart(2, '0');
+				returnStr += '.';
+
+				var month = date.getMonth() + 1;
+				returnStr += month.toString().padStart(2, '0');
+				returnStr += '.';
+
+				var year = date.getFullYear();
+				returnStr += year.toString()
+
+				return returnStr;
+			},
+
+
+
 
 			/**
 			 * Die Koeffizienten für den Immobilien-Preis-Rechner werden per FeatureLayer bereitgestellt.
@@ -141,8 +274,6 @@ define([
 						aQuery.outFields = ["*"];
 						if (aKoeffFeatureLayer !== undefined) {
 							aKoeffFeatureLayer.queryFeatures(aQuery, function (featureSet) {
-
-								console.log(featureSet);
 
 								// Wir holen uns die Features in ein lokales Array, um sie nach Koeffizent sortieren zu können
 								var arr = featureSet.features;

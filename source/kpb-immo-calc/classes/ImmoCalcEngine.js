@@ -8,63 +8,118 @@ define([
     lang,
     Memory,
     FeatureLayer
-    ) {
+) {
 
-        return declare(null, {
+    return declare(null, {
 
-            dummyOption: null,
-            
-            constructor: function (options) {
+        externalFields: null,
+        displayNames: null,
+        coefficients: null,
 
-                this.dummyOption = options.dummyOption;
-                this.myWidget = options.myWidget
+        constructor: function (options) {
+            this.myWidget = options.myWidget;
+        },
 
-            },
+        getTableConfig(stag, teilma, zone) {
 
-
-            calcImmoValue: function () {
-
-                var val = 1;
-
-                if (this.dummyOption) {
-                    val = this.dummyOption;
-                } 
-                return val;
-            },
-
-
-            getOrte: function() {
-                var aOrteStore = new Memory({
-                    data: [
-                        {name:"Bad Lippspringe", id:"1"},
-                        {name:"Borchen", id:"2"},
-                        {name:"Delbrück", id:"3"},
-                        {name:"Hövelhof", id:"4"},
-                        {name:"Salzkotten", id:"5"},
-                        {name:"Süd", id:"6"}
+            var uiControls = {
+                "BJ": {
+                    "Typ": "ZAHLENEINGABE",
+                    "Min": 0,
+                    "Max": 2022,
+                    "Spannen": [
+                        { "Min": 0, "Max": 1959, "Koeffizient": 1.7845 },
+                        { "Min": 1960, "Max": 1969, "Koeffizient": 1.8554 }
                     ]
-                });
-                return aOrteStore;
-            },
-
-            getSchulnote: function() {
-                var aSchulnotenStore = new Memory({
-                    data: [
-                        {name:"sehr gut", id:"1"},
-                        {name:"gut", id:"2"},
-                        {name:"befriedigend", id:"3"},
-                        {name:"ausreichend", id:"4"},
-                        {name:"mangelhaft", id:"5"},
-                        {name:"ungenügend", id:"6"}
+                },
+                "GSTAND": {
+                    "Typ": "AUSWAHL",
+                    "Liste": [
+                        { "Name": "normal", "id": 1, "Koeffizient:": 1.856 }
                     ]
-                });
-                return aSchulnotenStore;
-            },
+                }
+            };
 
-            getStdFromFeatureLayer: function (StandardBWO) {
-                var res = this.myWidget.getStdValueFromLayer(StandardBWO);
-                console.log("in Engine",res);
-               return res;
+            var tableConfig = {
+                "01.01.2021": { // Aus IRW_KOEFF (Komplett) mit DISTINCT auf JAHR + Ableitung von 2020 --> "01.01.2021"
+                    "Eigentumswohnungen": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=1)
+                        "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
+                            "zonenIrw": "1550 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                            "Eigenschaften": {
+                                "BJ": { // Aus IRW_KOEFF 
+                                    "Titel": "Baujahr",
+                                    "Norm": 1955,
+                                    "Steuerelement": uiControls["BJ"],
+                                    "WertInSteuerelemet": 1955,
+                                    "Koeffizient": 1.7845
+                                },
+                                "GSTAND": {
+                                    "Titel": "Gebäudestandard",
+                                    "Norm": "Mittel",
+                                    "Steuerelement": uiControls["GSTAND"],
+                                    "WertInSteuerelemet": "Mittel"
+                                }
+                            }
+                        },
+                        "Bad Lippspringe": {
+
+                        }
+
+                    },
+                    "Ein- und Zweifamilienhäuser freistehend": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=2
+                        "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
+                            "zonenIrw": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                            "Eigenschaften": {
+                                "BOWL": { // Aus IRW_KOEFF 
+
+                                }
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            };
+
+            gTableConfig = tableConfig;
+            return tableConfig[stag][teilma][zone];
+        },
+
+
+        getOrte: function () {
+            var aOrteStore = new Memory({
+                data: [
+                    { name: "Bad Lippspringe", id: "1" },
+                    { name: "Borchen", id: "2" },
+                    { name: "Delbrück", id: "3" },
+                    { name: "Hövelhof", id: "4" },
+                    { name: "Salzkotten", id: "5" },
+                    { name: "Süd", id: "6" }
+                ]
+            });
+            return aOrteStore;
+        },
+
+        getSchulnote: function () {
+            var aSchulnotenStore = new Memory({
+                data: [
+                    { name: "sehr gut", id: "1" },
+                    { name: "gut", id: "2" },
+                    { name: "befriedigend", id: "3" },
+                    { name: "ausreichend", id: "4" },
+                    { name: "mangelhaft", id: "5" },
+                    { name: "ungenügend", id: "6" }
+                ]
+            });
+            return aSchulnotenStore;
+        },
+
+        getStdFromFeatureLayer: function (StandardBWO) {
+            var res = this.myWidget.getStdValueFromLayer(StandardBWO);
+            console.log("in Engine", res);
+            return res;
             //     var stdStore = new Memory({
             //                         data: [
             //                             {name:"sehr einfach", id:"1"},
@@ -74,8 +129,8 @@ define([
             //                             ]
             //                         });
             //     return stdStore;
-            },
-        })
-        
-    }
+        },
+    })
+
+}
 );

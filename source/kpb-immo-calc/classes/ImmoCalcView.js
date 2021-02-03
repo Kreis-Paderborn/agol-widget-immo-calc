@@ -454,6 +454,16 @@ define([
             // anOtherElement.addEventListener("click", function userClick(event){
             //     console.log(event.type + ' : '+ anOtherElement.value)
             // }, false);
+        },
+
+        showTable: function(stag, teilma, zone, setControlsToNorm) {
+
+            var tableConfig = this.engine.getTableConfig(stag, teilma, zone);
+
+            console.log("Table-Config:");
+            console.log(tableConfig);
+
+
         }
     });
 }
