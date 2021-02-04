@@ -231,44 +231,38 @@ define([
         getOrte: function () {
             var aOrteStore = new Memory({
                 data: [
-                    { name: "Bad Lippspringe", id: "1" },
-                    { name: "Borchen", id: "2" },
-                    { name: "Delbrück", id: "3" },
-                    { name: "Hövelhof", id: "4" },
-                    { name: "Salzkotten", id: "5" },
-                    { name: "Süd", id: "6" }
+                    { name: "Altenbeken", id: "1" },
+                    { name: "Bad Lippspringe", id: "2" },
+                    { name: "Borchen", id: "3" },
+                    { name: "Delbrück", id: "4" },
+                    { name: "Hövelhof", id: "5" },
+                    { name: "Salzkotten", id: "6" },
+                    { name: "Süd", id: "7" }
                 ]
             });
             return aOrteStore;
         },
 
-        getSchulnote: function () {
-            var aSchulnotenStore = new Memory({
-                data: [
-                    { name: "sehr gut", id: "1" },
-                    { name: "gut", id: "2" },
-                    { name: "befriedigend", id: "3" },
-                    { name: "ausreichend", id: "4" },
-                    { name: "mangelhaft", id: "5" },
-                    { name: "ungenügend", id: "6" }
-                ]
-            });
-            return aSchulnotenStore;
-        },
+        getValuesForStore: function (eigenschaft, stag, teilma, zone) {
+            propertyMapping = {
+                "KOEFF": "value",
+                "INTNAME": "id",
+                "EXTNAME": "name"
+            }
+            // config = this.getTableConfig(stag, teilma, zone);
+            // aObject = config["Eigenschaften"][eigenschaft]["Steuerelement"]["Liste"];
+            uiControls = this.deriveUiControlConfig(stag, teilma);
+            aObject = uiControls[eigenschaft]["Liste"];
+            var dataArray = new Array();
+            for (const feature of aObject) {
+                var obj = {};
+                obj[propertyMapping.EXTNAME] = feature.Name;
+                obj[propertyMapping.INTNAME] = feature.id;
+                obj[propertyMapping.KOEFF] = feature.Koeffizient;
+                dataArray.push(obj);
+            };
+            return dataArray;
 
-        getStdFromFeatureLayer: function (StandardBWO) {
-            var res = this.myWidget.getStdValueFromLayer(StandardBWO);
-            console.log("in Engine", res);
-            return res;
-            //     var stdStore = new Memory({
-            //                         data: [
-            //                             {name:"sehr einfach", id:"1"},
-            //                             {name:"einfach", id:"2"},
-            //                             {name:"normal", id:"3"},
-            //                             {name:"gehoben/Neubau", id:"4"}
-            //                             ]
-            //                         });
-            //     return stdStore;
         },
     })
 

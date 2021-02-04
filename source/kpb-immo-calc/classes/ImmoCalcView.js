@@ -61,13 +61,11 @@ define([
                 value: "EI",
                 name: "teilmarkt",
                 onChange: function (newValue) {
-                    var anbauweiseElement = document.getElementById('rowAnbauweise');
+                    var anbauweiseElement = document.getElementById('rowEgart');
                     var flaecheElement = document.getElementById('rowFlaeche');
                     var standardElement = document.getElementById('rowStandard');
                     var anzahlElement = document.getElementById('rowAnzahl');
-                    var StandardBWO = dijitRegistry.byId("stdBWO");
-                    console.log("get by id:");
-                    console.log(StandardBWO);
+                    // var StandardBWO = dijitRegistry.byId("gstandBWO");
 
                     if (newValue) {
                         anbauweiseElement.style = "display: none;";
@@ -78,57 +76,78 @@ define([
                         anbauweiseElement.style = "display: true;";
                         flaecheElement.style = "display: true;";
                         standardElement.style = "display: true;";
-                        me.engine.getStdFromFeatureLayer(StandardBWO);
+                        // me.engine.getStdFromFeatureLayer(StandardBWO,"01.01.2021",2,"Altenbeken");
+                        // me.showTable("01.01.2021",2,"Altenbeken");
+                        me.getValuesGstand();
+                        me.getValuesEgart();
                         anzahlElement.style = "display: none;";
                     };
                 },
             }, "tmEIRadioButton").startup();
 
             var zoneBWO = new FormComboBox({
-                id: zoneBWO,
-                name: zoneBWO,
+                id: "zoneBWO",
+                name: "zoneBWO",
                 value: "Aus Karte vorbelegt",
                 store: this.engine.getOrte(),
                 searchAttr: "name",
                 cols: "20",
-                style: "width:150px"
+                style: "width:150px",
+                onChange: function (newValue) { console.log("zoneBWO", newValue) }
             }, "zoneBWO").startup();
 
-
-            var anbWNorm = new dijitSimpleTextarea({
-                id: anbWNorm,
-                name: anbWNorm,
+            var zoneIRW = new dijitSimpleTextarea({
+                id: "zoneIRW",
+                name: "zoneIRW",
                 rows: "1",
                 cols: "20",
                 style: "width:150px",
-                value: "freistehendes EFH"
-            }, "anbWNorm").startup();
+                value: "aValue"
+            }, "zoneIRW").startup();
 
-            var anbWStore = new Memory({
-                data: [
-                    { name: "freistehendes EFH", id: "1" },
-                    { name: "DoppelHH/Reihenhaus", id: "2" }
-                ]
-            });
-            var anbWBWO = new FormComboBox({
-                id: anbWBWO,
-                name: anbWBWO,
+            var egartLabel = new dijitSimpleTextarea({
+                id: "egartLabel",
+                name: "egartLabel",
+                rows: "1",
+                cols: "20",
+                style: "width:150px",
+                value: "Ergänzende Gebäudeart"
+            }, "egartLabel").startup();
+
+            var egartNorm = new dijitSimpleTextarea({
+                id: "egartNorm",
+                name: "egartNorm",
+                rows: "1",
+                cols: "20",
+                style: "width:150px",
+                value: "freistehend"
+            }, "egartNorm").startup();
+
+            // var anbWStore = new Memory({
+            //     data: [
+            //         { name: "freistehendes EFH", id: "1" },
+            //         { name: "DoppelHH/Reihenhaus", id: "2" }
+            //     ]
+            // });
+            var egartBWO = new FormComboBox({
+                id: "egartBWO",
+                name: "egartBWO",
                 value: "Bitte wählen",
-                store: anbWStore,
+                // store: anbWStore,
                 searchAttr: "name",
                 cols: "20",
                 style: "width:150px"
-            }, "anbWBWO").startup();
+            }, "egartBWO").startup();
 
 
-            var anbWIRWundUF = new dijitSimpleTextarea({
-                id: anbWIRWundUF,
-                name: anbWIRWundUF,
+            var egartIRWundUF = new dijitSimpleTextarea({
+                id: "egartIRWundUF",
+                name: "egartIRWundUF",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: 'aus DB'
-            }, "anbWIRWundUF").startup();
+            }, "egartIRWundUF").startup();
 
 
             var baujNorm = new dijitSimpleTextarea({
@@ -170,13 +189,12 @@ define([
             }, "brwNorm").startup();
 
 
-            var brwBWO = new dijitSimpleTextarea({
+            var brwBWO = new dijitNumberSpinner({
+                value: 100,
+                smallDelta: 10,
+                constraints: { min: 50, max: 1000, places: 0 },
                 id: brwBWO,
-                name: brwBWO,
-                rows: "1",
-                cols: "15",
-                style: "width:150px",
-                value: 'aus Karte abgeleitet'
+                style: "width:150px"
             }, "brwBWO").startup();
 
 
@@ -227,22 +245,6 @@ define([
                 value: '800-10000'
             }, "flaecheNorm").startup();
 
-            // var flaecheStore = new Memory({
-            //                     data: [
-            //                         {name:"(499,649]", id:"1"},
-            //                         {name:"(649,799]", id:"2"},
-            //                         {name:"(799,10000]", id:"3"}
-            //                         ]
-            //                     });
-
-            // var flaecheBWO = aComboBox = new FormComboBox({
-            //                     id: flaecheBWO,
-            //                     name: flaecheBWO,
-            //                     value: "Bitte wählen",
-            //                     store: flaecheStore,
-            //                     searchAttr: "name",
-            //                     style: "width:150px"
-            //                 }, "flaecheBWO").startup();
 
             var flaecheBWO = new dijitNumberSpinner({
                 value: 500,
@@ -261,47 +263,56 @@ define([
                 value: 'aus DB'
             }, "flaecheIRWundUF").startup();
 
-
-            var stdNorm = new dijitSimpleTextarea({
-                id: stdNorm,
-                name: stdNorm,
+            var gstandLabel = new dijitSimpleTextarea({
+                id: "gstandLabel",
+                name: "gstandLabel",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
-                value: 'normal'
-            }, "stdNorm").startup();
+                value: "Gebäudezustand"
+            }, "gstandLabel").startup();
+
+            var gstandNorm = new dijitSimpleTextarea({
+                id: "gstandNorm",
+                name: "gstandNorm",
+                rows: "1",
+                cols: "15",
+                style: "width:150px",
+                value: "einfach"
+            }, "gstandNorm").startup();
 
 
-            //      var stdStore = this.engine.getStdFromFeatureLayer();
-
-            var stdBWO = new FormComboBox({
-                id: "stdBWO",
-                name: "stdBWO",
+            var gstandBWO = new FormComboBox({
+                id: "gstandBWO",
+                name: "gstandBWO",
                 value: "Bitte wählen",
-                //   store: stdStore,
                 searchAttr: "name",
                 style: "width:150px",
                 onChange: function (newValue) {
 
                     this.store.query({ name: newValue }).forEach(function (object) {
                         console.log(object);
-                        var StandardIrw = dijitRegistry.byId("stdIRWundUF");
+                        // console.log(me.engine.displayNames);
+                        // console.log(me.engine.externalFields);
+                        // console.log(me.engine.coefficients);
+
+                        var StandardIrw = dijitRegistry.byId("gstandIRWundUF");
                         console.log(StandardIrw);
                         StandardIrw.textbox.value = object.value.toFixed(4);
-                        //  StandardIrw.set("value", object.value);
+
                     });
                 }
-            }, "stdBWO").startup();
+            }, "gstandBWO").startup();
 
 
-            var stdIRWundUF = new dijitSimpleTextarea({
-                id: "stdIRWundUF",
-                name: "stdIRWundUF",
+            var gstandIRWundUF = new dijitSimpleTextarea({
+                id: "gstandIRWundUF",
+                name: "gstandIRWundUF",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: 'aus DB'
-            }, "stdIRWundUF").startup();
+            }, "gstandIRWundUF").startup();
 
             var wflNorm = new dijitSimpleTextarea({
                 id: wflNorm,
@@ -331,33 +342,42 @@ define([
                 value: 'aus DB'
             }, "wflIRWundUF").startup();
 
-            var wesNorm = new dijitSimpleTextarea({
-                id: wesNorm,
-                name: wesNorm,
+            var stagLabel = new dijitSimpleTextarea({
+                id: "stagLabel",
+                name: "stagLabel",
+                rows: "1",
+                cols: "15",
+                style: "width:150px",
+                value: "Stichtag des Immobilienrichtwertes"
+            }, "stagLabel").startup();
+
+            var stagNorm = new dijitSimpleTextarea({
+                id: "stagNorm",
+                name: "stagNorm",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: '2021'
-            }, "wesNorm").startup();
+            }, "stagNorm").startup();
 
 
-            var wesBWO = new dijitNumberSpinner({
+            var stagBWO = new dijitNumberSpinner({
                 value: 2021,
                 smallDelta: 1,
                 constraints: { min: 2021, max: 2021, places: 0 },
-                id: wesBWO,
+                id: "stagBWO",
                 style: "width:150px"
-            }, "wesBWO").startup();
+            }, "stagBWO").startup();
 
 
-            var wesIRWundUF = new dijitSimpleTextarea({
-                id: wesIRWundUF,
-                name: wesIRWundUF,
+            var stagIRWundUF = new dijitSimpleTextarea({
+                id: "stagIRWundUF",
+                name: "stagIRWundUF",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: 'aus DB'
-            }, "wesIRWundUF").startup();
+            }, "stagIRWundUF").startup();
 
             var angIRWBWO = new dijitSimpleTextarea({
                 id: angIRWBWO,
@@ -454,6 +474,7 @@ define([
             // anOtherElement.addEventListener("click", function userClick(event){
             //     console.log(event.type + ' : '+ anOtherElement.value)
             // }, false);
+
         },
 
         initialiseHeader: function () {
@@ -467,8 +488,36 @@ define([
             console.log("Table-Config:");
             console.log(tableConfig);
 
+        },
 
+        getValuesGstand: function () {
+            var StandardBWO = dijitRegistry.byId("gstandBWO");
+            var StagBWO = dijitRegistry.byId("stagBWO");
+            currentStag = "01.01." + StagBWO.value;
+            var ZoneBWO = dijitRegistry.byId("zoneBWO");
+            currentZone = ZoneBWO.value;
+            console.log("currentZone ", currentZone);
+            var dataArray = this.engine.getValuesForStore("GSTAND", currentStag, 2, "Altenbeken");
+            StandardBWO.store = new Memory({
+                data: dataArray
+            });
+        },
+
+        getValuesEgart: function () {
+            var egartBWO = dijitRegistry.byId("egartBWO");
+            var StagBWO = dijitRegistry.byId("stagBWO");
+            currentStag = "01.01." + StagBWO.value;
+            var ZoneBWO = dijitRegistry.byId("zoneBWO");
+            currentZone = ZoneBWO.value;
+            console.log("currentZone ", currentZone);
+            var dataArray = this.engine.getValuesForStore("EGART", currentStag, 2, "Altenbeken");
+            egartBWO.store = new Memory({
+                data: dataArray
+            });
         }
+
+
+
     });
 }
 );

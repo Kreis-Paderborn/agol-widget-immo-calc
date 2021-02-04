@@ -12,7 +12,7 @@
 			    <td>Zone</td>
 				 <td><div id=zoneBWO></div></td>
 				 <td></td>
-				<td></td>
+				<td><div id=zoneIRW></div></td>
 			</tr>
 			<tr>
 			    <td></td>
@@ -20,11 +20,12 @@
 				<td>BWO</td>
 				<td>IRWundUF</td>
 			</tr>
-			<tr id=rowAnbauweise style="display: none;">
-			    	<td>Anbauweise</td>
-			    	<td><div id=anbWNorm></div></td>
-					<td><div id=anbWBWO></div></td>
-					<td><div id=anbWIRWundUF></div></td>
+			<tr id=rowEgart style="display: none;">
+					<!-- <td><div id=egartLabel></div></td> -->
+					<td>Ergänzende Gebäudeart</td>
+			    	<td><div id=egartNorm></div></td>
+					<td><div id=egartBWO></div></td>
+					<td><div id=egartIRWundUF></div></td>
 			</tr>
 			<tr>
 			    <td>Baujahr</td>
@@ -33,28 +34,29 @@
 				<td><div id=baujIRWundUF></div></td>
 			</tr>
 			<tr>
-			    <td>Boderrichtwert</td>
+			    <td>Boden/Lagewert</td>
 			    <td><div id=brwNorm></div></td>
 				<td><div id=brwBWO></div></td>
 				<td><div id=brwIRWundUF></div></td>
 			</tr>
 			<tr id=rowAnzahl style="display: true;">
-			    <td>Anzahl</td>
+			    <td>Anzahl der Einheiten im Gebäude</td>
 			    <td><div id=anzahlNorm></div></td>
 				<td><div id=anzahlBWO></div></td>
 				<td><div id=anzahlIRWundUF></div></td>
 			</tr>
 			<tr id=rowFlaeche style="display: none;">
-			    <td>Fläche</td>
+			    <td>Grundstücksgröße</td>
 			    <td><div id=flaecheNorm></div></td>
 				<td><div id=flaecheBWO></div></td>
 				<td><div id=flaecheIRWundUF></div></td>
 			</tr>
 			<tr id=rowStandard style="display: none;">
-			    <td>Standard</td>
-			    <td><div id=stdNorm></div></td>
-				<td><input id="stdBWO"></input></td>
-				<td><div id=stdIRWundUF></div></td>
+				<!-- <td><div id=gstandLabel></div></td> -->
+				<td>Gebäudezustand</td>
+			    <td><div id=gstandNorm></div></td>
+				<td><input id="gstandBWO"></input></td>
+				<td><div id=gstandIRWundUF></div></td>
 			</tr>
 			<tr>
 				<td>Wohnfläche</td>
@@ -63,10 +65,11 @@
 				<td><div id=wflIRWundUF></div></td>
 			</tr>
 			<tr>
-				<td>WES</td>
-				<td><div id=wesNorm></div></td>
-				<td><div id=wesBWO></div></td>
-				<td><div id=wesIRWundUF></div></td>
+				<!-- <td><div id=stagLabel></div></td> -->
+				<td>Stichtag des Immobilienrichtwertes </td>
+				<td><div id=stagNorm></div></td>
+				<td><div id=stagBWO></div></td>
+				<td><div id=stagIRWundUF></div></td>
 			</tr>
 			<tr>
 				<td>angepasster IRW</td>
