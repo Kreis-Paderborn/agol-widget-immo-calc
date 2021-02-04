@@ -50,6 +50,9 @@ define([
 
             var me = this;
 
+            var teilmaLabel = document.getElementById("teilmaLabel");
+            teilmaLabel.innerText = "Teilmarkt";
+
             var tmBBRadioButton = new dijitFormRadioButton({
                 checked: false,
                 value: "BB",
@@ -65,7 +68,6 @@ define([
                     var flaecheElement = document.getElementById('rowFlaeche');
                     var standardElement = document.getElementById('rowStandard');
                     var anzahlElement = document.getElementById('rowAnzahl');
-                    // var StandardBWO = dijitRegistry.byId("gstandBWO");
 
                     if (newValue) {
                         anbauweiseElement.style = "display: none;";
@@ -76,8 +78,6 @@ define([
                         anbauweiseElement.style = "display: true;";
                         flaecheElement.style = "display: true;";
                         standardElement.style = "display: true;";
-                        // me.engine.getStdFromFeatureLayer(StandardBWO,"01.01.2021",2,"Altenbeken");
-                        // me.showTable("01.01.2021",2,"Altenbeken");
                         me.getValuesGstand();
                         me.getValuesEgart();
                         anzahlElement.style = "display: none;";
@@ -85,34 +85,40 @@ define([
                 },
             }, "tmEIRadioButton").startup();
 
-            var zoneBWO = new FormComboBox({
-                id: "zoneBWO",
-                name: "zoneBWO",
+            var genaLabel = document.getElementById("genaLabel");
+            genaLabel.innerText = "Gemeinde";
+
+            var genaBWO = new FormComboBox({
+                id: "genaBWO",
+                name: "genaBWO",
                 value: "Aus Karte vorbelegt",
                 store: this.engine.getOrte(),
                 searchAttr: "name",
                 cols: "20",
                 style: "width:150px",
-                onChange: function (newValue) { console.log("zoneBWO", newValue) }
-            }, "zoneBWO").startup();
+                onChange: function (newValue) { console.log("genaBWO", newValue) }
+            }, "genaBWO").startup();
 
-            var zoneIRW = new dijitSimpleTextarea({
-                id: "zoneIRW",
-                name: "zoneIRW",
+            var genaIRW = new dijitSimpleTextarea({
+                id: "genaIRW",
+                name: "genaIRW",
                 rows: "1",
                 cols: "20",
                 style: "width:150px",
                 value: "aValue"
-            }, "zoneIRW").startup();
+            }, "genaIRW").startup();
 
-            var egartLabel = new dijitSimpleTextarea({
-                id: "egartLabel",
-                name: "egartLabel",
-                rows: "1",
-                cols: "20",
-                style: "width:150px",
-                value: "Ergänzende Gebäudeart"
-            }, "egartLabel").startup();
+            var normLabel = document.getElementById("normLabel");
+            normLabel.innerText = "Norm";
+
+            var bwoLabel = document.getElementById("bwoLabel");
+            bwoLabel.innerText = "BWO";
+
+            var irwLabel = document.getElementById("irwLabel");
+            irwLabel.innerText = "IRW und UF";
+            
+            var egartLabel = document.getElementById("egartLabel");
+            egartLabel.innerText = "Ergänzende Gebäudeart";
 
             var egartNorm = new dijitSimpleTextarea({
                 id: "egartNorm",
@@ -123,12 +129,7 @@ define([
                 value: "freistehend"
             }, "egartNorm").startup();
 
-            // var anbWStore = new Memory({
-            //     data: [
-            //         { name: "freistehendes EFH", id: "1" },
-            //         { name: "DoppelHH/Reihenhaus", id: "2" }
-            //     ]
-            // });
+           
             var egartBWO = new FormComboBox({
                 id: "egartBWO",
                 name: "egartBWO",
@@ -140,101 +141,111 @@ define([
             }, "egartBWO").startup();
 
 
-            var egartIRWundUF = new dijitSimpleTextarea({
-                id: "egartIRWundUF",
-                name: "egartIRWundUF",
+            var egartIRW = new dijitSimpleTextarea({
+                id: "egartIRW",
+                name: "egartIRW",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: 'aus DB'
-            }, "egartIRWundUF").startup();
+            }, "egartIRW").startup();
 
 
-            var baujNorm = new dijitSimpleTextarea({
-                id: baujNorm,
-                name: baujNorm,
+            var bjLabel = document.getElementById("bjLabel");
+            bjLabel.innerText = "Baujahr";
+
+            var bjNorm = new dijitSimpleTextarea({
+                id: "bjNorm",
+                name: "bjNorm",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: 'vor 1959'
-            }, "baujNorm").startup();
+            }, "bjNorm").startup();
 
 
-            var baujBWO = new dijitNumberSpinner({
+            var bjBWO = new dijitNumberSpinner({
                 value: 2020,
                 smallDelta: 1,
                 constraints: { min: 0, max: 2021, places: 0 },
-                id: baujBWO,
+                id: "baujBWO",
                 style: "width:150px"
-            }, "baujBWO").startup();
+            }, "bjBWO").startup();
 
 
-            var baujIRWundUF = new dijitSimpleTextarea({
-                id: baujIRWundUF,
-                name: baujIRWundUF,
+            var bjIRW = new dijitSimpleTextarea({
+                id: "bjIRW",
+                name: "bjIRW",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: 'aus DB'
-            }, "baujIRWundUF").startup();
+            }, "bjIRW").startup();
 
+            var bowlLabel = document.getElementById("bowlLabel");
+            bowlLabel.innerText = "Boden/Lagewert";
 
-            var brwNorm = new dijitSimpleTextarea({
-                id: brwNorm,
-                name: brwNorm,
+            var bowlNorm = new dijitSimpleTextarea({
+                id: "bowlNorm",
+                name: "bowlNorm",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: '51-100'
-            }, "brwNorm").startup();
+            }, "bowlNorm").startup();
 
 
-            var brwBWO = new dijitNumberSpinner({
+            var bowlBWO = new dijitNumberSpinner({
                 value: 100,
                 smallDelta: 10,
                 constraints: { min: 50, max: 1000, places: 0 },
-                id: brwBWO,
+                id: "bowlBWO",
                 style: "width:150px"
-            }, "brwBWO").startup();
+            }, "bowlBWO").startup();
 
 
-            var brwIRWundUF = new dijitSimpleTextarea({
-                id: brwIRWundUF,
-                name: brwIRWundUF,
+            var bowlIRW = new dijitSimpleTextarea({
+                id: "bowlIRW",
+                name: "bowlIRW",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: 'aus DB'
-            }, "brwIRWundUF").startup();
+            }, "bowlIRW").startup();
 
-            var anzahlNorm = new dijitSimpleTextarea({
-                id: anzahlNorm,
-                name: anzahlNorm,
+            var anzegebLabel = document.getElementById("anzegebLabel");
+            anzegebLabel.innerText = "Anzahl der Einheiten im Gebäude";
+
+            var anzegebNorm = new dijitSimpleTextarea({
+                id: anzegebNorm,
+                name: anzegebNorm,
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: '6-10'
-            }, "anzahlNorm").startup();
+            }, "anzegebNorm").startup();
 
 
-            var anzahlBWO = new dijitNumberSpinner({
+            var anzegebBWO = new dijitNumberSpinner({
                 value: 5,
                 smallDelta: 1,
                 constraints: { min: 0, max: 100, places: 0 },
-                id: anzahlBWO,
+                id: anzegebBWO,
                 style: "width:150px"
-            }, "anzahlBWO").startup();
+            }, "anzegebBWO").startup();
 
 
-            var anzahlIRWundUF = new dijitSimpleTextarea({
-                id: anzahlIRWundUF,
-                name: anzahlIRWundUF,
+            var anzegebIRW = new dijitSimpleTextarea({
+                id: anzegebIRW,
+                name: anzegebIRW,
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: 'aus DB'
-            }, "anzahlIRWundUF").startup();
+            }, "anzegebIRW").startup();
 
+            var flaecheLabel = document.getElementById("flaecheLabel");
+            flaecheLabel.innerText = "Grundstücksgröße";
 
             var flaecheNorm = new dijitSimpleTextarea({
                 id: flaecheNorm,
@@ -254,23 +265,17 @@ define([
                 style: "width:150px"
             }, "flaecheBWO").startup();
 
-            var flaecheIRWundUF = new dijitSimpleTextarea({
-                id: flaecheIRWundUF,
-                name: flaecheIRWundUF,
+            var flaecheIRW = new dijitSimpleTextarea({
+                id: flaecheIRW,
+                name: flaecheIRW,
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: 'aus DB'
-            }, "flaecheIRWundUF").startup();
+            }, "flaecheIRW").startup();
 
-            var gstandLabel = new dijitSimpleTextarea({
-                id: "gstandLabel",
-                name: "gstandLabel",
-                rows: "1",
-                cols: "15",
-                style: "width:150px",
-                value: "Gebäudezustand"
-            }, "gstandLabel").startup();
+            var gstandLabel = document.getElementById("gstandLabel");
+            gstandLabel.innerText = "Gebäudezustand";
 
             var gstandNorm = new dijitSimpleTextarea({
                 id: "gstandNorm",
@@ -278,7 +283,8 @@ define([
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
-                value: "einfach"
+                value: "einfach",
+                readonly: true
             }, "gstandNorm").startup();
 
 
@@ -296,7 +302,7 @@ define([
                         // console.log(me.engine.externalFields);
                         // console.log(me.engine.coefficients);
 
-                        var StandardIrw = dijitRegistry.byId("gstandIRWundUF");
+                        var StandardIrw = dijitRegistry.byId("gstandIRW");
                         console.log(StandardIrw);
                         StandardIrw.textbox.value = object.value.toFixed(4);
 
@@ -305,14 +311,17 @@ define([
             }, "gstandBWO").startup();
 
 
-            var gstandIRWundUF = new dijitSimpleTextarea({
-                id: "gstandIRWundUF",
-                name: "gstandIRWundUF",
+            var gstandIRW = new dijitSimpleTextarea({
+                id: "gstandIRW",
+                name: "gstandIRW",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: 'aus DB'
-            }, "gstandIRWundUF").startup();
+            }, "gstandIRW").startup();
+
+            var wflLabel = document.getElementById("wflLabel");
+            wflLabel.innerText = "Wohnfläche";
 
             var wflNorm = new dijitSimpleTextarea({
                 id: wflNorm,
@@ -333,23 +342,18 @@ define([
             }, "wflBWO").startup();
 
 
-            var wflIRWundUF = new dijitSimpleTextarea({
-                id: wflIRWundUF,
-                name: wflIRWundUF,
+            var wflIRW = new dijitSimpleTextarea({
+                id: wflIRW,
+                name: wflIRW,
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: 'aus DB'
-            }, "wflIRWundUF").startup();
+            }, "wflIRW").startup();
 
-            var stagLabel = new dijitSimpleTextarea({
-                id: "stagLabel",
-                name: "stagLabel",
-                rows: "1",
-                cols: "15",
-                style: "width:150px",
-                value: "Stichtag des Immobilienrichtwertes"
-            }, "stagLabel").startup();
+
+            var stagLabel = document.getElementById("stagLabel");
+            stagLabel.innerText = "Stichtag des Immobilienrichtwertes";
 
             var stagNorm = new dijitSimpleTextarea({
                 id: "stagNorm",
@@ -370,14 +374,17 @@ define([
             }, "stagBWO").startup();
 
 
-            var stagIRWundUF = new dijitSimpleTextarea({
-                id: "stagIRWundUF",
-                name: "stagIRWundUF",
+            var stagIRW = new dijitSimpleTextarea({
+                id: "stagIRW",
+                name: "stagIRW",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
                 value: 'aus DB'
-            }, "stagIRWundUF").startup();
+            }, "stagIRW").startup();
+
+            var angIRWLabel = document.getElementById("angIRWLabel");
+            angIRWLabel.innerText = "angepasster IRW";
 
             var angIRWBWO = new dijitSimpleTextarea({
                 id: angIRWBWO,
@@ -387,6 +394,9 @@ define([
                 style: "width:150px",
                 value: 'berechneter Wert'
             }, "angIRWBWO").startup();
+
+            var wertLabel = document.getElementById("wertLabel");
+            wertLabel.innerText = "geschätzter Wert";
 
             var wertBWO = new dijitSimpleTextarea({
                 id: wertBWO,
@@ -494,9 +504,9 @@ define([
             var StandardBWO = dijitRegistry.byId("gstandBWO");
             var StagBWO = dijitRegistry.byId("stagBWO");
             currentStag = "01.01." + StagBWO.value;
-            var ZoneBWO = dijitRegistry.byId("zoneBWO");
-            currentZone = ZoneBWO.value;
-            console.log("currentZone ", currentZone);
+            var genaBWO = dijitRegistry.byId("genaBWO");
+            currentGena = genaBWO.value;
+            console.log("currentGena ", currentGena);
             var dataArray = this.engine.getValuesForStore("GSTAND", currentStag, 2, "Altenbeken");
             StandardBWO.store = new Memory({
                 data: dataArray
@@ -507,9 +517,9 @@ define([
             var egartBWO = dijitRegistry.byId("egartBWO");
             var StagBWO = dijitRegistry.byId("stagBWO");
             currentStag = "01.01." + StagBWO.value;
-            var ZoneBWO = dijitRegistry.byId("zoneBWO");
-            currentZone = ZoneBWO.value;
-            console.log("currentZone ", currentZone);
+            var genaBWO = dijitRegistry.byId("genaBWO");
+            currentGena = genaBWO.value;
+            console.log("currentGena ", currentGena);
             var dataArray = this.engine.getValuesForStore("EGART", currentStag, 2, "Altenbeken");
             egartBWO.store = new Memory({
                 data: dataArray
