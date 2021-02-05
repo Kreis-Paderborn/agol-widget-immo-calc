@@ -33,22 +33,6 @@ define([
 				this.inherited(arguments);
 				this.featureLayers = this.collectFeatureLayersFromMap();
 
-				// Testweises Ausgeben der Koeffizienten für STST (Standard) mit einem gemappten Daten-Array
-				propMap = {
-					"KOEFF": "value",
-					"INTNAME": "id",
-					"EXTNAME": "name"
-				}
-
-				this.convertCoeffLayerToDataArray(2, "GSTAND", propMap, function (dataArray) {
-					console.log("Koeffizienten für Standard:");
-					// Ausgabe von Überschriften und Attributen mit Padding
-					console.log("NAME".padStart(12, ' ') + " | " + "INTERNER NAME".padStart(13, ' ') + " | " + "KOEFFIZIENT".padStart(11, ' ') + " | ");
-					for (const item of dataArray) {
-						console.log(item.name.padStart(12, ' ') + " | " + item.id.padStart(13, ' ') + " | " + item.value.toFixed(7).padStart(11, ' ') + " | ");
-					}
-				})
-
 				// var aFeatureLayer = new FeatureLayer("https://giscloud.gkdpb.de/geodienste/rest/services/open/KPB_Gebietsgrenzen/MapServer/2");
 				// this.map.on('click', function (mouseEvent) {
 				// 	var query = new esri.tasks.Query();
@@ -60,7 +44,7 @@ define([
 				// 	});
 				// });
 
-				this.engine = new ImmoCalcEngine({ dummyOption: "Hello World!", myWidget: this });
+				this.engine = new ImmoCalcEngine({});
 				this.view = new ImmoCalcView(this.engine);
 
 				this.readDefinitionsFromFeatureLayers();
@@ -242,99 +226,16 @@ define([
 			},
 
 
+			// onReceiveData: function (name, widgetId, data, historyData) {
 
-
-			/**
-			 * Die Koeffizienten für den Immobilien-Preis-Rechner werden per FeatureLayer bereitgestellt.
-			 * In der Oberfläche werden Sie aber in Form von Daten-Objekten oder Arrays benötigt (z.B. als Auswahlliste für eine Combobox)
-			 * Diese Methode soll helfen die Attribute aus dem FeatureLayer in ein Objekt-Array zu wandeln.
-			 *
-			 * @param {*} subsegment
-			 * @param {*} category
-			 * @param {*} propertyMapping
-			 * @param {*} callback
-			 */
-			convertCoeffLayerToDataArray: function (subsegment, category, propertyMapping, callback) {
-				var dataArray = new Array();
-				var displayNames = {};
-				var aQuery = new esri.tasks.Query();
-				var aKoeffFeatureLayer = this.featureLayers.IRW_IMMOCALC_KOEFFIZIENTEN;
-				var aAnzeigeFeatureLayer = this.featureLayers.IRW_ANZEIGEWERTE;
-
-				// Frage die Anzeigenamen für "category" ab
-				aQuery.where = "EIGN_BORIS = '" + category + "'";
-				aQuery.outFields = ["*"];
-				if (aAnzeigeFeatureLayer !== undefined) {
-					aAnzeigeFeatureLayer.queryFeatures(aQuery, function (featureSet) {
-
-						for (const feature of featureSet.features) {
-							displayNames[feature.attributes.WERT_BORIS] = feature.attributes.TXT_REAL;
-						}
-
-						// Frage die Einstellungen für "category" aus der Koeff-Tabelle ab
-						aQuery.where = "EIGN_BORIS = '" + category + "' AND TEILMA = '" + subsegment + "'";
-						aQuery.outFields = ["*"];
-						if (aKoeffFeatureLayer !== undefined) {
-							aKoeffFeatureLayer.queryFeatures(aQuery, function (featureSet) {
-
-								// Wir holen uns die Features in ein lokales Array, um sie nach Koeffizent sortieren zu können
-								var arr = featureSet.features;
-								arr.sort(function (a, b) { return a.attributes.KOEFF - b.attributes.KOEFF });
-
-								for (const feature of arr) {
-									var obj = {};
-									obj[propertyMapping.EXTNAME] = displayNames[feature.attributes.WERT_BORIS];
-									obj[propertyMapping.INTNAME] = feature.attributes.WERT_BORIS;
-									obj[propertyMapping.KOEFF] = feature.attributes.KOEFF;
-									dataArray.push(obj);
-								}
-
-								callback(dataArray);
-							});
-						}
-					});
-				}
-			},
-
-
-			getStdValueFromLayer: function (StandardBWO) {
-
-				propMap = {
-					"KOEFF": "value",
-					"INTNAME": "id",
-					"EXTNAME": "name"
-				}
-
-				this.convertCoeffLayerToDataArray(2, "GSTAND", propMap, function (dataArray) {
-					console.log(dataArray);
-					StandardBWO.store = new Memory({
-						data: dataArray
-					});
-				});
-				// console.log(res);			
-				// // return res;			
-				// var stdStore = new Memory({
-				// 	                        data: [
-				// 	                            {name:"sehr einfach", id:"1"},
-				// 	                            {name:"einfach", id:"2"},
-				// 	                            {name:"normal", id:"3"},
-				// 	                            {name:"gehoben/Neubau", id:"4"}
-				// 	                            ]
-				// 	                        });
-				// return stdStore;		
-
-			},
-
-			onReceiveData: function (name, widgetId, data, historyData) {
-
-				if (name === "Search"
-					&& data.selectResult
-					&& data.selectResult.result
-					&& data.selectResult.result.name) {
-					console.log(data.selectResult.result.name);
-					console.log(data.selectResult.result.feature.geometry);
-				}
-			},
+			// 	if (name === "Search"
+			// 		&& data.selectResult
+			// 		&& data.selectResult.result
+			// 		&& data.selectResult.result.name) {
+			// 		console.log(data.selectResult.result.name);
+			// 		console.log(data.selectResult.result.feature.geometry);
+			// 	}
+			// },
 
 
 			/**

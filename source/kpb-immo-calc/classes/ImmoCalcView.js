@@ -74,12 +74,14 @@ define([
                         flaecheElement.style = "display: none;";
                         standardElement.style = "display: none;";
                         anzahlElement.style = "display: true;";
+                        me.getValuesGena(newValue,false);
                     } else {
                         anbauweiseElement.style = "display: true;";
                         flaecheElement.style = "display: true;";
                         standardElement.style = "display: true;";
                         me.getValuesGstand();
                         me.getValuesEgart();
+                        me.getValuesGena(newValue,false);
                         anzahlElement.style = "display: none;";
                     };
                 },
@@ -92,12 +94,12 @@ define([
                 id: "genaBWO",
                 name: "genaBWO",
                 value: "Aus Karte vorbelegt",
-                store: this.engine.getOrte(),
                 searchAttr: "name",
                 cols: "20",
                 style: "width:150px",
                 onChange: function (newValue) { console.log("genaBWO", newValue) }
             }, "genaBWO").startup();
+
 
             var genaIRW = new dijitSimpleTextarea({
                 id: "genaIRW",
@@ -116,7 +118,7 @@ define([
 
             var irwLabel = document.getElementById("irwLabel");
             irwLabel.innerText = "IRW und UF";
-            
+
             var egartLabel = document.getElementById("egartLabel");
             egartLabel.innerText = "Ergänzende Gebäudeart";
 
@@ -129,7 +131,7 @@ define([
                 value: "freistehend"
             }, "egartNorm").startup();
 
-           
+
             var egartBWO = new FormComboBox({
                 id: "egartBWO",
                 name: "egartBWO",
@@ -297,13 +299,7 @@ define([
                 onChange: function (newValue) {
 
                     this.store.query({ name: newValue }).forEach(function (object) {
-                        console.log(object);
-                        // console.log(me.engine.displayNames);
-                        // console.log(me.engine.externalFields);
-                        // console.log(me.engine.coefficients);
-
                         var StandardIrw = dijitRegistry.byId("gstandIRW");
-                        console.log(StandardIrw);
                         StandardIrw.textbox.value = object.value.toFixed(4);
 
                     });
@@ -506,8 +502,10 @@ define([
             currentStag = "01.01." + StagBWO.value;
             var genaBWO = dijitRegistry.byId("genaBWO");
             currentGena = genaBWO.value;
-            console.log("currentGena ", currentGena);
-            var dataArray = this.engine.getValuesForStore("GSTAND", currentStag, 2, "Altenbeken");
+
+            config = this.engine.getTableConfig(currentStag, 2, "Altenbeken");
+            dataArray = config["Eigenschaften"]["GSTAND"]["Steuerelement"]["Liste"];
+
             StandardBWO.store = new Memory({
                 data: dataArray
             });
@@ -519,14 +517,32 @@ define([
             currentStag = "01.01." + StagBWO.value;
             var genaBWO = dijitRegistry.byId("genaBWO");
             currentGena = genaBWO.value;
-            console.log("currentGena ", currentGena);
-            var dataArray = this.engine.getValuesForStore("EGART", currentStag, 2, "Altenbeken");
+
+            config = this.engine.getTableConfig(currentStag, 2, "Altenbeken");
+            dataArray = config["Eigenschaften"]["EGART"]["Steuerelement"]["Liste"];
             egartBWO.store = new Memory({
                 data: dataArray
             });
+        },
+
+        getValuesGena: function (newValue, init) {
+            var genaBWO = dijitRegistry.byId("genaBWO");
+           
+            var headerConfig = this.engine.getHeaderConfig();
+            var StagBWO = dijitRegistry.byId("stagBWO");
+            currentStag = "01.01." + StagBWO.value;
+            if (newValue) {
+                teilmarkt = headerConfig["TEILMA"][currentStag][0];
+            } else {
+                teilmarkt = headerConfig["TEILMA"][currentStag][1];
+            };
+
+            dataArray = headerConfig["ZONEN"][currentStag][teilmarkt];
+            
+            genaBWO.store = new Memory({
+                data: dataArray
+            });
         }
-
-
 
     });
 }

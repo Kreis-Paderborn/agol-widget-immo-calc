@@ -17,7 +17,7 @@ define([
         coefficients: null,
 
         constructor: function (options) {
-            this.myWidget = options.myWidget;
+
         },
 
         getHeaderConfig() {
@@ -34,27 +34,28 @@ define([
                 "ZONEN": {
                     "01.01.2021": {
                         "Eigentumswohnungen": [
-                            "Bad Lippspringe",
-                            "Borchen",
-                            "Delbrück",
-                            "Hövelhof",
-                            "Salzkotten",
-                            "Südliches Kreisgebiet"
+                            { name: "Bad Lippspringe", id: "2" },
+                            { name: "Borchen", id: "4" },
+                            { name: "Delbrück", id: "6" },
+                            { name: "Hövelhof", id: "7" },
+                            { name: "Salzkotten", id: "9" },
+                            { name: "Südliches Kreisgebiet", id: "10" }
                         ],
                         "Ein- und Zweifamilienhäuser freistehend": [
-                            "Altenbeken",
-                            "Bad Lippspringe",
-                            "Bad Wünnenberg",
-                            "Borchen",
-                            "Büren",
-                            "Delbrück",
-                            "Hövelhof",
-                            "Lichtenau",
-                            "Salzkotten"
+                            { name: "Altenbeken", id: "1" },
+                            { name: "Bad Lippspringe", id: "2" },
+                            { name: "Bad Wünnenberg", id: "3" },
+                            { name: "Borchen", id: "4" },
+                            { name: "Büren", id: "5" },
+                            { name: "Delbrück", id: "6" },
+                            { name: "Hövelhof", id: "7" },
+                            { name: "Lichtenau", id: "8" },
+                            { name: "Salzkotten", id: "9" }
                         ]
                     }
                 }
             }
+            return headerConfig;
         },
 
         getTableConfig(stag, teilma, zone) {
@@ -72,7 +73,7 @@ define([
                 "GSTAND": {
                     "Typ": "AUSWAHL",
                     "Liste": [
-                        { "Name": "normal", "id": 1, "Koeffizient:": 1.856 }
+                        { "name": "normal", "id": 1, "value:": 1.856 }
                     ]
                 }
             };
@@ -114,6 +115,12 @@ define([
                                     "Norm": "Mittel",
                                     "Steuerelement": uiControls["GSTAND"],
                                     "WertInSteuerelemet": "Mittel"
+                                },
+                                "EGART": {
+                                    "Titel": "Ergänzende Gebäudeart",
+                                    "Norm": "freistehend",
+                                    "Steuerelement": uiControls["EGART"],
+                                    "WertInSteuerelemet": "freistehend"
                                 }
                             }
 
@@ -132,9 +139,6 @@ define([
 
         deriveUiControlConfig: function (stag, teilma) {
             var config = {};
-
-            console.log("coefficients");
-            console.log(this.coefficients);
 
             for (const row of this.coefficients) {
                 if (row.STAG === stag && row.TEILMA === teilma) {
@@ -177,7 +181,7 @@ define([
                         }
                     }
 
-                    // Behandlung von Zahleneingabe
+                    // Behandlung von Auswahlwerten
                     else if (row.STEUERELEM.startsWith("AUSWAHL")) {
                         config[row.EIGN_BORIS]["Typ"] = "AUSWAHL";
 
@@ -186,17 +190,14 @@ define([
                             config[row.EIGN_BORIS]["Liste"] = new Array();
                         }
                         var rangeObj = {};
-                        rangeObj["Name"] = this.mapDisplayNames(row.EIGN_BORIS, row.WERT_BORIS);
+                        rangeObj["name"] = this.mapDisplayNames(row.EIGN_BORIS, row.WERT_BORIS);
                         rangeObj["id"] = row.WERT_BORIS;
-                        rangeObj["Koeffizient"] = row.KOEFF;
+                        rangeObj["value"] = row.KOEFF;
                         config[row.EIGN_BORIS]["Liste"].push(rangeObj);
                     }
 
                 }
             }
-
-            console.log("uis");
-            console.log(config);
 
             return config;
         },
@@ -227,43 +228,6 @@ define([
             return obj;
         },
 
-
-        getOrte: function () {
-            var aOrteStore = new Memory({
-                data: [
-                    { name: "Altenbeken", id: "1" },
-                    { name: "Bad Lippspringe", id: "2" },
-                    { name: "Borchen", id: "3" },
-                    { name: "Delbrück", id: "4" },
-                    { name: "Hövelhof", id: "5" },
-                    { name: "Salzkotten", id: "6" },
-                    { name: "Süd", id: "7" }
-                ]
-            });
-            return aOrteStore;
-        },
-
-        getValuesForStore: function (eigenschaft, stag, teilma, zone) {
-            propertyMapping = {
-                "KOEFF": "value",
-                "INTNAME": "id",
-                "EXTNAME": "name"
-            }
-            // config = this.getTableConfig(stag, teilma, zone);
-            // aObject = config["Eigenschaften"][eigenschaft]["Steuerelement"]["Liste"];
-            uiControls = this.deriveUiControlConfig(stag, teilma);
-            aObject = uiControls[eigenschaft]["Liste"];
-            var dataArray = new Array();
-            for (const feature of aObject) {
-                var obj = {};
-                obj[propertyMapping.EXTNAME] = feature.Name;
-                obj[propertyMapping.INTNAME] = feature.id;
-                obj[propertyMapping.KOEFF] = feature.Koeffizient;
-                dataArray.push(obj);
-            };
-            return dataArray;
-
-        },
     })
 
 }
