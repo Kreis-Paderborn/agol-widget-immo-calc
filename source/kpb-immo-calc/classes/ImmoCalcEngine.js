@@ -23,7 +23,7 @@ define([
         getHeaderConfig() {
             var headerConfig = {
                 "STAG": [
-                    "01.01.2021"
+                    { name: "01.01.2021", id: "1" }
                 ],
                 "TEILMA": {
                     "01.01.2021": [
@@ -87,7 +87,7 @@ define([
                             "Eigenschaften": {
                                 "BJ": { // Aus IRW_KOEFF 
                                     "Titel": "Baujahr",
-                                    "Norm": 1955,
+                                    "Richtwert": 1955,
                                     "Steuerelement": uiControls["BJ"],
                                     "WertInSteuerelemet": 1955,
                                     "Koeffizient": 1.7845
@@ -105,22 +105,24 @@ define([
                             "Eigenschaften": {
                                 "BJ": { // Aus IRW_KOEFF 
                                     "Titel": "Baujahr",
-                                    "Norm": 1955,
+                                    "Richtwert": 1955,
                                     "Steuerelement": uiControls["BJ"],
                                     "WertInSteuerelemet": 1955,
                                     "Koeffizient": 1.7845
                                 },
                                 "GSTAND": {
                                     "Titel": "Gebäudestandard",
-                                    "Norm": "Mittel",
+                                    "Richtwert": "Mittel",
                                     "Steuerelement": uiControls["GSTAND"],
-                                    "WertInSteuerelemet": "Mittel"
+                                    "WertInSteuerelemet": "Mittel",
+                                    "Koeffizient": 1.0
                                 },
                                 "EGART": {
                                     "Titel": "Ergänzende Gebäudeart",
-                                    "Norm": "freistehend",
+                                    "Richtwert": "freistehend",
                                     "Steuerelement": uiControls["EGART"],
-                                    "WertInSteuerelemet": "freistehend"
+                                    "WertInSteuerelemet": "freistehend",
+                                    "Koeffizient": 0.865
                                 }
                             }
 

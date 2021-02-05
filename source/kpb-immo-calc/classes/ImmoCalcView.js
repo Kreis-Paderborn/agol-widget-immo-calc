@@ -74,14 +74,14 @@ define([
                         flaecheElement.style = "display: none;";
                         standardElement.style = "display: none;";
                         anzahlElement.style = "display: true;";
-                        me.getValuesGena(newValue,false);
+                        me.getValuesGena(newValue, false);
                     } else {
                         anbauweiseElement.style = "display: true;";
                         flaecheElement.style = "display: true;";
                         standardElement.style = "display: true;";
                         me.getValuesGstand();
                         me.getValuesEgart();
-                        me.getValuesGena(newValue,false);
+                        me.getValuesGena(newValue, false);
                         anzahlElement.style = "display: none;";
                     };
                 },
@@ -136,10 +136,12 @@ define([
                 id: "egartBWO",
                 name: "egartBWO",
                 value: "Bitte wählen",
-                // store: anbWStore,
                 searchAttr: "name",
                 cols: "20",
-                style: "width:150px"
+                style: "width:150px",
+                onChange: function (newValue) {
+                    me.getKoefForSelection(newValue, this, "egartIRW");
+                }
             }, "egartBWO").startup();
 
 
@@ -219,8 +221,8 @@ define([
             anzegebLabel.innerText = "Anzahl der Einheiten im Gebäude";
 
             var anzegebNorm = new dijitSimpleTextarea({
-                id: anzegebNorm,
-                name: anzegebNorm,
+                id: "anzegebNorm",
+                name: "anzegebNorm",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
@@ -232,14 +234,14 @@ define([
                 value: 5,
                 smallDelta: 1,
                 constraints: { min: 0, max: 100, places: 0 },
-                id: anzegebBWO,
+                id: "anzegebBWO",
                 style: "width:150px"
             }, "anzegebBWO").startup();
 
 
             var anzegebIRW = new dijitSimpleTextarea({
-                id: anzegebIRW,
-                name: anzegebIRW,
+                id: "anzegebIRW",
+                name: "anzegebIRW",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
@@ -250,8 +252,8 @@ define([
             flaecheLabel.innerText = "Grundstücksgröße";
 
             var flaecheNorm = new dijitSimpleTextarea({
-                id: flaecheNorm,
-                name: flaecheNorm,
+                id: "flaecheNorm",
+                name: "flaecheNorm",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
@@ -263,13 +265,13 @@ define([
                 value: 500,
                 smallDelta: 10,
                 constraints: { min: 0, max: 10000, places: 0 },
-                id: flaecheBWO,
+                id: "flaecheBWO",
                 style: "width:150px"
             }, "flaecheBWO").startup();
 
             var flaecheIRW = new dijitSimpleTextarea({
-                id: flaecheIRW,
-                name: flaecheIRW,
+                id: "flaecheIRW",
+                name: "flaecheIRW",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
@@ -297,15 +299,9 @@ define([
                 searchAttr: "name",
                 style: "width:150px",
                 onChange: function (newValue) {
-
-                    this.store.query({ name: newValue }).forEach(function (object) {
-                        var StandardIrw = dijitRegistry.byId("gstandIRW");
-                        StandardIrw.textbox.value = object.value.toFixed(4);
-
-                    });
+                    me.getKoefForSelection(newValue, this, "gstandIRW");
                 }
             }, "gstandBWO").startup();
-
 
             var gstandIRW = new dijitSimpleTextarea({
                 id: "gstandIRW",
@@ -320,8 +316,8 @@ define([
             wflLabel.innerText = "Wohnfläche";
 
             var wflNorm = new dijitSimpleTextarea({
-                id: wflNorm,
-                name: wflNorm,
+                id: "wflNorm",
+                name: "wflNorm",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
@@ -333,14 +329,14 @@ define([
                 value: 75,
                 smallDelta: 1,
                 constraints: { min: 25, max: 300, places: 0 },
-                id: wflBWO,
+                id: "wflBWO",
                 style: "width:150px"
             }, "wflBWO").startup();
 
 
             var wflIRW = new dijitSimpleTextarea({
-                id: wflIRW,
-                name: wflIRW,
+                id: "wflIRW",
+                name: "wflIRW",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
@@ -360,13 +356,15 @@ define([
                 value: '2021'
             }, "stagNorm").startup();
 
-
-            var stagBWO = new dijitNumberSpinner({
-                value: 2021,
-                smallDelta: 1,
-                constraints: { min: 2021, max: 2021, places: 0 },
+            var stagBWO = new FormComboBox({
                 id: "stagBWO",
-                style: "width:150px"
+                name: "stagBWO",
+                value: "Bitte wählen",
+                searchAttr: "name",
+                style: "width:150px",
+                onChange: function (newValue) {
+                    // me.getKoefForSelection(newValue,this,"stagIRW");
+                }
             }, "stagBWO").startup();
 
 
@@ -383,8 +381,8 @@ define([
             angIRWLabel.innerText = "angepasster IRW";
 
             var angIRWBWO = new dijitSimpleTextarea({
-                id: angIRWBWO,
-                name: angIRWBWO,
+                id: "angIRWBWO",
+                name: "angIRWBWO",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
@@ -395,8 +393,8 @@ define([
             wertLabel.innerText = "geschätzter Wert";
 
             var wertBWO = new dijitSimpleTextarea({
-                id: wertBWO,
-                name: wertBWO,
+                id: "wertBWO",
+                name: "wertBWO",
                 rows: "1",
                 cols: "15",
                 style: "width:150px",
@@ -491,46 +489,74 @@ define([
         showTable: function (stag, teilma, zone, setControlsToNorm) {
             var tableConfig = this.engine.getTableConfig(stag, teilma, zone);
 
+            var genaIRW = dijitRegistry.byId("genaIRW");
+            genaIRW.textbox.value = tableConfig["zonenIrw"];
+
+            var genaBWO = dijitRegistry.byId("genaBWO");
+            genaBWO.textbox.value = "Altenbeken";
+
+            var stagBWO = dijitRegistry.byId("stagBWO");
+            stagBWO.textbox.value = "01.01.2021";
+
+            for (value in tableConfig["Eigenschaften"]) {
+                 elementNormName = value.toLowerCase()+"Norm";
+                 elementNorm = dijitRegistry.byId(elementNormName);
+                 elementNormValue = tableConfig["Eigenschaften"][value]["Richtwert"];
+                 elementNorm.textbox.value = elementNormValue;
+
+                //  elementBWOName = value.toLowerCase()+"BWO";
+                //  console.log(elementBWOName);
+                //  elementBWO = dijitRegistry.byId(elementBWOName);
+                //  console.log(elementBWO);
+                //  elementBWOValue = tableConfig["Eigenschaften"][value]["WertInSteuerelement"];
+                //  console.log(elementBWOValue);
+                //  elementBWO.textbox.value = elementBWOValue;
+
+                 elementIRWName = value.toLowerCase()+"IRW";
+                 elementIRW = dijitRegistry.byId(elementIRWName);
+                 elementIRWValue = tableConfig["Eigenschaften"][value]["Koeffizient"];
+                 IRWNormAbw = (elementIRWValue-1) *100
+                 elementIRW.textbox.value = IRWNormAbw;
+            }
             console.log("Table-Config:");
             console.log(tableConfig);
 
         },
 
+        // Werte zur Auswahl von ComboBoxen bestimmen
+        // ComboBox Gebäudestandard 
         getValuesGstand: function () {
-            var StandardBWO = dijitRegistry.byId("gstandBWO");
-            var StagBWO = dijitRegistry.byId("stagBWO");
-            currentStag = "01.01." + StagBWO.value;
-            var genaBWO = dijitRegistry.byId("genaBWO");
-            currentGena = genaBWO.value;
-
-            config = this.engine.getTableConfig(currentStag, 2, "Altenbeken");
-            dataArray = config["Eigenschaften"]["GSTAND"]["Steuerelement"]["Liste"];
-
-            StandardBWO.store = new Memory({
-                data: dataArray
-            });
+            var gstandBWO = dijitRegistry.byId("gstandBWO");
+            this.getStoreValuesForComboBox(gstandBWO, "GSTAND");
         },
 
+        // ComboBox Ergänzende Gebäuderart
         getValuesEgart: function () {
             var egartBWO = dijitRegistry.byId("egartBWO");
-            var StagBWO = dijitRegistry.byId("stagBWO");
-            currentStag = "01.01." + StagBWO.value;
-            var genaBWO = dijitRegistry.byId("genaBWO");
-            currentGena = genaBWO.value;
+            this.getStoreValuesForComboBox(egartBWO, "EGART");
 
-            config = this.engine.getTableConfig(currentStag, 2, "Altenbeken");
-            dataArray = config["Eigenschaften"]["EGART"]["Steuerelement"]["Liste"];
-            egartBWO.store = new Memory({
+        },
+
+        // 
+        getStoreValuesForComboBox: function (aComboBox, feld) {
+            var StagBWO = dijitRegistry.byId("stagBWO");
+            currentStag = StagBWO.textbox.value;
+            var genaBWO = dijitRegistry.byId("genaBWO");
+            currentGena = genaBWO.textbox.value;
+           console.log(currentStag)
+            config = this.engine.getTableConfig(currentStag, 2, currentGena);
+            dataArray = config["Eigenschaften"][feld]["Steuerelement"]["Liste"];
+            aComboBox.store = new Memory({
                 data: dataArray
             });
         },
-
+        // Auswahlmöglichkeiten für Gemeinde/Zone bestimmen
         getValuesGena: function (newValue, init) {
             var genaBWO = dijitRegistry.byId("genaBWO");
-           
+
             var headerConfig = this.engine.getHeaderConfig();
-            var StagBWO = dijitRegistry.byId("stagBWO");
-            currentStag = "01.01." + StagBWO.value;
+            var stagBWO = dijitRegistry.byId("stagBWO");
+            currentStag = stagBWO.textbox.value;
             if (newValue) {
                 teilmarkt = headerConfig["TEILMA"][currentStag][0];
             } else {
@@ -538,9 +564,28 @@ define([
             };
 
             dataArray = headerConfig["ZONEN"][currentStag][teilmarkt];
-            
+
             genaBWO.store = new Memory({
                 data: dataArray
+            });
+        },
+
+        getValuesStag: function (newValue) {
+            var stagBWO = dijitRegistry.byId("stagBWO");
+            var headerConfig = this.engine.getHeaderConfig();
+            dataArray = headerConfig["STAG"];
+
+            stagBWO.store = new Memory({
+                data: dataArray
+            });
+        },
+
+        // Koeffizient für Auswahl in ComboBox bestimmen und in der IRW Spalte eintragen
+        // FIXME der Wert muss in die prozentuale Abweichung vom Normkoeffizienten umgerechnet werden. 
+        getKoefForSelection: function (newValue, aComboBox, IdIRW) {
+            aComboBox.store.query({ name: newValue }).forEach(function (object) {
+                var aIRWField = dijitRegistry.byId(IdIRW);
+                aIRWField.textbox.value = object.value.toFixed(4);
             });
         }
 
