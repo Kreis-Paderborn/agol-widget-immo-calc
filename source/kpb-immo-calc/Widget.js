@@ -103,7 +103,9 @@ define([
 
 				this.readDisplayNames(
 					this.readCoefficientsHandler(
-						this.readyHandler()
+						this.readZonesHandler(
+							this.readyHandler()
+						)
 					)
 				);
 
@@ -119,7 +121,7 @@ define([
 					extFieldArray.push(obj);
 				}
 
-				this.engine.externalFields = extFieldArray;
+				this.engine.setExternalFieldNames(extFieldArray);
 			},
 
 
@@ -142,7 +144,7 @@ define([
 							obj["TXT_REAL"] = feature.attributes.TXT_REAL;
 							displayNameArray.push(obj);
 						}
-						me.engine.displayNames = displayNameArray;
+						me.engine.setDisplayNames(displayNameArray);
 						callback();
 					})
 				}
@@ -171,7 +173,7 @@ define([
 							obj["GASL"] = feature.attributes.GASL;
 							obj["IRWTYP"] = feature.attributes.IRWTYP;
 							obj["TEILMA"] = feature.attributes.TEILMA;
-							obj["STAG"] = me.convertDate(feature.attributes.STAG);
+							obj["STAG"] = me.engine.convertDate(feature.attributes.STAG);
 							obj["STEUERELEM"] = feature.attributes.STEUERELEM;
 							obj["NUMZ"] = feature.attributes.NUMZ;
 							coeffArray.push(obj);
@@ -186,6 +188,45 @@ define([
 			readCoefficientsHandler: function (callback) {
 				me = this;
 				return function () { me.readCoefficients(callback) }
+			},
+
+
+			readZones: function (callback) {
+				var zonesArray = new Array();
+				var aQuery = new esri.tasks.Query();
+				var aZonesLayer = this.featureLayers.IRW_ZONEN;
+				var me = this;
+
+				// Wir bestimmen hier den Feldnamne für die Where-Abfrage
+				// dynamisch, da dieser an dem Klassennamen hängt, der sich 
+				// ändern kann.
+				var whereFieldName;
+				for (const field of aZonesLayer.fields) {
+					if(field.name.endsWith("TEILMA")) {
+						whereFieldName = field.name;
+						break;
+					}
+				}
+
+				// Frage alle Koeffizienten ab
+				aQuery.where = whereFieldName + " is not null";
+				aQuery.outFields = ["*"];
+				if (aZonesLayer !== undefined) {
+					aZonesLayer.queryFeatures(aQuery, function (featureSet) {
+
+						for (const feature of featureSet.features) {
+							zonesArray.push(feature.attributes);
+						}
+
+						me.engine.setZones(zonesArray);
+						callback();
+
+					})
+				}
+			},
+			readZonesHandler: function (callback) {
+				me = this;
+				return function () { me.readZones(callback) }
 			},
 
 			ready: function () {
@@ -207,23 +248,7 @@ define([
 			},
 
 
-			convertDate: function (DateInMilliseconds) {
-				var date = new Date(DateInMilliseconds);
-				var returnStr = "";
-
-				var day = date.getDate();
-				returnStr += day.toString().padStart(2, '0');
-				returnStr += '.';
-
-				var month = date.getMonth() + 1;
-				returnStr += month.toString().padStart(2, '0');
-				returnStr += '.';
-
-				var year = date.getFullYear();
-				returnStr += year.toString()
-
-				return returnStr;
-			},
+			
 
 
 			// onReceiveData: function (name, widgetId, data, historyData) {

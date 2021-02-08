@@ -12,8 +12,10 @@ define([
 
     return declare(null, {
 
-        externalFields: null,
-        displayNames: null,
+        _externalFieldNames: null,
+        _displayNames: null,
+        _headerConfig: null,
+        _tableConfig: null,
         coefficients: null,
 
         constructor: function (options) {
@@ -21,41 +23,59 @@ define([
         },
 
         getHeaderConfig() {
-            var headerConfig = {
-                "STAG": [
-                    { name: "01.01.2021", id: "1" }
-                ],
-                "TEILMA": {
-                    "01.01.2021": [
-                        "Eigentumswohnungen",
-                        "Ein- und Zweifamilienhäuser freistehend"
-                    ]
-                },
-                "ZONEN": {
-                    "01.01.2021": {
-                        "Eigentumswohnungen": [
-                            { name: "Bad Lippspringe", id: "2" },
-                            { name: "Borchen", id: "4" },
-                            { name: "Delbrück", id: "6" },
-                            { name: "Hövelhof", id: "7" },
-                            { name: "Salzkotten", id: "9" },
-                            { name: "Südliches Kreisgebiet", id: "10" }
-                        ],
-                        "Ein- und Zweifamilienhäuser freistehend": [
-                            { name: "Altenbeken", id: "1" },
-                            { name: "Bad Lippspringe", id: "2" },
-                            { name: "Bad Wünnenberg", id: "3" },
-                            { name: "Borchen", id: "4" },
-                            { name: "Büren", id: "5" },
-                            { name: "Delbrück", id: "6" },
-                            { name: "Hövelhof", id: "7" },
-                            { name: "Lichtenau", id: "8" },
-                            { name: "Salzkotten", id: "9" }
-                        ]
-                    }
-                }
-            }
-            return headerConfig;
+
+            return this._headerConfig;
+
+            // var headerConfig = {
+            //     "STAG": [ // sortiert nach ID
+            //         {
+            //             name: "01.01.2021",     // STAG als String
+            //             id: 2021                // Jahr aus STAG
+            //         }
+            //     ],
+            //     "TEILMA": {
+            //         "01.01.2021": [ // Sortiert nach ID
+            //             {
+            //                 name: "Eigentumswohnungen", // TEILMA_TXT
+            //                 id: 1                       // TEILMA
+            //             },
+            //             {
+            //                 name: "Ein- und Zweifamilienhäuser freistehend",  // TEILMA_TXT
+            //                 id: 2                                             // TEILMA
+            //             }
+            //         ]
+            //     },
+            //     "ZONEN": {
+            //         "01.01.2021": {
+            //             "Eigentumswohnungen": [  // Sortiert nach NAME
+            //                 {
+            //                     name: "Bad Lippspringe",        // IRW_NAME
+            //                     id: 2                           // NUMZ
+            //                 },
+            //                 {
+            //                     name: "Borchen",                // IRW_NAME
+            //                     id: 4                           // NUMZ         
+            //                 },
+            //                 { name: "Delbrück", id: 6 },
+            //                 { name: "Hövelhof", id: 7 },
+            //                 { name: "Salzkotten", id: 9 },
+            //                 { name: "Südliches Kreisgebiet", id: 10 }
+            //             ],
+            //             "Ein- und Zweifamilienhäuser freistehend": [
+            //                 { name: "Altenbeken", id: 1 },
+            //                 { name: "Bad Lippspringe", id: 2 },
+            //                 { name: "Bad Wünnenberg", id: 3 },
+            //                 { name: "Borchen", id: 4 },
+            //                 { name: "Büren", id: 5 },
+            //                 { name: "Delbrück", id: 6 },
+            //                 { name: "Hövelhof", id: 7 },
+            //                 { name: "Lichtenau", id: 8 },
+            //                 { name: "Salzkotten", id: 9 }
+            //             ]
+            //         }
+            //     }
+            // }
+            // return headerConfig;
         },
 
         getTableConfig(stag, teilma, zone) {
@@ -205,21 +225,186 @@ define([
         },
 
         mapDisplayNames: function (eignBoris, wertBoris) {
+            var myDisplayNames = this._displayNames[eignBoris];
+            var returnVal = "[" + eignBoris + ":" + wertBoris + "]"
 
-            // FIXME AT: die DisplayNames könnte man auch gleich zu Beginn in eine 
-            //           Struktur packen, wo man sie auf EIGN_BORIS aufschlüsselt.
-            //           Dann müsste man hier nicht immer über alle einträge loopen.
+            if (myDisplayNames !== undefined) {
+                for (const row of myDisplayNames) {
+                    if (row.WERT_BORIS === wertBoris) {
+                        returnVal = row.TXT_REAL;
+                        break;
+                    }
+                }
+            }
 
-            for (const row of this.displayNames) {
-                if (row.EIGN_BORIS === eignBoris
-                    && row.WERT_BORIS === wertBoris) {
-                    return row.TXT_REAL;
+            return returnVal;
+        },
+
+
+        /**
+         * Ziel dieser Methode ist, aus dem Array der Anzeigewerte eine
+         * einfach zu verwendene Zuordnungstabelle über die Boris-Eigenschaft zu erstellen.
+         * 
+         * @param {*} displayNameArray 
+         */
+        setDisplayNames: function (displayNameArray) {
+            this._displayNames = {};
+
+            for (const row of displayNameArray) {
+                if (this._displayNames[row.EIGN_BORIS] === undefined) {
+                    this._displayNames[row.EIGN_BORIS] = new Array();
+                }
+
+                var obj = {};
+                obj["WERT_BORIS"] = row.WERT_BORIS;
+                obj["TXT_REAL"] = row.TXT_REAL;
+                this._displayNames[row.EIGN_BORIS].push(obj);
+            }
+        },
+
+        /**
+         * Ziel dieser Methode ist, aus dem Array der externen Feldnamen (Aliase) eine
+         * einfach zu verwendene Zuordnungstabelle über die Boris-Eigenschaft zu erstellen.
+         * 
+         * Besonderheit bei den externen Feldnamen ist, dass es für viele Felder ein
+         * zusätzliches Feld mit der Endung "_TXT" gibt. Diese Zusatzfelder enthalten den Anzeigewert
+         * und sind für die BORIS-Datenabgabe wichtig. Sie enthalten den eigentlich zu verwendenden
+         * externen Feldnamen.
+         * 
+         * Beispiel:
+         * TEILMA = "Teilmarkt (Schlüssel)" mit Wert 1
+         * TEILMA_TXT = "Teilmarkt" mit Wert "Eigentumswohnungen"
+         * 
+         * Da wir hier einen einfachen Zugriff über die Boris-Eigenschaft anstreben,
+         * elemenieren wird hier die Zusatzfelder, übernehmen aber ihren externen Feldnamen
+         * für das Ausgangsfeld.
+         * 
+         * Beispiel:
+         * TEILMA = "Teilmarkt"
+         * 
+         * @param {*} extFieldNameArray 
+         */
+        setExternalFieldNames: function (extFieldNameArray) {
+            var tempExternalFieldNames = {};
+
+            // im ersten Lauf verarbeiten wir alle Angaben
+            for (const row of extFieldNameArray) {
+
+                // Das Table-Präfix entfernen und gemappten Wert merken
+                var n = row.name;
+                var eignBoris = n.substr(n.lastIndexOf('.') + 1);
+                tempExternalFieldNames[eignBoris] = row.alias;
+            }
+
+            // Nun, wo wir einen einfachen Zugriff über eignBoris haben,
+            // sortieren wir die aus, für die es eine "_TXT"-Alternative gibt.
+            this._externalFieldNames = {};
+            for (const tempExtFieldName in tempExternalFieldNames) {
+                if (!tempExtFieldName.endsWith("_TXT")) {
+                    var value = tempExternalFieldNames[tempExtFieldName];
+                    var alternativeKey = tempExtFieldName + "_TXT";
+                    var alternativeValue = tempExternalFieldNames[alternativeKey];
+
+                    if (alternativeValue !== undefined) {
+                        this._externalFieldNames[tempExtFieldName] = alternativeValue;
+                    } else {
+                        this._externalFieldNames[tempExtFieldName] = value;
+                    }
+                }
+            }
+        },
+
+        /**
+         * Ziel dieser Methode ist, aus dem Array der Zonen einfach zu verwendende Konfig-Objekte
+         * für den Header und die Tabellenansicht zu erstellen.         * 
+         * 
+         * @param {*} zonesArray 
+         */
+        setZones: function (zonesArray) {
+            var existingZoneFieldNames = {};
+            var tempZoneArray = new Array();
+
+            // Im ersten Durchlauf entfernen wir die Table-Präfixe 
+            // und merken uns, welche Felder überhaupt gesetzt sind
+            for (const fieldsObj of zonesArray) {
+                var obj = {};
+
+                for (const fullFieldname in fieldsObj) {
+                    var n = fullFieldname;
+                    var fieldname = n.substr(n.lastIndexOf('.') + 1);
+                    var value = fieldsObj[fullFieldname];
+
+                    if (value !== null) {
+                        if (existingZoneFieldNames[fieldname] === undefined) {
+                            existingZoneFieldNames[fieldname] = 1;
+                        } else {
+                            existingZoneFieldNames[fieldname] += 1;
+                        }
+                        obj[fieldname] = value;
+                    }
+                }
+                tempZoneArray.push(obj);
+            }
+
+            // Initiale Struktur für die Header- und TableConfig.
+            this._headerConfig = {
+                "STAG": new Array(),
+                "TEILMA": {},
+                "ZONEN": {}
+            };
+            this._tableConfig = {};
+
+            // Dann gehen wir nochmal über alle Zonen und bauen 
+            // damit die Zielstruktur für table- und headerConfig auf.
+            for (const fieldsObj of tempZoneArray) {
+
+                // Die erste Ebene ist immer STAG. Mit dieser werden 
+                // alle Liste initialisiert.
+                var stagMilliSec = fieldsObj["STAG"];
+                var stagId = new Date(stagMilliSec).getFullYear();
+                var stag = this.convertDate(stagMilliSec);
+
+                if (this._tableConfig[stag] === undefined) {
+                    this._tableConfig[stag] = {};
+                    this._headerConfig["STAG"].push({ "name": stag, "id": stagId });
+                    this._headerConfig["STAG"].sort(function (a, b) { return a.id - b.id });
+                    this._headerConfig["TEILMA"][stag] = new Array();
+                    this._headerConfig["ZONEN"][stag] = {};
+                }
+
+                // die zweite Ebene ist der Teilmarkt.
+                var teilma = fieldsObj["TEILMA"];
+                var teilmaTxt = fieldsObj["TEILMA_TXT"];
+                if (this._tableConfig[stag][teilmaTxt] === undefined) {
+                    this._tableConfig[stag][teilmaTxt] = {};
+                    this._headerConfig["TEILMA"][stag].push({ "name": teilmaTxt, "id": teilma });
+                    this._headerConfig["TEILMA"][stag].sort(function (a, b) { return a.id - b.id });
+                    this._headerConfig["ZONEN"][stag][teilmaTxt] = new Array();
+                }
+
+                // die dritte Ebene ist der IRW-Name mit hrere Richtwertzonen-ID.
+                // Damit ist die Header-Config auch schon komplett
+                var irwName = fieldsObj["NAME_IRW"];
+                var numz = fieldsObj["NUMZ"];
+                if (this._tableConfig[stag][teilmaTxt][irwName] === undefined) {
+                    this._tableConfig[stag][teilmaTxt][irwName] = {};
+                    this._headerConfig["ZONEN"][stag][teilmaTxt].push({ "name": irwName, "id": numz });
+                    this._headerConfig["ZONEN"][stag][teilmaTxt].sort(function (a, b) { return a.name.localeCompare(b.name); });
                 }
             }
         },
 
 
 
+        /**
+         * Hilfsmethode, die aus einer Spanne in einer Zeichenkette
+         * ein Objekt mit zwei echten Integerwerte machen.
+         * 
+         * Beispiel
+         * "10-20" --> {"Min":10, "Max": 20}
+         * 
+         * @param {*} range 
+         */
         splitRange: function (range) {
             var obj = {};
 
@@ -228,6 +413,30 @@ define([
             obj["Max"] = parseInt(stringArray[1]);
 
             return obj;
+        },
+
+        /**
+         * Hilfsmethode, um ein Datum von Millisekunden in die detusche
+         * Standardschreibweise zu überführen.
+         * 
+         * @param {*} DateInMilliseconds 
+         */
+        convertDate: function (DateInMilliseconds) {
+            var date = new Date(DateInMilliseconds);
+            var returnStr = "";
+
+            var day = date.getDate();
+            returnStr += day.toString().padStart(2, '0');
+            returnStr += '.';
+
+            var month = date.getMonth() + 1;
+            returnStr += month.toString().padStart(2, '0');
+            returnStr += '.';
+
+            var year = date.getFullYear();
+            returnStr += year.toString()
+
+            return returnStr;
         },
 
     })
