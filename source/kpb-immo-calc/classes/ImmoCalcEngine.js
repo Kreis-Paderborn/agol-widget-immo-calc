@@ -159,6 +159,15 @@ define([
             return tableConfig[stag][teilma_txt][zone];
         },
 
+        
+        /**
+         * FIXME AT: Wir sollten hier einmal alle UIs erstellen und dann nur die 
+         *           für STAG und TEILMA zurückgeben.
+         * 
+         * 
+         * @param {*} stag 
+         * @param {*} teilma 
+         */
         deriveUiControlConfig: function (stag, teilma) {
             var config = {};
 
@@ -321,31 +330,8 @@ define([
          * @param {*} zonesArray 
          */
         setZones: function (zonesArray) {
-            var existingZoneFieldNames = {};
-            var tempZoneArray = new Array();
-
-            // Im ersten Durchlauf entfernen wir die Table-Präfixe 
-            // und merken uns, welche Felder überhaupt gesetzt sind
-            for (const fieldsObj of zonesArray) {
-                var obj = {};
-
-                for (const fullFieldname in fieldsObj) {
-                    var n = fullFieldname;
-                    var fieldname = n.substr(n.lastIndexOf('.') + 1);
-                    var value = fieldsObj[fullFieldname];
-
-                    if (value !== null) {
-                        if (existingZoneFieldNames[fieldname] === undefined) {
-                            existingZoneFieldNames[fieldname] = 1;
-                        } else {
-                            existingZoneFieldNames[fieldname] += 1;
-                        }
-                        obj[fieldname] = value;
-                    }
-                }
-                tempZoneArray.push(obj);
-            }
-
+            var usedZoneFieldsArray = this.detectUsedZoneFields(zonesArray);
+            
             // Initiale Struktur für die Header- und TableConfig.
             this._headerConfig = {
                 "STAG": new Array(),
@@ -355,8 +341,8 @@ define([
             this._tableConfig = {};
 
             // Dann gehen wir nochmal über alle Zonen und bauen 
-            // damit die Zielstruktur für table- und headerConfig auf.
-            for (const fieldsObj of tempZoneArray) {
+            // damit die Zielstruktur für Table- und HeaderConfig auf.
+            for (const fieldsObj of usedZoneFieldsArray) {
 
                 // Die erste Ebene ist immer STAG. Mit dieser werden 
                 // alle Liste initialisiert.
@@ -391,8 +377,133 @@ define([
                     this._headerConfig["ZONEN"][stag][teilmaTxt].push({ "name": irwName, "id": numz });
                     this._headerConfig["ZONEN"][stag][teilmaTxt].sort(function (a, b) { return a.name.localeCompare(b.name); });
                 }
+
+                // Setzen der spezifischen Definitionen der
+                this._tableConfig[stag][teilmaTxt][irwName] = this.deriveZoneDetails(fieldsObj, stag, teilma);
+
             }
         },
+
+
+        deriveZoneDetails: function (fieldsObj, stag, teilma) {
+            var detailsObj = {};
+            var uiControls = this.deriveUiControlConfig(stag, teilma);
+
+            // Setzen des IRWs für die Zone
+            detailsObj["zonenIrw"] = fieldsObj.IMRW_TXT;
+
+            // Ermitteln und Setzen der Eigenschaften abhängig von STAG und TEILMA
+            eignObj = {};
+
+            for (const coeffRow of this.coefficients) {
+                if (coeffRow.STAG === stag && coeffRow.TEILMA === teilma) {
+                    var eign = coeffRow.EIGN_BORIS;
+                    if (eignObj[eign] === undefined) {
+                        eignObj[eign] = {};
+                    }
+                }
+            }
+
+            for (const eign in eignObj) {
+                var obj = {};
+                var uiControlConfig = uiControls[eign];
+                var internalValue = fieldsObj[eign];
+
+                obj["Titel"] = this._externalFieldNames[eign];
+                obj["Steuerelement"] = uiControlConfig;
+                
+                // Wenn eiun Anzeigetext verfügbar ist, verwenden wir diesen.
+                var eignTxt = eign + "_TXT";
+                if (fieldsObj[eignTxt] !== undefined) {
+                    obj["Richtwert"] = fieldsObj[eignTxt];
+                } else {
+                    obj["Richtwert"] = internalValue;
+                }
+
+                // Für den Wert im Steuerelement wird jedenfalls nicht der Anzeigetext verwendet.
+                obj["WertInSteuerelement"] = internalValue;
+                obj["RichtwertKoeffizient"] = this.mapValueToCoeff(internalValue, uiControlConfig);
+
+                eignObj[eign] = obj;
+            }
+
+            detailsObj["Eigenschaften"] = eignObj;
+
+
+
+            return detailsObj;
+        },
+
+
+        /**
+         * Gibt den Koeffizienten für einen Wert zurück unter berücksichtigung
+         * der übergebenen Konfiguration eines Steuerelementes.
+         * 
+         * @param {*} internalValue 
+         * @param {*} uiControlConfig 
+         */
+        mapValueToCoeff: function (internalValue, uiControlConfig) {
+            var type = uiControlConfig.Typ;
+            var returnVal; 
+
+            if (type === "ZAHLENEINGABE") {
+
+                // Wenn der Wert eine Spanne ist, müssen wir mit Mittelwert berechnen
+                if (typeof internalValue === "string") {
+                    var range = this.splitRange(internalValue);
+                    internalValue = (range.Max + range.Min) / 2;
+                }
+
+                for (const range of uiControlConfig.Spannen) {
+                    if (internalValue >= range.Min && internalValue <= range.Max) {
+                        returnVal = range.Koeffizient;
+                        break;
+                    }
+                }
+
+            } else if (type === "AUSWAHL") {
+
+                for (const listEntry of uiControlConfig.Liste) {
+                    if (listEntry.id.toString() === internalValue.toString()) {
+                        returnVal = listEntry.value;
+                        break;
+                    }
+                }
+            }
+
+            return returnVal;
+        },
+
+
+        detectUsedZoneFields: function (zonesArray) {
+            var existingZoneFieldNames = {};
+            var usedZoneFieldsArray = new Array();
+
+            // Im ersten Durchlauf entfernen wir die Table-Präfixe 
+            // und merken uns, welche Felder überhaupt gesetzt sind
+            for (const fieldsObj of zonesArray) {
+                var obj = {};
+
+                for (const fullFieldname in fieldsObj) {
+                    var n = fullFieldname;
+                    var fieldname = n.substr(n.lastIndexOf('.') + 1);
+                    var value = fieldsObj[fullFieldname];
+
+                    if (value !== null) {
+                        if (existingZoneFieldNames[fieldname] === undefined) {
+                            existingZoneFieldNames[fieldname] = 1;
+                        } else {
+                            existingZoneFieldNames[fieldname] += 1;
+                        }
+                        obj[fieldname] = value;
+                    }
+                }
+                usedZoneFieldsArray.push(obj);
+            }
+
+            return usedZoneFieldsArray;
+        },
+
 
 
 
