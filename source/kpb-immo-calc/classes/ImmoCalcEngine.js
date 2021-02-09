@@ -24,139 +24,171 @@ define([
 
         getHeaderConfig() {
 
-            return this._headerConfig;
+            var headerConfig = this._headerConfig;
 
-            // var headerConfig = {
-            //     "STAG": [ // sortiert nach ID
-            //         {
-            //             name: "01.01.2021",     // STAG als String
-            //             id: 2021                // Jahr aus STAG
-            //         }
-            //     ],
-            //     "TEILMA": {
-            //         "01.01.2021": [ // Sortiert nach ID
-            //             {
-            //                 name: "Eigentumswohnungen", // TEILMA_TXT
-            //                 id: 1                       // TEILMA
-            //             },
-            //             {
-            //                 name: "Ein- und Zweifamilienhäuser freistehend",  // TEILMA_TXT
-            //                 id: 2                                             // TEILMA
-            //             }
-            //         ]
-            //     },
-            //     "ZONEN": {
-            //         "01.01.2021": {
-            //             "Eigentumswohnungen": [  // Sortiert nach NAME
-            //                 {
-            //                     name: "Bad Lippspringe",        // IRW_NAME
-            //                     id: 2                           // NUMZ
-            //                 },
-            //                 {
-            //                     name: "Borchen",                // IRW_NAME
-            //                     id: 4                           // NUMZ         
-            //                 },
-            //                 { name: "Delbrück", id: 6 },
-            //                 { name: "Hövelhof", id: 7 },
-            //                 { name: "Salzkotten", id: 9 },
-            //                 { name: "Südliches Kreisgebiet", id: 10 }
-            //             ],
-            //             "Ein- und Zweifamilienhäuser freistehend": [
-            //                 { name: "Altenbeken", id: 1 },
-            //                 { name: "Bad Lippspringe", id: 2 },
-            //                 { name: "Bad Wünnenberg", id: 3 },
-            //                 { name: "Borchen", id: 4 },
-            //                 { name: "Büren", id: 5 },
-            //                 { name: "Delbrück", id: 6 },
-            //                 { name: "Hövelhof", id: 7 },
-            //                 { name: "Lichtenau", id: 8 },
-            //                 { name: "Salzkotten", id: 9 }
-            //             ]
-            //         }
-            //     }
-            // }
-            // return headerConfig;
+            if (headerConfig === null) {
+                headerConfig = {
+                    "STAG": [ // sortiert nach ID
+                        {
+                            name: "01.01.2021",     // STAG als String
+                            id: 2021                // Jahr aus STAG
+                        }
+                    ],
+                    "TEILMA": {
+                        "01.01.2021": [ // Sortiert nach ID
+                            {
+                                name: "Eigentumswohnungen", // TEILMA_TXT
+                                id: 1                       // TEILMA
+                            },
+                            {
+                                name: "Ein- und Zweifamilienhäuser freistehend",  // TEILMA_TXT
+                                id: 2                                             // TEILMA
+                            }
+                        ]
+                    },
+                    "ZONEN": {
+                        "01.01.2021": {
+                            "Eigentumswohnungen": [  // Sortiert nach NAME
+                                {
+                                    name: "Bad Lippspringe",        // IRW_NAME
+                                    id: 2                           // NUMZ
+                                },
+                                {
+                                    name: "Altenbeken",              // IRW_NAME
+                                    id: 1                           // NUMZ
+                                }
+                            ],
+                            "Ein- und Zweifamilienhäuser freistehend": [
+                                {
+                                    name: "Delbrück",       // IRW_NAME
+                                    id: 6                   // NUMZ
+                                },
+                                {
+                                    name: "Altenbeken",      // IRW_NAME
+                                    id: 1                   // NUMZ
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+            return headerConfig;
         },
 
         getTableConfig(stag, teilma, zone) {
 
-            // var uiControls = {
-            //     "BJ": {
-            //         "Typ": "ZAHLENEINGABE",
-            //         "Min": 0,
-            //         "Max": 2022,
-            //         "Spannen": [
-            //             { "Min": 0, "Max": 1959, "Koeffizient": 1.7845 },
-            //             { "Min": 1960, "Max": 1969, "Koeffizient": 1.8554 }
-            //         ]
-            //     },
-            //     "GSTAND": {
-            //         "Typ": "AUSWAHL",
-            //         "Liste": [
-            //             { "name": "normal", "id": 1, "value:": 1.856 }
-            //         ]
-            //     }
-            // };
-            // uiControls = this.deriveUiControlConfig(stag, teilma);
-
-            // var tableConfig = {
-            //     "01.01.2021": { // Aus IRW_KOEFF (Komplett) mit DISTINCT auf JAHR + Ableitung von 2020 --> "01.01.2021"
-            //         "Eigentumswohnungen": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=1)
-            //             "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
-            //                 "zonenIrw": "1550 €/m²", // Aus IRW_ZONEN IRWE_TXT
-            //                 "Eigenschaften": {
-            //                     "BJ": { // Aus IRW_KOEFF 
-            //                         "Titel": "Baujahr",
-            //                         "Richtwert": 1955,
-            //                         "Steuerelement": uiControls["BJ"],
-            //                         "WertInSteuerelement": 1955,
-            //                         "Koeffizient": 1.7845
-            //                     }
-            //                 }
-            //             },
-            //             "Bad Lippspringe": {
-
-            //             }
-
-            //         },
-            //         "Ein- und Zweifamilienhäuser freistehend": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=2
-            //             "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
-            //                 "zonenIrw": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
-            //                 "Eigenschaften": {
-            //                     "BJ": { // Aus IRW_KOEFF 
-            //                         "Titel": "Baujahr",
-            //                         "Richtwert": 1955,
-            //                         "Steuerelement": uiControls["BJ"],
-            //                         "WertInSteuerelement": 1955,
-            //                         "Koeffizient": 1.7845
-            //                     },
-            //                     "GSTAND": {
-            //                         "Titel": "Gebäudestandard",
-            //                         "Richtwert": "Mittel",
-            //                         "Steuerelement": uiControls["GSTAND"],
-            //                         "WertInSteuerelement": "Mittel",
-            //                         "Koeffizient": 1.0
-            //                     },
-            //                     "EGART": {
-            //                         "Titel": "Ergänzende Gebäudeart",
-            //                         "Richtwert": "freistehend",
-            //                         "Steuerelement": uiControls["EGART"],
-            //                         "WertInSteuerelement": "freistehend",
-            //                         "Koeffizient": 0.865
-            //                     }
-            //                 }
-
-            //             }
-
-            //         }
-
-            //     }
-
-            // };
-
-            // gTableConfig = tableConfig;
             var teilma_txt = this.mapDisplayNames("TEILMA", teilma.toString());
-            return this._tableConfig[stag][teilma_txt][zone];
+            var uiControls = this.deriveUiControlConfig(stag, teilma);
+            var tableConfig = this._tableConfig;
+
+            if (uiControls === undefined) {
+                uiControls = {
+                    "BJ": {
+                        "Typ": "ZAHLENEINGABE",
+                        "Min": 0,
+                        "Max": 2022,
+                        "Spannen": [
+                            { "Min": 0, "Max": 1990, "Koeffizient": 1.7845 },
+                            { "Min": 1990, "Max": 2021, "Koeffizient": 1.9554 }
+                        ]
+                    },
+                    "GSTAND": {
+                        "Typ": "AUSWAHL",
+                        "Liste": [
+                            { "name": "Toll", "id": 1, "value:": 1.856 },
+                            { "name": "Mies", "id": 2, "value:": 0.856 }
+                        ]
+                    }
+                };
+            }
+
+            if (tableConfig === null) {
+
+                if (teilma === 1) {
+                    teilma_txt = "Eigentumswohnungen";
+                } else {
+                    teilma_txt = "Ein- und Zweifamilienhäuser freistehend";
+                }
+
+
+                tableConfig = {
+                    "01.01.2021": { // Aus IRW_KOEFF (Komplett) mit DISTINCT auf JAHR + Ableitung von 2020 --> "01.01.2021"
+                        "Eigentumswohnungen": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=1)
+                            "Bad Lippspringe": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
+                                "zonenIrw": "1550 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                                "Eigenschaften": {
+                                    "BJ": { // Aus IRW_KOEFF 
+                                        "Titel": "Baujahr",
+                                        "Richtwert": 1955,
+                                        "Steuerelement": uiControls["BJ"],
+                                        "WertInSteuerelement": 1955,
+                                        "RichtwertKoeffizient": 1.7845
+                                    }
+                                }
+                            },
+                            "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
+                                "zonenIrw": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                                "Eigenschaften": {
+                                    "BJ": { // Aus IRW_KOEFF 
+                                        "Titel": "Baujahr",
+                                        "Richtwert": 1955,
+                                        "Steuerelement": uiControls["BJ"],
+                                        "WertInSteuerelement": 1955,
+                                        "RichtwertKoeffizient": 1.7845
+                                    }
+                                }
+                            }
+
+                        },
+                        "Ein- und Zweifamilienhäuser freistehend": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=2
+                            "Delbrück": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
+                                "zonenIrw": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                                "Eigenschaften": {
+                                    "BJ": { // Aus IRW_KOEFF 
+                                        "Titel": "Baujahr",
+                                        "Richtwert": 1955,
+                                        "Steuerelement": uiControls["BJ"],
+                                        "WertInSteuerelement": 1955,
+                                        "RichtwertKoeffizient": 1.7845
+                                    },
+                                    "GSTAND": {
+                                        "Titel": "Gebäudestandard",
+                                        "Richtwert": "Mittel",
+                                        "Steuerelement": uiControls["GSTAND"],
+                                        "WertInSteuerelement": "Mittel",
+                                        "RichtwertKoeffizient": 1.0
+                                    }
+                                }
+                            },
+                            "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
+                                "zonenIrw": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                                "Eigenschaften": {
+                                    "BJ": { // Aus IRW_KOEFF 
+                                        "Titel": "Baujahr",
+                                        "Richtwert": 1955,
+                                        "Steuerelement": uiControls["BJ"],
+                                        "WertInSteuerelement": 1955,
+                                        "RichtwertKoeffizient": 1.7845
+                                    },
+                                    "GSTAND": {
+                                        "Titel": "Gebäudestandard",
+                                        "Richtwert": "Mittel",
+                                        "Steuerelement": uiControls["GSTAND"],
+                                        "WertInSteuerelement": "Mittel",
+                                        "RichtwertKoeffizient": 1.0
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+
+                };
+            }
+
+            return tableConfig[stag][teilma_txt][zone];
+
         },
 
 
@@ -169,64 +201,67 @@ define([
          * @param {*} teilma 
          */
         deriveUiControlConfig: function (stag, teilma) {
-            var config = {};
 
-            for (const row of this.coefficients) {
-                if (row.STAG === stag && row.TEILMA === teilma) {
-                    if (config[row.EIGN_BORIS] === undefined) {
-                        config[row.EIGN_BORIS] = {};
-                    }
+            if (this.coefficients !== null) {
+                var config = {};
 
-                    // Behandlung von Zahleneingabe
-                    if (row.STEUERELEM.startsWith("ZAHLENEINGABE")) {
-                        config[row.EIGN_BORIS]["Typ"] = "ZAHLENEINGABE";
-                        var range = this.splitRange(row.WERT_BORIS);
-
-                        // Alle Spannen werden gemerkt
-                        // Diese kommen dann bei der Anwendung der Koeffizienten zum Einsatz
-                        if (config[row.EIGN_BORIS]["Spannen"] === undefined) {
-                            config[row.EIGN_BORIS]["Spannen"] = new Array();
+                for (const row of this.coefficients) {
+                    if (row.STAG === stag && row.TEILMA === teilma) {
+                        if (config[row.EIGN_BORIS] === undefined) {
+                            config[row.EIGN_BORIS] = {};
                         }
-                        var rangeObj = {};
-                        rangeObj["Min"] = range["Min"];
-                        rangeObj["Max"] = range["Max"];
-                        rangeObj["Koeffizient"] = row.KOEFF;
-                        config[row.EIGN_BORIS]["Spannen"].push(rangeObj);
 
-                        // Der niedrigste MIN als Gesamt-Min
-                        if (config[row.EIGN_BORIS]["Min"] === undefined) {
-                            config[row.EIGN_BORIS]["Min"] = range["Min"];
-                        } else {
-                            if (config[row.EIGN_BORIS]["Min"] > range["Min"]) {
+                        // Behandlung von Zahleneingabe
+                        if (row.STEUERELEM.startsWith("ZAHLENEINGABE")) {
+                            config[row.EIGN_BORIS]["Typ"] = "ZAHLENEINGABE";
+                            var range = this.splitRange(row.WERT_BORIS);
+
+                            // Alle Spannen werden gemerkt
+                            // Diese kommen dann bei der Anwendung der Koeffizienten zum Einsatz
+                            if (config[row.EIGN_BORIS]["Spannen"] === undefined) {
+                                config[row.EIGN_BORIS]["Spannen"] = new Array();
+                            }
+                            var rangeObj = {};
+                            rangeObj["Min"] = range["Min"];
+                            rangeObj["Max"] = range["Max"];
+                            rangeObj["Koeffizient"] = row.KOEFF;
+                            config[row.EIGN_BORIS]["Spannen"].push(rangeObj);
+
+                            // Der niedrigste MIN als Gesamt-Min
+                            if (config[row.EIGN_BORIS]["Min"] === undefined) {
                                 config[row.EIGN_BORIS]["Min"] = range["Min"];
+                            } else {
+                                if (config[row.EIGN_BORIS]["Min"] > range["Min"]) {
+                                    config[row.EIGN_BORIS]["Min"] = range["Min"];
+                                }
                             }
-                        }
 
-                        // Der höchste Max als Gesamt-Ma
-                        if (config[row.EIGN_BORIS]["Max"] === undefined) {
-                            config[row.EIGN_BORIS]["Max"] = range["Max"];
-                        } else {
-                            if (config[row.EIGN_BORIS]["Max"] < range["Max"]) {
+                            // Der höchste Max als Gesamt-Ma
+                            if (config[row.EIGN_BORIS]["Max"] === undefined) {
                                 config[row.EIGN_BORIS]["Max"] = range["Max"];
+                            } else {
+                                if (config[row.EIGN_BORIS]["Max"] < range["Max"]) {
+                                    config[row.EIGN_BORIS]["Max"] = range["Max"];
+                                }
                             }
                         }
-                    }
 
-                    // Behandlung von Auswahlwerten
-                    else if (row.STEUERELEM.startsWith("AUSWAHL")) {
-                        config[row.EIGN_BORIS]["Typ"] = "AUSWAHL";
+                        // Behandlung von Auswahlwerten
+                        else if (row.STEUERELEM.startsWith("AUSWAHL")) {
+                            config[row.EIGN_BORIS]["Typ"] = "AUSWAHL";
 
-                        // Alle Listeeinträge werden samt Koeffizienten gemerkt
-                        if (config[row.EIGN_BORIS]["Liste"] === undefined) {
-                            config[row.EIGN_BORIS]["Liste"] = new Array();
+                            // Alle Listeeinträge werden samt Koeffizienten gemerkt
+                            if (config[row.EIGN_BORIS]["Liste"] === undefined) {
+                                config[row.EIGN_BORIS]["Liste"] = new Array();
+                            }
+                            var rangeObj = {};
+                            rangeObj["name"] = this.mapDisplayNames(row.EIGN_BORIS, row.WERT_BORIS);
+                            rangeObj["id"] = row.WERT_BORIS;
+                            rangeObj["value"] = row.KOEFF;
+                            config[row.EIGN_BORIS]["Liste"].push(rangeObj);
                         }
-                        var rangeObj = {};
-                        rangeObj["name"] = this.mapDisplayNames(row.EIGN_BORIS, row.WERT_BORIS);
-                        rangeObj["id"] = row.WERT_BORIS;
-                        rangeObj["value"] = row.KOEFF;
-                        config[row.EIGN_BORIS]["Liste"].push(rangeObj);
-                    }
 
+                    }
                 }
             }
 
@@ -234,14 +269,17 @@ define([
         },
 
         mapDisplayNames: function (eignBoris, wertBoris) {
-            var myDisplayNames = this._displayNames[eignBoris];
             var returnVal = "[" + eignBoris + ":" + wertBoris + "]"
 
-            if (myDisplayNames !== undefined) {
-                for (const row of myDisplayNames) {
-                    if (row.WERT_BORIS === wertBoris) {
-                        returnVal = row.TXT_REAL;
-                        break;
+            if (this._displayNames !== null) {
+                var myDisplayNames = this._displayNames[eignBoris];
+
+                if (myDisplayNames !== undefined) {
+                    for (const row of myDisplayNames) {
+                        if (row.WERT_BORIS === wertBoris) {
+                            returnVal = row.TXT_REAL;
+                            break;
+                        }
                     }
                 }
             }

@@ -113,12 +113,15 @@ define([
 
 			readExternalFieldnames: function () {
 				var extFieldArray = new Array();
+				var aZonesLayer = this.featureLayers.IRW_ZONEN;
 
-				for (const field of this.featureLayers.IRW_ZONEN.fields) {
-					var obj = {};
-					obj["name"] = field.name;
-					obj["alias"] = field.alias;
-					extFieldArray.push(obj);
+				if (aZonesLayer !== undefined) {
+					for (const field of this.featureLayers.IRW_ZONEN.fields) {
+						var obj = {};
+						obj["name"] = field.name;
+						obj["alias"] = field.alias;
+						extFieldArray.push(obj);
+					}
 				}
 
 				this.engine.setExternalFieldNames(extFieldArray);
@@ -131,10 +134,11 @@ define([
 				var aAnzeigeFeatureLayer = this.featureLayers.IRW_ANZEIGEWERTE;
 				var me = this;
 
-				// Frage die Anzeigenamen für "category" ab
-				aQuery.where = "VERWENDET = 'ja'";
-				aQuery.outFields = ["*"];
 				if (aAnzeigeFeatureLayer !== undefined) {
+
+					// Frage die Anzeigenamen für "category" ab
+					aQuery.where = "VERWENDET = 'ja'";
+					aQuery.outFields = ["*"];
 					aAnzeigeFeatureLayer.queryFeatures(aQuery, function (featureSet) {
 
 						for (const feature of featureSet.features) {
@@ -147,6 +151,9 @@ define([
 						me.engine.setDisplayNames(displayNameArray);
 						callback();
 					})
+				} else {
+					console.error("FeatureLayer IRW_ANZEIGEWERTE nicht verfügbar.");
+					callback();
 				}
 			},
 
@@ -157,10 +164,11 @@ define([
 				var aKoeffFeatureLayer = this.featureLayers.IRW_IMMOCALC_KOEFFIZIENTEN;
 				var me = this;
 
-				// Frage alle Koeffizienten ab
-				aQuery.where = "GASL is not null";
-				aQuery.outFields = ["*"];
 				if (aKoeffFeatureLayer !== undefined) {
+
+					// Frage alle Koeffizienten ab
+					aQuery.where = "GASL is not null";
+					aQuery.outFields = ["*"];
 					aKoeffFeatureLayer.queryFeatures(aQuery, function (featureSet) {
 
 						for (const feature of featureSet.features) {
@@ -183,6 +191,9 @@ define([
 						callback();
 
 					})
+				} else {
+					console.error("FeatureLayer IRW_IMMOCALC_KOEFFIZIENTEN nicht verfügbar.");
+					callback();
 				}
 			},
 			readCoefficientsHandler: function (callback) {
@@ -197,21 +208,22 @@ define([
 				var aZonesLayer = this.featureLayers.IRW_ZONEN;
 				var me = this;
 
-				// Wir bestimmen hier den Feldnamne für die Where-Abfrage
-				// dynamisch, da dieser an dem Klassennamen hängt, der sich 
-				// ändern kann.
-				var whereFieldName;
-				for (const field of aZonesLayer.fields) {
-					if(field.name.endsWith("TEILMA")) {
-						whereFieldName = field.name;
-						break;
-					}
-				}
-
-				// Frage alle Koeffizienten ab
-				aQuery.where = whereFieldName + " is not null";
-				aQuery.outFields = ["*"];
 				if (aZonesLayer !== undefined) {
+
+					// Wir bestimmen hier den Feldnamne für die Where-Abfrage
+					// dynamisch, da dieser an dem Klassennamen hängt, der sich 
+					// ändern kann.
+					var whereFieldName;
+					for (const field of aZonesLayer.fields) {
+						if (field.name.endsWith("TEILMA")) {
+							whereFieldName = field.name;
+							break;
+						}
+					}
+
+					// Frage alle Koeffizienten ab
+					aQuery.where = whereFieldName + " is not null";
+					aQuery.outFields = ["*"];
 					aZonesLayer.queryFeatures(aQuery, function (featureSet) {
 
 						for (const feature of featureSet.features) {
@@ -222,6 +234,9 @@ define([
 						callback();
 
 					})
+				}else {
+					console.error("FeatureLayer IRW_ZONEN nicht verfügbar.");
+					callback();
 				}
 			},
 			readZonesHandler: function (callback) {
@@ -248,7 +263,7 @@ define([
 			},
 
 
-			
+
 
 
 			// onReceiveData: function (name, widgetId, data, historyData) {
