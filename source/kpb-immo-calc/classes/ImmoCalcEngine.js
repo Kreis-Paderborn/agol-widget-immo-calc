@@ -80,86 +80,86 @@ define([
 
         getTableConfig(stag, teilma, zone) {
 
-            var uiControls = {
-                "BJ": {
-                    "Typ": "ZAHLENEINGABE",
-                    "Min": 0,
-                    "Max": 2022,
-                    "Spannen": [
-                        { "Min": 0, "Max": 1959, "Koeffizient": 1.7845 },
-                        { "Min": 1960, "Max": 1969, "Koeffizient": 1.8554 }
-                    ]
-                },
-                "GSTAND": {
-                    "Typ": "AUSWAHL",
-                    "Liste": [
-                        { "name": "normal", "id": 1, "value:": 1.856 }
-                    ]
-                }
-            };
-            uiControls = this.deriveUiControlConfig(stag, teilma);
+            // var uiControls = {
+            //     "BJ": {
+            //         "Typ": "ZAHLENEINGABE",
+            //         "Min": 0,
+            //         "Max": 2022,
+            //         "Spannen": [
+            //             { "Min": 0, "Max": 1959, "Koeffizient": 1.7845 },
+            //             { "Min": 1960, "Max": 1969, "Koeffizient": 1.8554 }
+            //         ]
+            //     },
+            //     "GSTAND": {
+            //         "Typ": "AUSWAHL",
+            //         "Liste": [
+            //             { "name": "normal", "id": 1, "value:": 1.856 }
+            //         ]
+            //     }
+            // };
+            // uiControls = this.deriveUiControlConfig(stag, teilma);
 
-            var tableConfig = {
-                "01.01.2021": { // Aus IRW_KOEFF (Komplett) mit DISTINCT auf JAHR + Ableitung von 2020 --> "01.01.2021"
-                    "Eigentumswohnungen": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=1)
-                        "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
-                            "zonenIrw": "1550 €/m²", // Aus IRW_ZONEN IRWE_TXT
-                            "Eigenschaften": {
-                                "BJ": { // Aus IRW_KOEFF 
-                                    "Titel": "Baujahr",
-                                    "Richtwert": 1955,
-                                    "Steuerelement": uiControls["BJ"],
-                                    "WertInSteuerelemet": 1955,
-                                    "Koeffizient": 1.7845
-                                }
-                            }
-                        },
-                        "Bad Lippspringe": {
+            // var tableConfig = {
+            //     "01.01.2021": { // Aus IRW_KOEFF (Komplett) mit DISTINCT auf JAHR + Ableitung von 2020 --> "01.01.2021"
+            //         "Eigentumswohnungen": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=1)
+            //             "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
+            //                 "zonenIrw": "1550 €/m²", // Aus IRW_ZONEN IRWE_TXT
+            //                 "Eigenschaften": {
+            //                     "BJ": { // Aus IRW_KOEFF 
+            //                         "Titel": "Baujahr",
+            //                         "Richtwert": 1955,
+            //                         "Steuerelement": uiControls["BJ"],
+            //                         "WertInSteuerelement": 1955,
+            //                         "Koeffizient": 1.7845
+            //                     }
+            //                 }
+            //             },
+            //             "Bad Lippspringe": {
 
-                        }
+            //             }
 
-                    },
-                    "Ein- und Zweifamilienhäuser freistehend": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=2
-                        "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
-                            "zonenIrw": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
-                            "Eigenschaften": {
-                                "BJ": { // Aus IRW_KOEFF 
-                                    "Titel": "Baujahr",
-                                    "Richtwert": 1955,
-                                    "Steuerelement": uiControls["BJ"],
-                                    "WertInSteuerelemet": 1955,
-                                    "Koeffizient": 1.7845
-                                },
-                                "GSTAND": {
-                                    "Titel": "Gebäudestandard",
-                                    "Richtwert": "Mittel",
-                                    "Steuerelement": uiControls["GSTAND"],
-                                    "WertInSteuerelemet": "Mittel",
-                                    "Koeffizient": 1.0
-                                },
-                                "EGART": {
-                                    "Titel": "Ergänzende Gebäudeart",
-                                    "Richtwert": "freistehend",
-                                    "Steuerelement": uiControls["EGART"],
-                                    "WertInSteuerelemet": "freistehend",
-                                    "Koeffizient": 0.865
-                                }
-                            }
+            //         },
+            //         "Ein- und Zweifamilienhäuser freistehend": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=2
+            //             "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
+            //                 "zonenIrw": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
+            //                 "Eigenschaften": {
+            //                     "BJ": { // Aus IRW_KOEFF 
+            //                         "Titel": "Baujahr",
+            //                         "Richtwert": 1955,
+            //                         "Steuerelement": uiControls["BJ"],
+            //                         "WertInSteuerelement": 1955,
+            //                         "Koeffizient": 1.7845
+            //                     },
+            //                     "GSTAND": {
+            //                         "Titel": "Gebäudestandard",
+            //                         "Richtwert": "Mittel",
+            //                         "Steuerelement": uiControls["GSTAND"],
+            //                         "WertInSteuerelement": "Mittel",
+            //                         "Koeffizient": 1.0
+            //                     },
+            //                     "EGART": {
+            //                         "Titel": "Ergänzende Gebäudeart",
+            //                         "Richtwert": "freistehend",
+            //                         "Steuerelement": uiControls["EGART"],
+            //                         "WertInSteuerelement": "freistehend",
+            //                         "Koeffizient": 0.865
+            //                     }
+            //                 }
 
-                        }
+            //             }
 
-                    }
+            //         }
 
-                }
+            //     }
 
-            };
+            // };
 
-            gTableConfig = tableConfig;
+            // gTableConfig = tableConfig;
             var teilma_txt = this.mapDisplayNames("TEILMA", teilma.toString());
-            return tableConfig[stag][teilma_txt][zone];
+            return this._tableConfig[stag][teilma_txt][zone];
         },
 
-        
+
         /**
          * FIXME AT: Wir sollten hier einmal alle UIs erstellen und dann nur die 
          *           für STAG und TEILMA zurückgeben.
@@ -325,13 +325,13 @@ define([
 
         /**
          * Ziel dieser Methode ist, aus dem Array der Zonen einfach zu verwendende Konfig-Objekte
-         * für den Header und die Tabellenansicht zu erstellen.         * 
+         * für den Header und die Tabellen-Konfiguration zu erstellen.         
          * 
          * @param {*} zonesArray 
          */
         setZones: function (zonesArray) {
             var usedZoneFieldsArray = this.detectUsedZoneFields(zonesArray);
-            
+
             // Initiale Struktur für die Header- und TableConfig.
             this._headerConfig = {
                 "STAG": new Array(),
@@ -340,8 +340,6 @@ define([
             };
             this._tableConfig = {};
 
-            // Dann gehen wir nochmal über alle Zonen und bauen 
-            // damit die Zielstruktur für Table- und HeaderConfig auf.
             for (const fieldsObj of usedZoneFieldsArray) {
 
                 // Die erste Ebene ist immer STAG. Mit dieser werden 
@@ -373,14 +371,12 @@ define([
                 var irwName = fieldsObj["NAME_IRW"];
                 var numz = fieldsObj["NUMZ"];
                 if (this._tableConfig[stag][teilmaTxt][irwName] === undefined) {
-                    this._tableConfig[stag][teilmaTxt][irwName] = {};
                     this._headerConfig["ZONEN"][stag][teilmaTxt].push({ "name": irwName, "id": numz });
                     this._headerConfig["ZONEN"][stag][teilmaTxt].sort(function (a, b) { return a.name.localeCompare(b.name); });
+
+                    // Hier werden nun die Bestandteile für alle vier Spalten der Tabelle festgelegt.
+                    this._tableConfig[stag][teilmaTxt][irwName] = this.deriveZoneDetails(fieldsObj, stag, teilma);
                 }
-
-                // Setzen der spezifischen Definitionen der
-                this._tableConfig[stag][teilmaTxt][irwName] = this.deriveZoneDetails(fieldsObj, stag, teilma);
-
             }
         },
 
@@ -408,21 +404,23 @@ define([
                 var obj = {};
                 var uiControlConfig = uiControls[eign];
                 var internalValue = fieldsObj[eign];
+                var valueInControl = null;
 
                 obj["Titel"] = this._externalFieldNames[eign];
                 obj["Steuerelement"] = uiControlConfig;
-                
-                // Wenn eiun Anzeigetext verfügbar ist, verwenden wir diesen.
+
+                // Wenn ein Anzeigetext verfügbar ist, verwenden wir diesen.
                 var eignTxt = eign + "_TXT";
                 if (fieldsObj[eignTxt] !== undefined) {
                     obj["Richtwert"] = fieldsObj[eignTxt];
+                    valueInControl = this.detectValueForControl(internalValue, fieldsObj[eignTxt], uiControlConfig);
                 } else {
                     obj["Richtwert"] = internalValue;
+                    valueInControl = internalValue;
                 }
 
-                // Für den Wert im Steuerelement wird jedenfalls nicht der Anzeigetext verwendet.
-                obj["WertInSteuerelement"] = internalValue;
-                obj["RichtwertKoeffizient"] = this.mapValueToCoeff(internalValue, uiControlConfig);
+                obj["WertInSteuerelement"] = valueInControl;
+                obj["RichtwertKoeffizient"] = this.mapValueToCoeff(valueInControl, uiControlConfig);
 
                 eignObj[eign] = obj;
             }
@@ -434,9 +432,34 @@ define([
             return detailsObj;
         },
 
+        /**
+         * Wenn es einen internen UND externen Wert gibt hängt es vom Typ des Steuerelementes ab, welcher
+         * Wert angezeigt werden soll.
+         * 
+         * @param {*} internalValue 
+         * @param {*} uiControlConfig 
+         */
+        detectValueForControl: function (internalValue, externalValue, uiControlConfig) {
+            var type = uiControlConfig.Typ;
+            var returnVal;
+
+            if (type === "ZAHLENEINGABE") {
+                if (typeof internalValue === "string") {
+                    var range = this.splitRange(internalValue);
+                    internalValue = (range.Max + range.Min) / 2;
+                }
+                returnVal = internalValue;
+
+            } else if (type === "AUSWAHL") {
+                returnVal = externalValue;
+            }
+
+            return returnVal;
+        },
+
 
         /**
-         * Gibt den Koeffizienten für einen Wert zurück unter berücksichtigung
+         * Gibt den Koeffizienten für einen Wert zurück unter Berücksichtigung
          * der übergebenen Konfiguration eines Steuerelementes.
          * 
          * @param {*} internalValue 
@@ -444,16 +467,12 @@ define([
          */
         mapValueToCoeff: function (internalValue, uiControlConfig) {
             var type = uiControlConfig.Typ;
-            var returnVal; 
+            var returnVal;
 
             if (type === "ZAHLENEINGABE") {
 
-                // Wenn der Wert eine Spanne ist, müssen wir mit Mittelwert berechnen
-                if (typeof internalValue === "string") {
-                    var range = this.splitRange(internalValue);
-                    internalValue = (range.Max + range.Min) / 2;
-                }
-
+                // Hier wird der Koeffizient anhand der hinterlegen Spannen ermittelt.
+                // Es wird angenommen, das der Wert vom Typ Number ist.
                 for (const range of uiControlConfig.Spannen) {
                     if (internalValue >= range.Min && internalValue <= range.Max) {
                         returnVal = range.Koeffizient;
@@ -463,6 +482,9 @@ define([
 
             } else if (type === "AUSWAHL") {
 
+                // Hier wird der Koeffizient anhand der Auswahl-Listeneinträge ermittelt.
+                // Ob der Typ des Wertes ein String oder eine Number ist, sollte ignoriert werden.
+                // Das ist wichtig, da die ID mal so mal so belegt ist.
                 for (const listEntry of uiControlConfig.Liste) {
                     if (listEntry.id.toString() === internalValue.toString()) {
                         returnVal = listEntry.value;
@@ -475,26 +497,31 @@ define([
         },
 
 
+        /**
+         * In der Datenstruktur der Zonen gibt es viele Reservefelder, die wir,
+         * solange sie nicht verwendet werden, nicht weiter betrachten wollen.
+         * 
+         * Daher werden in dieser Methode die Felder herausgesucht, die auch tatsächlich
+         * einen Wert tragen. In dem  Zuge wird noch der Table-Präfix entfernt, der 
+         * beim weiteren Arbeiten mit den Feldern hinderlich ist.
+         * 
+         * @param {*} zonesArray 
+         */
         detectUsedZoneFields: function (zonesArray) {
-            var existingZoneFieldNames = {};
             var usedZoneFieldsArray = new Array();
 
-            // Im ersten Durchlauf entfernen wir die Table-Präfixe 
-            // und merken uns, welche Felder überhaupt gesetzt sind
             for (const fieldsObj of zonesArray) {
                 var obj = {};
 
                 for (const fullFieldname in fieldsObj) {
                     var n = fullFieldname;
+
+                    // Entfernen des Table-Präfix.
                     var fieldname = n.substr(n.lastIndexOf('.') + 1);
                     var value = fieldsObj[fullFieldname];
 
+                    // Wir behalten nur die Felder, die gesetzt sind.
                     if (value !== null) {
-                        if (existingZoneFieldNames[fieldname] === undefined) {
-                            existingZoneFieldNames[fieldname] = 1;
-                        } else {
-                            existingZoneFieldNames[fieldname] += 1;
-                        }
                         obj[fieldname] = value;
                     }
                 }
@@ -503,8 +530,6 @@ define([
 
             return usedZoneFieldsArray;
         },
-
-
 
 
         /**
@@ -525,6 +550,7 @@ define([
 
             return obj;
         },
+
 
         /**
          * Hilfsmethode, um ein Datum von Millisekunden in die detusche
