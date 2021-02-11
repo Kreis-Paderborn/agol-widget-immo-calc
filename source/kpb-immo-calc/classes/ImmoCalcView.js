@@ -44,7 +44,7 @@ define([
 
         constructor: function (engine, options) {
 
-            this.visElements = [ ];
+            this.visElements = [];
 
             this.engine = engine;
 
@@ -90,7 +90,7 @@ define([
 
         initialiseHeader: function () {
             var me = this;
-            var headerConfig = this.engine.getHeaderConfig();
+            // var headerConfig = this.engine.getHeaderConfig();
 
             // teilmaLabel
             elementLabelName = "teilmaLabel";
@@ -122,7 +122,7 @@ define([
                 style: "width:150px",
                 onChange: function (newValue) {
                     me.refreshTable();
-                 }
+                }
             }, "genaBWO").startup();
 
             // genaIRW
@@ -177,7 +177,7 @@ define([
 
                 var teilmaBWO = dijitRegistry.byId("teilmaBWO");
                 teilmaBWO.textbox.value = teilma_txt;
-                teilmaBWO.item = {name: teilma_txt,id: teilma};
+                teilmaBWO.item = { name: teilma_txt, id: teilma };
 
                 this.getValuesTeilma(stag);
                 var stagBWO = dijitRegistry.byId("stagBWO");
@@ -189,7 +189,7 @@ define([
             oldVisElements = this.visElements.slice();
             // Array leeren
             this.visElements.splice(0);
-            
+
             for (value in tableConfig["Eigenschaften"]) {
                 var lowerCaseValue = value.toLowerCase();
                 this.visElements.push(lowerCaseValue);
@@ -208,7 +208,7 @@ define([
                     elementBWOValue = tableConfig["Eigenschaften"][value]["WertInSteuerelement"];
                     elementBWOUIControl = tableConfig["Eigenschaften"][value]["Steuerelement"];
                     elementBWORwKoeffizient = tableConfig["Eigenschaften"][value]["RichtwertKoeffizient"];
-                    this.generateBWOElement(elementBWOName, elementBWOValue, elementBWOUIControl,elementBWORwKoeffizient);
+                    this.generateBWOElement(elementBWOName, elementBWOValue, elementBWOUIControl, elementBWORwKoeffizient);
 
                     elementIRWName = lowerCaseValue + "IRW";
                     elementIRWValue = "0%";
@@ -218,15 +218,15 @@ define([
                 this.getStoreValuesForComboBox(aComboBox, value);
             }
             // aktuelle Elemente sichtbar schalten
-            this.visElements.forEach(function (aValue,index,self){
+            this.visElements.forEach(function (aValue) {
                 var elementId = "row" + aValue;
                 var aElement = document.getElementById(elementId);
                 aElement.style = "display: true;"
             });
 
             // Bestimmen der Element die Unsichtbar geschaltet werden müssen
-            visDiff = oldVisElements.filter(x=> this.visElements.indexOf(x) === -1);
-            visDiff.forEach(function (aValue,index,self){
+            visDiff = oldVisElements.filter(x => this.visElements.indexOf(x) === -1);
+            visDiff.forEach(function (aValue) {
                 var elementId = "row" + aValue;
                 var aElement = document.getElementById(elementId);
                 aElement.style = "display: none;"
@@ -304,7 +304,7 @@ define([
         },
 
         // Erzeugt ein dijit Auswahl oder Nummer Element
-        generateBWOElement: function (elementBWOName, elementBWOValue, elementBWOUIControl,elementBWORwKoeffizient) {
+        generateBWOElement: function (elementBWOName, elementBWOValue, elementBWOUIControl, elementBWORwKoeffizient) {
             me = this;
             switch (elementBWOUIControl["Typ"]) {
                 case "ZAHLENEINGABE":
@@ -314,7 +314,7 @@ define([
                         constraints: { min: elementBWOUIControl["Min"], max: elementBWOUIControl["Max"], places: 0 },
                         id: elementBWOName,
                         style: "width:150px",
-                        onChange: function(newValue){
+                        onChange: function (newValue) {
                             IdIRW = elementBWOName.replace("BWO", "IRW");
                             me.getKoefForSelection(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
                         }
@@ -337,20 +337,6 @@ define([
 
         },
 
-        // Werte zur Auswahl von ComboBoxen bestimmen
-        // ComboBox Gebäudestandard
-        getValuesGstand: function () {
-            var gstandBWO = dijitRegistry.byId("gstandBWO");
-            this.getStoreValuesForComboBox(gstandBWO, "GSTAND");
-        },
-
-        // ComboBox Ergänzende Gebäuderart
-        getValuesEgart: function () {
-            var egartBWO = dijitRegistry.byId("egartBWO");
-            this.getStoreValuesForComboBox(egartBWO, "EGART");
-
-        },
-
         // erzeugt die Auswahlliste für ComboBoxen
         getStoreValuesForComboBox: function (aComboBox, feld) {
             var StagBWO = dijitRegistry.byId("stagBWO");
@@ -358,7 +344,7 @@ define([
             var genaBWO = dijitRegistry.byId("genaBWO");
             currentGena = genaBWO.textbox.value;
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
-            currentTeilma= teilmaBWO.item.id;
+            currentTeilma = teilmaBWO.item.id;
             config = this.engine.getTableConfig(currentStag, currentTeilma, currentGena);
             dataArray = config["Eigenschaften"][feld]["Steuerelement"]["Liste"];
             aComboBox.store = new Memory({
@@ -366,7 +352,7 @@ define([
             });
         },
 
-        // Auswahlliste für Gemeinde/Zone erzeugen
+        // Auswahlliste für Header Element Gemeinde/Zone erzeugen
         getValuesGena: function (teilma, stag) {
             var headerConfig = this.engine.getHeaderConfig();
             var genaBWO = dijitRegistry.byId("genaBWO");
@@ -382,7 +368,7 @@ define([
             });
         },
 
-        // Auswahlliste für Teilmarkt erzeugen
+        // Auswahlliste für Header EWlement Teilmarkt erzeugen
         getValuesTeilma: function (stag) {
             var headerConfig = this.engine.getHeaderConfig();
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
@@ -399,7 +385,7 @@ define([
             });
         },
 
-        // Baut den dynamischen teil der Gui neu auf, wird bei Änderungen in den Header Elementen Aufgerufen
+        // Baut den dynamischen Teil der Gui neu auf, wird bei Änderungen in den Header Elementen Aufgerufen
         refreshTable: function () {
             var genaBWO = dijitRegistry.byId("genaBWO");
             zone = genaBWO.textbox.value;
@@ -410,24 +396,29 @@ define([
             var stagBWO = dijitRegistry.byId("stagBWO");
             stag = stagBWO.textbox.value;
 
-            this.showTable(stag, teilma, zone);
+            var teilma_txt = this.engine.mapDisplayNames("TEILMA", teilma.toString());
+            this.getValuesGena(teilma_txt, stag);
+            this.getValuesTeilma(stag);
 
+            this.showTable(stag, teilma, zone);
         },
 
         // Koeffizient für Auswahl in ComboBox bestimmen und in der IRW Spalte eintragen
         // FIXME der Wert muss in die prozentuale Abweichung vom Normkoeffizienten umgerechnet werden.
         getKoefForSelection: function (newValue, aUIControl, IdIRW, elementBWORwKoeffizient) {
-            for (aObject in aUIControl["Liste"]) {
-                listEntry = aUIControl["Liste"][aObject];
-                if (listEntry["name"] == newValue) {
-                    newValueId = listEntry["id"];
-                }
-            }
-            aKoef = this.engine.mapValueToCoeff(newValueId, aUIControl);
+            if (aUIControl["Typ"] == "AUSWAHL") {
+                aUIControl["Liste"].forEach(function (object) {
+                    if (object["name"] == newValue) {
+                        aKoef = object["value"];
+                    };
+                });
+            } else {
+                aKoef = this.engine.mapValueToCoeff(newValue, aUIControl);
+            };
             var aIRWField = dijitRegistry.byId(IdIRW);
-            aIRWField.textbox.value = aKoef/elementBWORwKoeffizient;
-        }
-
-    });
+            // aIRWField.textbox.value = aKoef / elementBWORwKoeffizient;
+            aIRWField.textbox.value = ((aKoef - 1) * 100).toFixed(2).toString() + "%"
+        },
+    })
 }
 );
