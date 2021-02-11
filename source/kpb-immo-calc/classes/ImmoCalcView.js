@@ -40,8 +40,11 @@ define([
 
         dummyOption: null,
         engine: null,
+        visElements: null,
 
         constructor: function (engine, options) {
+
+            this.visElements = [ ];
 
             this.engine = engine;
 
@@ -49,29 +52,6 @@ define([
                 this.dummyOption = options.dummyOption;
 
             var me = this;
-
-            var genaLabel = document.getElementById("genaLabel");
-            genaLabel.innerText = "Gemeinde";
-
-            var genaBWO = new FormComboBox({
-                id: "genaBWO",
-                name: "genaBWO",
-                value: "Aus Karte vorbelegt",
-                searchAttr: "name",
-                cols: "20",
-                style: "width:150px",
-                onChange: function (newValue) { console.log("genaBWO", newValue) }
-            }, "genaBWO").startup();
-
-
-            var genaIRW = new dijitSimpleTextarea({
-                id: "genaIRW",
-                name: "genaIRW",
-                rows: "1",
-                cols: "20",
-                style: "width:150px",
-                value: "aValue"
-            }, "genaIRW").startup();
 
             var normLabel = document.getElementById("normLabel");
             normLabel.innerText = "Norm";
@@ -81,28 +61,6 @@ define([
 
             var irwLabel = document.getElementById("irwLabel");
             irwLabel.innerText = "IRW und UF";
-
-            var stagLabel = document.getElementById("stagLabel");
-            stagLabel.innerText = "Stichtag des Immobilienrichtwertes";
-
-            var stagNorm = new dijitSimpleTextarea({
-                id: "stagNorm",
-                name: "stagNorm",
-                rows: "1",
-                cols: "15",
-                style: "width:150px",
-                value: '2021'
-            }, "stagNorm").startup();
-
-            var stagBWO = new FormComboBox({
-                id: "stagBWO",
-                name: "stagBWO",
-                value: "Bitte wählen",
-                searchAttr: "name",
-                style: "width:150px",
-                onChange: function (newValue) {
-                }
-            }, "stagBWO").startup();
 
             var angIRWLabel = document.getElementById("angIRWLabel");
             angIRWLabel.innerText = "angepasster IRW";
@@ -134,10 +92,6 @@ define([
             var me = this;
             var headerConfig = this.engine.getHeaderConfig();
 
-            var stagBWO = dijitRegistry.byId("stagBWO");
-            stagBWOValue = headerConfig["STAG"][0].name;
-            stagBWO.textbox.value = stagBWOValue;
-
             // teilmaLabel
             elementLabelName = "teilmaLabel";
             elementLabelValue = "Teilmarkt";
@@ -147,112 +101,197 @@ define([
             var teilmaBWO = new FormComboBox({
                 id: "teilmaBWO",
                 name: "teilmaBWO",
-                // value: headerConfig["TEILMA"][stagBWOValue][0].name,
                 searchAttr: "name",
                 style: "width:150px",
-                store: new Memory({ data: headerConfig["TEILMA"][stagBWOValue] }),
                 onChange: function (newValue) {
-                    console.log(newValue);
-                    var anbauweiseElement = document.getElementById('rowegart');
-                    var flaecheElement = document.getElementById('rowflae');
-                    var standardElement = document.getElementById('rowgstand');
-                    // var anzahlElement = document.getElementById('rowanzegeb');
-                    if (newValue === "Eigentumswohnungen") {
-                        anbauweiseElement.style = "display: none;";
-                        flaecheElement.style = "display: none;";
-                        standardElement.style = "display: none;";
-                        // anzahlElement.style = "display: true;";
-                        me.getValuesGena(newValue);
-                    } else {
-                        anbauweiseElement.style = "display: true;";
-                        flaecheElement.style = "display: true;";
-                        standardElement.style = "display: true;";
-                        // anzahlElement.style = "display: none;";
-                        me.getValuesGstand();
-                        me.getValuesEgart();
-                        me.getValuesGena(newValue);
-                    };
+                    me.refreshTable();
                 },
             }, "teilmaBWO").startup();
 
             // genaLabel
-            // zoneBWO
-            // zoneIRW
+            var genaLabel = document.getElementById("genaLabel");
+            genaLabel.innerText = "Gemeinde";
+
+            // genaBWO
+            var genaBWO = new FormComboBox({
+                id: "genaBWO",
+                name: "genaBWO",
+                value: "Aus Karte vorbelegt",
+                searchAttr: "name",
+                cols: "20",
+                style: "width:150px",
+                onChange: function (newValue) {
+                    me.refreshTable();
+                 }
+            }, "genaBWO").startup();
+
+            // genaIRW
+            var genaIRW = new dijitSimpleTextarea({
+                id: "genaIRW",
+                name: "genaIRW",
+                rows: "1",
+                cols: "20",
+                style: "width:150px",
+                value: "aValue"
+            }, "genaIRW").startup();
+
+            // stagLabel
+            var stagLabel = document.getElementById("stagLabel");
+            stagLabel.innerText = "Stichtag des Immobilienrichtwertes";
+
+            //  stagNorm
+            var stagNorm = new dijitSimpleTextarea({
+                id: "stagNorm",
+                name: "stagNorm",
+                rows: "1",
+                cols: "15",
+                style: "width:150px",
+                value: '2021'
+            }, "stagNorm").startup();
+
+            // stagBWO
+            var stagBWO = new FormComboBox({
+                id: "stagBWO",
+                name: "stagBWO",
+                value: "Bitte wählen",
+                searchAttr: "name",
+                style: "width:150px",
+                onChange: function (newValue) {
+                }
+            }, "stagBWO").startup();
 
         },
 
         showTable: function (stag, teilma, zone, setControlsToNorm) {
-            var tableConfig = this.engine.getTableConfig(stag, teilma, zone);
-            // Fixme Hier wird ein fester initialer Wert vorgegeben.
-            var genaBWO = dijitRegistry.byId("genaBWO");
-            genaBWO.textbox.value = zone;
+            var tableConfig = this.checkHeaderConfig(stag, teilma, zone);
 
             var genaIRW = dijitRegistry.byId("genaIRW");
             genaIRW.textbox.value = tableConfig["zonenIrw"];
 
-            var teilmaBWO = dijitRegistry.byId("teilmaBWO");
-            teilmaBWO.value = teilma;
+            if (setControlsToNorm) {
+                var genaBWO = dijitRegistry.byId("genaBWO");
+                genaBWO.textbox.value = zone;
 
-            // Erzeugen der Gui Elemente auf Basis der tableConfig (Daten aus DB)
-            for (value in tableConfig["Eigenschaften"]) {
+                var teilma_txt = this.engine.mapDisplayNames("TEILMA", teilma.toString());
+                this.getValuesGena(teilma_txt, stag);
 
-                var lowerCaseValue = value.toLowerCase();
-                this.createHtmlElement(lowerCaseValue);
+                var teilmaBWO = dijitRegistry.byId("teilmaBWO");
+                teilmaBWO.textbox.value = teilma_txt;
+                teilmaBWO.item = {name: teilma_txt,id: teilma};
 
-                elementLabelName = lowerCaseValue + "Label";
-                elementLabelValue = tableConfig["Eigenschaften"][value]["Titel"];
-                this.generateLabelElement(elementLabelName, elementLabelValue);
+                this.getValuesTeilma(stag);
+                var stagBWO = dijitRegistry.byId("stagBWO");
+                stagBWO.textbox.value = stag;
 
-                elementNormName = lowerCaseValue + "Norm";
-                elementNormValue = tableConfig["Eigenschaften"][value]["Richtwert"];
-                this.generateTextElement(elementNormName, elementNormValue);
-
-                elementBWOName = lowerCaseValue + "BWO";
-                elementBWOValue = tableConfig["Eigenschaften"][value]["WertInSteuerelement"];
-                elementBWOUIControl = tableConfig["Eigenschaften"][value]["Steuerelement"];
-                this.generateBWOElement(elementBWOName, elementBWOValue, elementBWOUIControl);
-
-                elementIRWName = lowerCaseValue + "IRW";
-                elementIRWValue = "0%";
-                this.generateTextElement(elementIRWName, elementIRWValue);
-
-                // var aHTMLTag = document.getElementById("row"+lowerCaseValue);
-                // aHTMLTag.style.display = "true";
-            }
-            console.log("Table-Config:");
-            console.log(tableConfig);
-
-        },
-
-        createHtmlElement: function (value) {
-            if (document.getElementById("row" + value) == null){
-
-                var htmlFrag = document.createDocumentFragment();
-                var aTr = document.createElement("tr");
-                aTr.id = "row" + value;
-                aTr.style = "display: true;"
-                console.log(aTr);
-                var aRow = htmlFrag.appendChild(aTr);
-                var col1 = aRow.appendChild(document.createElement("td"));
-                var col2 = aRow.appendChild(document.createElement("td"));
-                var col3 = aRow.appendChild(document.createElement("td"));
-                var col4 = aRow.appendChild(document.createElement("td"));
-                col1.innerHTML = "<div id=" + value + "Label></div>";
-                col2.innerHTML = "<div id=" + value + "Norm></div>";
-                col3.innerHTML = "<div id=" + value + "BWO></div>";
-                col4.innerHTML = "<div id=" + value + "IRW></div>";
-
-                var rowAngIRW = document.getElementById("rowAngIRW");
-                var parentNode = document.getElementById("tableBody");
-                parentNode.insertBefore(htmlFrag, rowAngIRW);
             };
+            // Erzeugen der Gui Elemente auf Basis der tableConfig (Daten aus DB)
+            // kopie des Arrays anlegen
+            oldVisElements = this.visElements.slice();
+            // Array leeren
+            this.visElements.splice(0);
+            
+            for (value in tableConfig["Eigenschaften"]) {
+                var lowerCaseValue = value.toLowerCase();
+                this.visElements.push(lowerCaseValue);
+                if (document.getElementById("row" + lowerCaseValue) == null) {
+                    this.createHtmlElement(lowerCaseValue);
+
+                    elementLabelName = lowerCaseValue + "Label";
+                    elementLabelValue = tableConfig["Eigenschaften"][value]["Titel"];
+                    this.generateLabelElement(elementLabelName, elementLabelValue);
+
+                    elementNormName = lowerCaseValue + "Norm";
+                    elementNormValue = tableConfig["Eigenschaften"][value]["Richtwert"];
+                    this.generateTextElement(elementNormName, elementNormValue);
+
+                    elementBWOName = lowerCaseValue + "BWO";
+                    elementBWOValue = tableConfig["Eigenschaften"][value]["WertInSteuerelement"];
+                    elementBWOUIControl = tableConfig["Eigenschaften"][value]["Steuerelement"];
+                    elementBWORwKoeffizient = tableConfig["Eigenschaften"][value]["RichtwertKoeffizient"];
+                    this.generateBWOElement(elementBWOName, elementBWOValue, elementBWOUIControl,elementBWORwKoeffizient);
+
+                    elementIRWName = lowerCaseValue + "IRW";
+                    elementIRWValue = "0%";
+                    this.generateTextElement(elementIRWName, elementIRWValue);
+                };
+                aComboBox = dijitRegistry.byId(lowerCaseValue + "BWO");
+                this.getStoreValuesForComboBox(aComboBox, value);
+            }
+            // aktuelle Elemente sichtbar schalten
+            this.visElements.forEach(function (aValue,index,self){
+                var elementId = "row" + aValue;
+                var aElement = document.getElementById(elementId);
+                aElement.style = "display: true;"
+            });
+
+            // Bestimmen der Element die Unsichtbar geschaltet werden müssen
+            visDiff = oldVisElements.filter(x=> this.visElements.indexOf(x) === -1);
+            visDiff.forEach(function (aValue,index,self){
+                var elementId = "row" + aValue;
+                var aElement = document.getElementById(elementId);
+                aElement.style = "display: none;"
+            });
         },
 
+        // Fixme unzulässige Kombinationen im header werden korrigiert
+        checkHeaderConfig: function (stag, teilma, zone) {
+            var oldZone = zone;
+            if (teilma == 1) {
+                switch (zone) {
+                    case "Altenbeken":
+                        zone = "SUED";
+                        break;
+                    case "Bueren":
+                        zone = "SUED";
+                        break;
+                    case "Bad Wuennenberg":
+                        zone = "SUED";
+                        break;
+                    case "Lichtenau":
+                        zone = "SUED";
+                        break;
+                };
+            };
+            if (teilma == 2 && zone == "SUED") {
+                zone = "Altenbeken";
+            };
+
+            if (oldZone != zone) {
+                var genaBWO = dijitRegistry.byId("genaBWO");
+                genaBWO.textbox.value = zone;
+            };
+            tableConfig = this.engine.getTableConfig(stag, teilma, zone);
+            return tableConfig;
+        },
+
+        // Erzeugt das DOM für den "Standard" Teil des HTML Dokuments
+        createHtmlElement: function (value) {
+            var htmlFrag = document.createDocumentFragment();
+            var aTr = document.createElement("tr");
+            aTr.id = "row" + value;
+            aTr.style = "display: true;"
+            var aRow = htmlFrag.appendChild(aTr);
+            var col1 = aRow.appendChild(document.createElement("td"));
+            var col2 = aRow.appendChild(document.createElement("td"));
+            var col3 = aRow.appendChild(document.createElement("td"));
+            var col4 = aRow.appendChild(document.createElement("td"));
+            col1.innerHTML = "<div id=" + value + "Label></div>";
+            col2.innerHTML = "<div id=" + value + "Norm></div>";
+            col3.innerHTML = "<div id=" + value + "BWO></div>";
+            col4.innerHTML = "<div id=" + value + "IRW></div>";
+
+            var rowAngIRW = document.getElementById("rowAngIRW");
+            var parentNode = document.getElementById("tableBody");
+            parentNode.insertBefore(htmlFrag, rowAngIRW);
+        },
+
+        // Erzeugt ein Label Element, fügt elementLabelValue im Element elementLabelName ein
         generateLabelElement: function (elementLabelName, elementLabelValue) {
             var aLabelElement = document.getElementById(elementLabelName);
             aLabelElement.innerText = elementLabelValue;
         },
 
+        // Erzeugt ein dijit Text Element
         generateTextElement: function (elementTextName, elementTextValue) {
             var aTextElement = new dijitSimpleTextarea({
                 id: elementTextName,
@@ -264,7 +303,8 @@ define([
             }, elementTextName).startup();
         },
 
-        generateBWOElement: function (elementBWOName, elementBWOValue, elementBWOUIControl) {
+        // Erzeugt ein dijit Auswahl oder Nummer Element
+        generateBWOElement: function (elementBWOName, elementBWOValue, elementBWOUIControl,elementBWORwKoeffizient) {
             me = this;
             switch (elementBWOUIControl["Typ"]) {
                 case "ZAHLENEINGABE":
@@ -273,7 +313,11 @@ define([
                         smallDelta: 1,
                         constraints: { min: elementBWOUIControl["Min"], max: elementBWOUIControl["Max"], places: 0 },
                         id: elementBWOName,
-                        style: "width:150px"
+                        style: "width:150px",
+                        onChange: function(newValue){
+                            IdIRW = elementBWOName.replace("BWO", "IRW");
+                            me.getKoefForSelection(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                        }
                     }, elementBWOName).startup();
                     break;
                 case "AUSWAHL":
@@ -285,7 +329,7 @@ define([
                         style: "width:150px",
                         onChange: function (newValue) {
                             IdIRW = elementBWOName.replace("BWO", "IRW");
-                            me.getKoefForSelection(newValue, elementBWOUIControl, IdIRW);
+                            me.getKoefForSelection(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
                         }
                     }, elementBWOName).startup();
                     break;
@@ -294,7 +338,7 @@ define([
         },
 
         // Werte zur Auswahl von ComboBoxen bestimmen
-        // ComboBox Gebäudestandard 
+        // ComboBox Gebäudestandard
         getValuesGstand: function () {
             var gstandBWO = dijitRegistry.byId("gstandBWO");
             this.getStoreValuesForComboBox(gstandBWO, "GSTAND");
@@ -307,43 +351,72 @@ define([
 
         },
 
-        // 
+        // erzeugt die Auswahlliste für ComboBoxen
         getStoreValuesForComboBox: function (aComboBox, feld) {
             var StagBWO = dijitRegistry.byId("stagBWO");
             currentStag = StagBWO.textbox.value;
             var genaBWO = dijitRegistry.byId("genaBWO");
             currentGena = genaBWO.textbox.value;
-            config = this.engine.getTableConfig(currentStag, 2, currentGena);
+            var teilmaBWO = dijitRegistry.byId("teilmaBWO");
+            currentTeilma= teilmaBWO.item.id;
+            config = this.engine.getTableConfig(currentStag, currentTeilma, currentGena);
             dataArray = config["Eigenschaften"][feld]["Steuerelement"]["Liste"];
             aComboBox.store = new Memory({
                 data: dataArray
             });
         },
-        // Auswahlmöglichkeiten für Gemeinde/Zone bestimmen
-        getValuesGena: function (teilmarkt) {
-            var genaBWO = dijitRegistry.byId("genaBWO");
+
+        // Auswahlliste für Gemeinde/Zone erzeugen
+        getValuesGena: function (teilma, stag) {
             var headerConfig = this.engine.getHeaderConfig();
-            var stagBWO = dijitRegistry.byId("stagBWO");
-            currentStag = stagBWO.textbox.value;
-            dataArray = headerConfig["ZONEN"][currentStag][teilmarkt];
+            var genaBWO = dijitRegistry.byId("genaBWO");
+            if (stag == false) {
+                var stagBWO = dijitRegistry.byId("stagBWO");
+                currentStag = stagBWO.textbox.value;
+            } else {
+                currentStag = stag;
+            };
+            dataArray = headerConfig["ZONEN"][currentStag][teilma];
             genaBWO.store = new Memory({
                 data: dataArray
             });
         },
 
-        // getValuesStag: function (newValue) {
-        //     var stagBWO = dijitRegistry.byId("stagBWO");
-        //     var headerConfig = this.engine.getHeaderConfig();
-        //     dataArray = headerConfig["STAG"];
+        // Auswahlliste für Teilmarkt erzeugen
+        getValuesTeilma: function (stag) {
+            var headerConfig = this.engine.getHeaderConfig();
+            var teilmaBWO = dijitRegistry.byId("teilmaBWO");
+            if (stag == false) {
+                var stagBWO = dijitRegistry.byId("stagBWO");
+                currentStag = stagBWO.textbox.value;
+            } else {
+                currentStag = stag;
+            };
+            dataArray = headerConfig["TEILMA"][currentStag];
 
-        //     stagBWO.store = new Memory({
-        //         data: dataArray
-        //     });
-        // },
+            teilmaBWO.store = new Memory({
+                data: dataArray
+            });
+        },
+
+        // Baut den dynamischen teil der Gui neu auf, wird bei Änderungen in den Header Elementen Aufgerufen
+        refreshTable: function () {
+            var genaBWO = dijitRegistry.byId("genaBWO");
+            zone = genaBWO.textbox.value;
+
+            var teilmaBWO = dijitRegistry.byId("teilmaBWO");
+            teilma = teilmaBWO.item.id;
+
+            var stagBWO = dijitRegistry.byId("stagBWO");
+            stag = stagBWO.textbox.value;
+
+            this.showTable(stag, teilma, zone);
+
+        },
 
         // Koeffizient für Auswahl in ComboBox bestimmen und in der IRW Spalte eintragen
-        // FIXME der Wert muss in die prozentuale Abweichung vom Normkoeffizienten umgerechnet werden. 
-        getKoefForSelection: function (newValue, aUIControl, IdIRW) {
+        // FIXME der Wert muss in die prozentuale Abweichung vom Normkoeffizienten umgerechnet werden.
+        getKoefForSelection: function (newValue, aUIControl, IdIRW, elementBWORwKoeffizient) {
             for (aObject in aUIControl["Liste"]) {
                 listEntry = aUIControl["Liste"][aObject];
                 if (listEntry["name"] == newValue) {
@@ -352,7 +425,7 @@ define([
             }
             aKoef = this.engine.mapValueToCoeff(newValueId, aUIControl);
             var aIRWField = dijitRegistry.byId(IdIRW);
-            aIRWField.textbox.value = aKoef;
+            aIRWField.textbox.value = aKoef/elementBWORwKoeffizient;
         }
 
     });
