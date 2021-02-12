@@ -41,8 +41,14 @@ define([
         dummyOption: null,
         engine: null,
         visElements: null,
+        coeffStore: null,
+        workingHeaderConfig: null,
 
         constructor: function (engine, options) {
+
+            this.workingHeaderConfig = null;
+
+            this.coeffStore = null;
 
             this.visElements = [];
 
@@ -157,6 +163,7 @@ define([
                 searchAttr: "name",
                 style: "width:150px",
                 onChange: function (newValue) {
+                    me.refreshTable();
                 }
             }, "stagBWO").startup();
 
@@ -164,28 +171,15 @@ define([
 
         showTable: function (stag, teilma, zone, setControlsToNorm) {
             var tableConfig = this.checkHeaderConfig(stag, teilma, zone);
-
             var genaIRW = dijitRegistry.byId("genaIRW");
             genaIRW.textbox.value = tableConfig["zonenIrw"];
-
+            // initialer Aufruf der Gui
             if (setControlsToNorm) {
-                var genaBWO = dijitRegistry.byId("genaBWO");
-                genaBWO.textbox.value = zone;
-
-                var teilma_txt = this.engine.mapDisplayNames("TEILMA", teilma.toString());
-                this.getValuesGena(teilma_txt, stag);
-
-                var teilmaBWO = dijitRegistry.byId("teilmaBWO");
-                teilmaBWO.textbox.value = teilma_txt;
-                teilmaBWO.item = { name: teilma_txt, id: teilma };
-
-                this.getValuesTeilma(stag);
-                var stagBWO = dijitRegistry.byId("stagBWO");
-                stagBWO.textbox.value = stag;
-
+                this.workingHeaderConfig = {stag, teilma, zone};
+                this.setValuesInHeaderGui(stag, teilma, zone);
             };
             // Erzeugen der Gui Elemente auf Basis der tableConfig (Daten aus DB)
-            // kopie des Arrays anlegen
+            // Kopie des Arrays anlegen
             oldVisElements = this.visElements.slice();
             // Array leeren
             this.visElements.splice(0);
@@ -233,35 +227,21 @@ define([
             });
         },
 
-        // Fixme unzulässige Kombinationen im header werden korrigiert
+        // Unzulässige Kombinationen im header werden gefunden und zurückgesetzt
         checkHeaderConfig: function (stag, teilma, zone) {
-            var oldZone = zone;
-            if (teilma == 1) {
-                switch (zone) {
-                    case "Altenbeken":
-                        zone = "SUED";
-                        break;
-                    case "Bueren":
-                        zone = "SUED";
-                        break;
-                    case "Bad Wuennenberg":
-                        zone = "SUED";
-                        break;
-                    case "Lichtenau":
-                        zone = "SUED";
-                        break;
-                };
-            };
-            if (teilma == 2 && zone == "SUED") {
-                zone = "Altenbeken";
-            };
+            aTableConfig =this.engine.getTableConfig(stag, teilma, zone);
 
-            if (oldZone != zone) {
-                var genaBWO = dijitRegistry.byId("genaBWO");
-                genaBWO.textbox.value = zone;
+            if (aTableConfig == undefined) {
+                alert("Unerlaubter header, werte werden zurückgesetzt");
+                stag = this.workingHeaderConfig.stag;
+                teilma = this.workingHeaderConfig.teilma;
+                zone = this.workingHeaderConfig.zone;
+                aTableConfig = this.engine.getTableConfig(stag, teilma, zone);
+                this.setValuesInHeaderGui(stag, teilma, zone);
             };
-            tableConfig = this.engine.getTableConfig(stag, teilma, zone);
-            return tableConfig;
+            this.workingHeaderConfig = {stag, teilma, zone}
+            return aTableConfig;
+            
         },
 
         // Erzeugt das DOM für den "Standard" Teil des HTML Dokuments
@@ -316,7 +296,8 @@ define([
                         style: "width:150px",
                         onChange: function (newValue) {
                             IdIRW = elementBWOName.replace("BWO", "IRW");
-                            me.getKoefForSelection(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                            me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                            me.calculateIRW();
                         }
                     }, elementBWOName).startup();
                     break;
@@ -329,7 +310,8 @@ define([
                         style: "width:150px",
                         onChange: function (newValue) {
                             IdIRW = elementBWOName.replace("BWO", "IRW");
-                            me.getKoefForSelection(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                            me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                            me.calculateIRW();
                         }
                     }, elementBWOName).startup();
                     break;
@@ -366,6 +348,13 @@ define([
             genaBWO.store = new Memory({
                 data: dataArray
             });
+            // var headerConfig = this.engine.getHeaderConfig();
+            // var currentStag = this.workingHeaderConfig.stag;
+            // var teilma = this.workingHeaderConfig.teilma;
+            // dataArray = headerConfig["ZONEN"][currentStag][teilma];
+            // genaBWO.store = new Memory({
+            //     data: dataArray
+            // });
         },
 
         // Auswahlliste für Header EWlement Teilmarkt erzeugen
@@ -403,21 +392,54 @@ define([
             this.showTable(stag, teilma, zone);
         },
 
+        // setzt die werte im Header der Gui
+        setValuesInHeaderGui: function(stag, teilma, zone) {
+            var genaBWO = dijitRegistry.byId("genaBWO");
+                genaBWO.textbox.value = zone;
+
+                var teilma_txt = this.engine.mapDisplayNames("TEILMA", teilma.toString());
+                this.getValuesGena(teilma_txt, stag);
+
+                var teilmaBWO = dijitRegistry.byId("teilmaBWO");
+                teilmaBWO.textbox.value = teilma_txt;
+                teilmaBWO.item = { name: teilma_txt, id: teilma };
+
+                this.getValuesTeilma(stag);
+                var stagBWO = dijitRegistry.byId("stagBWO");
+                stagBWO.textbox.value = stag;
+        },
+
         // Koeffizient für Auswahl in ComboBox bestimmen und in der IRW Spalte eintragen
         // FIXME der Wert muss in die prozentuale Abweichung vom Normkoeffizienten umgerechnet werden.
-        getKoefForSelection: function (newValue, aUIControl, IdIRW, elementBWORwKoeffizient) {
+        getCoeffForBWO: function (newValue, aUIControl, IdIRW, elementBWORwKoeffizient) {
             if (aUIControl["Typ"] == "AUSWAHL") {
                 aUIControl["Liste"].forEach(function (object) {
                     if (object["name"] == newValue) {
-                        aKoef = object["value"];
+                        aCoeff = object["value"];
                     };
                 });
             } else {
-                aKoef = this.engine.mapValueToCoeff(newValue, aUIControl);
-            };
+                aCoeff = this.engine.mapValueToCoeff(newValue, aUIControl);
+            };         
+           
+            // var res = {key:IdIRW,value:aCoeff};
+           
+            // this.coeffStore.push(aCoeff);
+           
             var aIRWField = dijitRegistry.byId(IdIRW);
-            // aIRWField.textbox.value = aKoef / elementBWORwKoeffizient;
-            aIRWField.textbox.value = ((aKoef - 1) * 100).toFixed(2).toString() + "%"
+            // aIRWField.textbox.value = aCoeff / elementBWORwKoeffizient;
+            aIRWField.textbox.value = ((aCoeff - 1) * 100).toFixed(2).toString() + "%"
+        },
+
+        calculateIRW: function(){
+            console.log("calculateIRW");
+            // console.log(this.coeffStore);
+
+            // var angIRWBWO = dijitRegistry.byId("angIRWBWO");
+            // angIRWBWO.textbox.value = aAngIRWBWOValue;
+            // var wertBWO = dijitRegistry.byId("wertBWO");
+            // wertBWO.textbox.value = aWertBWOValue;
+
         },
     })
 }
