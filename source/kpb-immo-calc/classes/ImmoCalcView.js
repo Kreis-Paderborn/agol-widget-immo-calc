@@ -105,7 +105,7 @@ define([
                 id: "teilmaBWO",
                 name: "teilmaBWO",
                 searchAttr: "name",
-                style: "width:150px",
+                style: "width:300px",
                 onChange: function (newValue) {
                     me.refreshTable();
                 },
@@ -121,8 +121,7 @@ define([
                 name: "genaBWO",
                 value: "Aus Karte vorbelegt",
                 searchAttr: "name",
-                cols: "20",
-                style: "width:150px",
+                style: "width:300px",
                 onChange: function (newValue) {
                     me.refreshTable();
                 }
@@ -318,6 +317,17 @@ define([
             });
         },
 
+        // Auswahlliste für Header Element Stichtag erzeugen
+        getValuesStag: function (teilma, gena) {
+            var headerConfig = this.engine.getHeaderConfig();
+            var stagBWO = dijitRegistry.byId("stagBWO");
+            var dataArray = headerConfig["STAG"];
+            console.log(dataArray);
+            stagBWO.store = new Memory({
+                data: dataArray
+            });
+        },
+
         // Auswahlliste für Header Element Gemeinde/Zone erzeugen
         getValuesGena: function (teilma, stag) {
             var headerConfig = this.engine.getHeaderConfig();
@@ -335,7 +345,7 @@ define([
         },
 
         // Auswahlliste für Header Element Teilmarkt erzeugen
-        getValuesTeilma: function (stag) {
+        getValuesTeilma: function (stag, zone) {
             var headerConfig = this.engine.getHeaderConfig();
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
             if (stag == false) {
@@ -344,10 +354,25 @@ define([
             } else {
                 currentStag = stag;
             };
-            var dataArray = headerConfig["TEILMA"][currentStag];
 
+            if (zone == undefined) {
+                var genaBWO = dijitRegistry.byId("genaBWO");
+                currentGena = genaBWO.textbox.value;
+            } else {
+                currentGena = zone;
+            };
+
+            var dataArray = headerConfig["TEILMA"][currentStag];
+            var resultArray = [];
+            dataArray.forEach(function (aTeilma) {
+                headerConfig["ZONEN"][currentStag][aTeilma.name].forEach(function (aObject){
+                    if (aObject.name === currentGena){
+                        resultArray.push(aTeilma);
+                    }
+                })
+            })
             teilmaBWO.store = new Memory({
-                data: dataArray
+                data: resultArray
             });
         },
 
@@ -362,6 +387,8 @@ define([
             var stagBWO = dijitRegistry.byId("stagBWO");
             var stag = stagBWO.textbox.value;
 
+            // Auswahllisten für headerelemente aktualsieren
+            this.getValuesStag();
             this.getValuesTeilma(stag);
             var teilma_txt = this.engine.mapDisplayNames("TEILMA", teilma.toString());
             this.getValuesGena(teilma_txt, stag);
@@ -372,25 +399,26 @@ define([
             var headerSelection = headerConfig["ZONEN"][stag][teilma_txt];
             if (headerSelection == undefined) {
                 console.log("Teilmarkt auswahl korrigieren");
-                // Auswahl Zone und dynamischen Teil sperren
+                // Auswahl Zone und dynamischen Teil sperren, neuen Teilmarkt bestimmen
             };
-            headerSelection.forEach(function(aObject){
-                if (aObject.name == zone){
+            headerSelection.forEach(function (aObject) {
+                if (aObject.name == zone) {
                     auswahlOk = true;
                     console.log("Alles ok");
                 };
             })
-            if (auswahlOk=false){
-                // Auswahl korrigieren
-            var genaBWO = dijitRegistry.byId("genaBWO");
+            if (auswahlOk = false) {
+                // Auswahl dynamische Elemente sperren, neue Zone bestimmen
+                var genaBWO = dijitRegistry.byId("genaBWO");
             };
-          
+
 
             this.showTable(stag, teilma, zone);
         },
 
         // setzt die Werte im Header der Gui
         setValuesInHeaderGui: function (stag, teilma, zone) {
+            this.getValuesStag();
             var genaBWO = dijitRegistry.byId("genaBWO");
             genaBWO.textbox.value = zone;
             var teilma_txt = this.engine.mapDisplayNames("TEILMA", teilma.toString());
