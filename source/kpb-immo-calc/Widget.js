@@ -3,6 +3,7 @@ define([
 	"dojo/_base/lang",
 	'dojo/store/Memory',
 	'jimu/BaseWidget',
+	'jimu/PanelManager',
 	'esri/layers/FeatureLayer',
 	'./classes/ImmoCalcEngine',
 	'./classes/ImmoCalcView',
@@ -14,20 +15,25 @@ define([
 		lang,
 		Memory,
 		BaseWidget,
+		PanelManager,
 		FeatureLayer,
 		ImmoCalcEngine,
 		ImmoCalcView
 	) {
 
-		//To create a widget, you need to derive from BaseWidget.
 		return declare([BaseWidget], {
-			// Custom widget code goes here
 
 			baseClass: 'jimu-widget-widget-kpb-immo-calc',
 			engine: null,
 			view: null,
 			featureLayers: null,
 
+			modes: {
+				"PRODUCTION": 1,
+				"TEST": 2,
+				"DEVELOPMENT": 3,
+			},
+			mode: 3,
 
 			startup: function () {
 				this.inherited(arguments);
@@ -44,7 +50,12 @@ define([
 				// 	});
 				// });
 
-				this.engine = new ImmoCalcEngine({});
+				this.engine = new ImmoCalcEngine({ 
+
+					// Wir übergeben hier den ErrorHandler, um der Engine die Möglichkeit zu geben,
+					// auf den zentral eingestellten MODE zuzugreifen und über die aktuelle VIEW einen Dialog zu schalten.
+					"handleError": this.errorHandler() 
+				});
 				this.view = new ImmoCalcView(this.engine);
 
 				this.readDefinitionsFromFeatureLayers();
@@ -152,8 +163,10 @@ define([
 						callback();
 					})
 				} else {
-					console.error("FeatureLayer IRW_ANZEIGEWERTE nicht verfügbar.");
-					callback();
+					var continueAfterError = this.handleError("0001", "Fehlende Datenanbindung", "FeatureLayer IRW_ANZEIGEWERTE nicht verfügbar.", true);
+					if (continueAfterError) {
+						callback();
+					}
 				}
 			},
 
@@ -187,13 +200,15 @@ define([
 							coeffArray.push(obj);
 						}
 
-						me.engine.coefficients = coeffArray;
+						me.engine.setCoefficients(coeffArray);
 						callback();
 
 					})
 				} else {
-					console.error("FeatureLayer IRW_IMMOCALC_KOEFFIZIENTEN nicht verfügbar.");
-					callback();
+					var continueAfterError = this.handleError("0001", "Fehlende Datenanbindung", "FeatureLayer IRW_IMMOCALC_KOEFFIZIENTEN nicht verfügbar.", true);
+					if (continueAfterError) {
+						callback();
+					}
 				}
 			},
 			readCoefficientsHandler: function (callback) {
@@ -234,9 +249,11 @@ define([
 						callback();
 
 					})
-				}else {
-					console.error("FeatureLayer IRW_ZONEN nicht verfügbar.");
-					callback();
+				} else {
+					var continueAfterError = this.handleError("0001", "Fehlende Datenanbindung", "FeatureLayer IRW_ZONEN nicht verfügbar.", true);
+					if (continueAfterError) {
+						callback();
+					}
 				}
 			},
 			readZonesHandler: function (callback) {
@@ -261,6 +278,62 @@ define([
 				me = this;
 				return function () { me.ready() }
 			},
+
+
+			/**
+			 * Regelt die Behandlung von Fehlern in Abhängigkeit des im Widget gesetzten MODE.
+			 * Im Produktionsmodus sollen bei Fehlern dem Anwender ein Meldung und ein Code angezeigt werden.
+			 * Damit hat diese die Möglichkeit bei Bedarf eine Info an GIS@Kreis-Paderborn.de zu senden.
+			 * Der ErrorCode hilft dabei den Fehler zu identifizieren.
+			 * 
+			 * @param {*} errorCode Identifikator, der in errorCodes.txt zu finden sein muss.
+			 * @param {*} dialogTitle Titel der Meldung.
+			 * @param {*} dialogMessage Inhalt der Meldung.
+			 * @param {*} destroyPanel (Optional) Wenn der Fehler so schwerwiegend ist, dass man nicht weiterarbeiten kann, sollte hier TRUE gesetzt werden. Standard: FALSE
+			 */
+			handleError: function (errorCode, dialogTitle, dialogMessage, destroyPanel) {
+				var continueAfterError = true;
+
+				// In jedem FAall wird eine Meldung an der Browser-Konsole ausgegeben.				
+				console.error(errorCode + ": " + dialogTitle + " - " + dialogMessage);
+
+				// Da der Tester vielleicht nicht die Konsole im Blick hat, wird ihm eine
+				// Meldung an der Oberfläche mit Fehlerinhalt angezeigt.
+				if (this.mode === this.modes["TEST"]) {
+					dialogMessage = "Es ist ein Fehler aufgetreten:<br><br>" + dialogMessage;
+					dialogMessage += "<br><br>Fehlercode: " + errorCode;
+					this.view.showDialog(dialogTitle, dialogMessage);
+
+				// Im Produktionsbetrieb sollen die Fehlerdetails nicht an der Oberfläche erscheinen.
+				// Der Anwender wird nur informiert, dass es Fehler vorliegt. Mittels eines
+				// Fehlercodes kann er uns einen Tipp geben wo es hakt.
+				} else if (this.mode === this.modes["PRODUCTION"]) {
+					continueAfterError = false;
+
+					prodTitle = "Es ist ein Fehler aufgetreten";
+					prodMessage = "Aktuell besteht ein Problem mit der Anzeige des Immobilien-Preis-Kalkulators.<br><br>"
+						+ "Bitte versuchen Sie es später noch einmal.<br>"
+						+ "Wenn das Problem weiterhin besteht, wenden Sie sich bitte an<br>GIS@Kreis-Paderborn.de.<br><br>Fehlercode: " + errorCode;
+
+					this.view.showDialog(prodTitle, prodMessage);
+
+					if (destroyPanel) {
+						// Zerstören der Panel-Instanz, damit beim
+						// nächsten Start sicher alles zurück gesetzt ist.
+						var pm = PanelManager.getInstance();
+						pm.destroyPanel(this.id + "_panel");
+					}
+				}
+				return continueAfterError;
+
+			},
+			errorHandler: function () {
+				me = this;
+				return function (errorCode, dialogTitle, dialogMessage, destroyPanel) {
+					me.handleError(errorCode, dialogTitle, dialogMessage, destroyPanel)
+				}
+			},
+
 
 
 
