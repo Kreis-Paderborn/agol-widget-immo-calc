@@ -322,7 +322,6 @@ define([
             var headerConfig = this.engine.getHeaderConfig();
             var stagBWO = dijitRegistry.byId("stagBWO");
             var dataArray = headerConfig["STAG"];
-            console.log(dataArray);
             stagBWO.store = new Memory({
                 data: dataArray
             });
@@ -332,15 +331,10 @@ define([
         getValuesGena: function (teilma, stag) {
             var headerConfig = this.engine.getHeaderConfig();
             var genaBWO = dijitRegistry.byId("genaBWO");
-            if (stag == false) {
-                var stagBWO = dijitRegistry.byId("stagBWO");
-                currentStag = stagBWO.textbox.value;
-            } else {
-                currentStag = stag;
-            };
-            var dataArray = headerConfig["ZONEN"][currentStag][teilma];
+            
+            var zonenArray = headerConfig["ZONEN"][stag][teilma];
             genaBWO.store = new Memory({
-                data: dataArray
+                data: zonenArray
             });
         },
 
@@ -348,25 +342,15 @@ define([
         getValuesTeilma: function (stag, zone) {
             var headerConfig = this.engine.getHeaderConfig();
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
-            if (stag == false) {
-                var stagBWO = dijitRegistry.byId("stagBWO");
-                currentStag = stagBWO.textbox.value;
-            } else {
-                currentStag = stag;
-            };
-
-            if (zone == undefined) {
-                var genaBWO = dijitRegistry.byId("genaBWO");
-                currentGena = genaBWO.textbox.value;
-            } else {
-                currentGena = zone;
-            };
-
-            var dataArray = headerConfig["TEILMA"][currentStag];
+        
+            // alle Teilmärkte zu dem Stichtag
+            var teilmaArray = headerConfig["TEILMA"][stag];
             var resultArray = [];
-            dataArray.forEach(function (aTeilma) {
-                headerConfig["ZONEN"][currentStag][aTeilma.name].forEach(function (aObject){
-                    if (aObject.name === currentGena){
+
+            // wenn für den Teilmarkt am Stichtag ein Eintrag für die Zone existiert, wird der Teilmark der Auswahl hinzugefügt. 
+            teilmaArray.forEach(function (aTeilma) {
+                headerConfig["ZONEN"][stag][aTeilma.name].forEach(function (aObject){
+                    if (aObject.name === zone){
                         resultArray.push(aTeilma);
                     }
                 })
@@ -388,29 +372,29 @@ define([
             var stag = stagBWO.textbox.value;
 
             // Auswahllisten für headerelemente aktualsieren
-            this.getValuesStag();
-            this.getValuesTeilma(stag);
             var teilma_txt = this.engine.mapDisplayNames("TEILMA", teilma.toString());
+            this.getValuesStag(teilma_txt,zone);
+            this.getValuesTeilma(stag,zone);
             this.getValuesGena(teilma_txt, stag);
 
-            // check header
-            var auswahlOk = false;
-            var headerConfig = this.engine.getHeaderConfig();
-            var headerSelection = headerConfig["ZONEN"][stag][teilma_txt];
-            if (headerSelection == undefined) {
-                console.log("Teilmarkt auswahl korrigieren");
-                // Auswahl Zone und dynamischen Teil sperren, neuen Teilmarkt bestimmen
-            };
-            headerSelection.forEach(function (aObject) {
-                if (aObject.name == zone) {
-                    auswahlOk = true;
-                    console.log("Alles ok");
-                };
-            })
-            if (auswahlOk = false) {
-                // Auswahl dynamische Elemente sperren, neue Zone bestimmen
-                var genaBWO = dijitRegistry.byId("genaBWO");
-            };
+            // // check header
+            // var auswahlOk = false;
+            // var headerConfig = this.engine.getHeaderConfig();
+            // var headerSelection = headerConfig["ZONEN"][stag][teilma_txt];
+            // if (headerSelection == undefined) {
+            //     console.log("Teilmarkt auswahl korrigieren");
+            //     // Auswahl Zone und dynamischen Teil sperren, neuen Teilmarkt bestimmen
+            // };
+            // headerSelection.forEach(function (aObject) {
+            //     if (aObject.name == zone) {
+            //         auswahlOk = true;
+            //         console.log("Alles ok");
+            //     };
+            // })
+            // if (auswahlOk = false) {
+            //     // Auswahl dynamische Elemente sperren, neue Zone bestimmen
+            //     var genaBWO = dijitRegistry.byId("genaBWO");
+            // };
 
 
             this.showTable(stag, teilma, zone);
@@ -427,7 +411,7 @@ define([
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
             teilmaBWO.textbox.value = teilma_txt;
             teilmaBWO.item = { name: teilma_txt, id: teilma };
-            this.getValuesTeilma(stag);
+            this.getValuesTeilma(stag,zone);
 
             var stagBWO = dijitRegistry.byId("stagBWO");
             stagBWO.textbox.value = stag;
