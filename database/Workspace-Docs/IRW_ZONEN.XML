@@ -1,1 +1,1483 @@
-<esri:Workspace xmlns:esri='http://www.esri.com/schemas/ArcGIS/10.6' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema'><WorkspaceDefinition xsi:type='esri:WorkspaceDefinition'><WorkspaceType>esriRemoteDatabaseWorkspace</WorkspaceType><Version>KPB_GUTACHTER.DEFAULT</Version><Domains xsi:type='esri:ArrayOfDomain'></Domains><DatasetDefinitions xsi:type='esri:ArrayOfDataElement'><DataElement xsi:type='esri:DEFeatureClass'><CatalogPath>/V=KPB_GUTACHTER.DEFAULT/FC=KPB_GUTACHTER.IRW_ZONEN</CatalogPath><Name>KPB_GUTACHTER.IRW_ZONEN</Name><DatasetType>esriDTFeatureClass</DatasetType><DSID>975</DSID><Versioned>false</Versioned><CanVersion>true</CanVersion><ConfigurationKeyword></ConfigurationKeyword><HasOID>true</HasOID><OIDFieldName>OBJECTID</OIDFieldName><Fields xsi:type='esri:Fields'><FieldArray xsi:type='esri:ArrayOfField'><Field xsi:type='esri:Field'><Name>OBJECTID</Name><Type>esriFieldTypeOID</Type><IsNullable>false</IsNullable><Length>4</Length><Precision>10</Precision><Scale>0</Scale><Required>true</Required><Editable>false</Editable><ModelName>OBJECTID</ModelName></Field><Field xsi:type='esri:Field'><Name>WNUM</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Immobilienrichtwertnummer</AliasName><ModelName>WNUM</ModelName></Field><Field xsi:type='esri:Field'><Name>IMRW</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Immobilienrichtwert (intern)</AliasName><ModelName>IMRW</ModelName></Field><Field xsi:type='esri:Field'><Name>IMRW_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>false</IsNullable><Length>10</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Immobilienrichtwert</AliasName><ModelName>IMRW_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>STAG</Name><Type>esriFieldTypeDate</Type><IsNullable>false</IsNullable><Length>8</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Stichtag des Immobilienrichtwertes (intern)</AliasName><ModelName>STAG</ModelName></Field><Field xsi:type='esri:Field'><Name>STAG_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>false</IsNullable><Length>10</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Stichtag des Immobilienrichtwertes</AliasName><ModelName>STAG_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>XWERT</Name><Type>esriFieldTypeInteger</Type><IsNullable>false</IsNullable><Length>4</Length><Precision>10</Precision><Scale>0</Scale><AliasName>Hochwert</AliasName><ModelName>XWERT</ModelName></Field><Field xsi:type='esri:Field'><Name>YWERT</Name><Type>esriFieldTypeInteger</Type><IsNullable>false</IsNullable><Length>4</Length><Precision>10</Precision><Scale>0</Scale><AliasName>Rechtswert</AliasName><ModelName>YWERT</ModelName></Field><Field xsi:type='esri:Field'><Name>BEZUG</Name><Type>esriFieldTypeString</Type><IsNullable>false</IsNullable><Length>12</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Bezugssystem</AliasName><ModelName>BEZUG</ModelName></Field><Field xsi:type='esri:Field'><Name>UDOK</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Örtliche Fachinformation</AliasName><ModelName>UDOK</ModelName></Field><Field xsi:type='esri:Field'><Name>NUMZ</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Richtwertzonen ID</AliasName><ModelName>NUMZ</ModelName></Field><Field xsi:type='esri:Field'><Name>TEILMA</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Teilmarkt (Schlüssel)</AliasName><ModelName>TEILMA</ModelName></Field><Field xsi:type='esri:Field'><Name>TEILMA_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>100</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Teilmarkt</AliasName><ModelName>TEILMA_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>OBJGR</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Objektgruppe (Schlüssel)</AliasName><ModelName>OBJGR</ModelName></Field><Field xsi:type='esri:Field'><Name>OBJGR_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>false</IsNullable><Length>50</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Objektgruppe</AliasName><ModelName>OBJGR_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>EGART</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Ergänzende Gebäudeart (Schlüssel)</AliasName><ModelName>EGART</ModelName></Field><Field xsi:type='esri:Field'><Name>EGART_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>30</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Ergänzende Gebäudeart</AliasName><ModelName>EGART_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>BJ</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Baujahr</AliasName><ModelName>BJ</ModelName></Field><Field xsi:type='esri:Field'><Name>WHNFL</Name><Type>esriFieldTypeString</Type><IsNullable>false</IsNullable><Length>12</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Wohnfläche (intern)</AliasName><ModelName>WHNFL</ModelName></Field><Field xsi:type='esri:Field'><Name>WHNFL_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>false</IsNullable><Length>20</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Wohnfläche</AliasName><ModelName>WHNFL_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>FLAE</Name><Type>esriFieldTypeString</Type><IsNullable>false</IsNullable><Length>12</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Grundstücksgröße (intern)</AliasName><ModelName>FLAE</ModelName></Field><Field xsi:type='esri:Field'><Name>FLAE_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>25</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Grundstücksgröße</AliasName><ModelName>FLAE_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>BOWL</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Boden-/ Lagewert (intern)</AliasName><ModelName>BOWL</ModelName></Field><Field xsi:type='esri:Field'><Name>BOWL_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>8</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Boden/Lagewert</AliasName><ModelName>BOWL_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>IRWTYP</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Immobilienrichtwerttyp (Schlüssel)</AliasName><ModelName>IRWTYP</ModelName></Field><Field xsi:type='esri:Field'><Name>IRWTYP_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>false</IsNullable><Length>70</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Immobilienrichtwerttyp</AliasName><ModelName>IRWTYP_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>BRWTYP</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Bodenrichtwerttyp (Schlüssel)</AliasName><ModelName>BRWTYP</ModelName></Field><Field xsi:type='esri:Field'><Name>BRWTYP_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>false</IsNullable><Length>50</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Bodenrichtwerttyp</AliasName><ModelName>BRWTYP_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>BRECHV</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Berechnungsverfahren Umrechnungskoeffizienten (Schlüssel)</AliasName><ModelName>BRECHV</ModelName></Field><Field xsi:type='esri:Field'><Name>BRECHV_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>false</IsNullable><Length>30</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Berechnungsverfahren Umrechnungskoeffizienten</AliasName><ModelName>BRECHV_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>GSTAND</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Gebäudestandard (Schlüssel)</AliasName><ModelName>GSTAND</ModelName></Field><Field xsi:type='esri:Field'><Name>GSTAND_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>false</IsNullable><Length>30</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Gebäudestandard</AliasName><ModelName>GSTAND_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>ANZEGEB</Name><Type>esriFieldTypeString</Type><IsNullable>false</IsNullable><Length>10</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Anzahl der Einheiten im Gebäude</AliasName><ModelName>ANZEGEB</ModelName></Field><Field xsi:type='esri:Field'><Name>FARBE</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Farbliche Immobilienrichtwerte (Schlüssel)</AliasName><ModelName>FARBE</ModelName></Field><Field xsi:type='esri:Field'><Name>FARBE_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>70</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Farbliche Immobilienrichtwerte</AliasName><ModelName>FARBE_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>GEBIET</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>50</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Gebietsgliederung</AliasName><ModelName>GEBIET</ModelName></Field><Field xsi:type='esri:Field'><Name>WHNLA</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Wohnlage (Schlüssel)</AliasName><ModelName>WHNLA</ModelName></Field><Field xsi:type='esri:Field'><Name>WHNLA_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>20</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Wohnlage</AliasName><ModelName>WHNLA_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>GART</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Gebäudeart (Schlüssel)</AliasName><ModelName>GART</ModelName></Field><Field xsi:type='esri:Field'><Name>GART_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>70</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Gebäudeart</AliasName><ModelName>GART_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>AKL</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Ausstattungsklasse (Schlüssel)</AliasName><ModelName>AKL</ModelName></Field><Field xsi:type='esri:Field'><Name>AKL_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>40</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Ausstattungsklasse</AliasName><ModelName>AKL_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>MTYP</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Modernisierungstyp (Schlüssel)</AliasName><ModelName>MTYP</ModelName></Field><Field xsi:type='esri:Field'><Name>MTYP_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>60</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Modernisierungstyp</AliasName><ModelName>MTYP_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>KELLER</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Keller (Schlüssel)</AliasName><ModelName>KELLER</ModelName></Field><Field xsi:type='esri:Field'><Name>KELLER_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>30</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Keller</AliasName><ModelName>KELLER_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>DGA</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Dachgeschoss (Schlüssel)</AliasName><ModelName>DGA</ModelName></Field><Field xsi:type='esri:Field'><Name>DGA_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>40</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Dachgeschoss</AliasName><ModelName>DGA_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>GESLA</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Geschosslage (Schlüssel)</AliasName><ModelName>GESLA</ModelName></Field><Field xsi:type='esri:Field'><Name>GESLA_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>40</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Geschosslage</AliasName><ModelName>GESLA_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>BK</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Balkon/Terrasse (Schlüssel)</AliasName><ModelName>BK</ModelName></Field><Field xsi:type='esri:Field'><Name>BK_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>40</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Balkon/Terrasse</AliasName><ModelName>BK_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>BEHING</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Ausbau behindertengerecht (Schlüssel)</AliasName><ModelName>BEHING</ModelName></Field><Field xsi:type='esri:Field'><Name>BEHING_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>4</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Ausbau behindertengerecht</AliasName><ModelName>BEHING_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>RANZ</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Raumzahl</AliasName><ModelName>RANZ</ModelName></Field><Field xsi:type='esri:Field'><Name>WHNA</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>10</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Anzahl der Einheiten in der Wohnanlage</AliasName><ModelName>WHNA</ModelName></Field><Field xsi:type='esri:Field'><Name>ANZG</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>12</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Anzahl der Geschosse</AliasName><ModelName>ANZG</ModelName></Field><Field xsi:type='esri:Field'><Name>GRDA</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Grundstücksart (Schlüssel)</AliasName><ModelName>GRDA</ModelName></Field><Field xsi:type='esri:Field'><Name>GRDA_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>60</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Grundstücksart</AliasName><ModelName>GRDA_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>BEIT</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>beitragsrechtlicher Zustand (Schlüssel)</AliasName><ModelName>BEIT</ModelName></Field><Field xsi:type='esri:Field'><Name>BEIT_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>150</Length><Precision>0</Precision><Scale>0</Scale><AliasName>beitragsrechtlicher Zustand</AliasName><ModelName>BEIT_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>GTIE</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Tiefe (intern)</AliasName><ModelName>GTIE</ModelName></Field><Field xsi:type='esri:Field'><Name>GTIE_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>8</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Tiefe</AliasName><ModelName>GTIE_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>GBREI</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Breite (intern)</AliasName><ModelName>GBREI</ModelName></Field><Field xsi:type='esri:Field'><Name>GBREI_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>8</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Breite</AliasName><ModelName>GBREI_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>GFZ</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>wertrelevante Geschossflächenzahl (intern)</AliasName><ModelName>GFZ</ModelName></Field><Field xsi:type='esri:Field'><Name>GFZ_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>10</Length><Precision>0</Precision><Scale>0</Scale><AliasName>wertrelevante Geschossflächenzahl</AliasName><ModelName>GFZ_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>GRZ</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Grundflächenzahl (intern)</AliasName><ModelName>GRZ</ModelName></Field><Field xsi:type='esri:Field'><Name>GRZ_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>10</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Grundflächenzahl</AliasName><ModelName>GRZ_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>MIETS</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Mietsituation (Schlüssel)</AliasName><ModelName>MIETS</ModelName></Field><Field xsi:type='esri:Field'><Name>MIETS_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>40</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Mietsituation</AliasName><ModelName>MIETS_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>BEM</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>255</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Bemerkung</AliasName><ModelName>BEM</ModelName></Field><Field xsi:type='esri:Field'><Name>FREI</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>255</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Freies Feld</AliasName><ModelName>FREI</ModelName></Field><Field xsi:type='esri:Field'><Name>NUZFL</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>12</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Nutzungsfläche (intern)</AliasName><ModelName>NUZFL</ModelName></Field><Field xsi:type='esri:Field'><Name>NUZFL_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>25</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Nutzungsfläche</AliasName><ModelName>NUZFL_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>BGF</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>12</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Brutto-Grundfläche (intern)</AliasName><ModelName>BGF</ModelName></Field><Field xsi:type='esri:Field'><Name>BGF_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>25</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Brutto-Grundfläche</AliasName><ModelName>BGF_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>IMMIS</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Immissionen (Schlüssel)</AliasName><ModelName>IMMIS</ModelName></Field><Field xsi:type='esri:Field'><Name>IMMIS_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>20</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Immissionen</AliasName><ModelName>IMMIS_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>DENKS</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Denkmalschutz (Schlüssel)</AliasName><ModelName>DENKS</ModelName></Field><Field xsi:type='esri:Field'><Name>DENKS_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>4</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Denkmalschutz</AliasName><ModelName>DENKS_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>VERAN</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Verkehrsanbindung (Schlüssel)</AliasName><ModelName>VERAN</ModelName></Field><Field xsi:type='esri:Field'><Name>VERAN_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>10</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Verkehrsanbindung</AliasName><ModelName>VERAN_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>BAUGP</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Baujahrsgruppe (Schlüssel)</AliasName><ModelName>BAUGP</ModelName></Field><Field xsi:type='esri:Field'><Name>BAUGP_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>25</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Baujahrsgruppe</AliasName><ModelName>BAUGP_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>BVERU</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>besonderer Verkaufsumstand (Schlüssel)</AliasName><ModelName>BVERU</ModelName></Field><Field xsi:type='esri:Field'><Name>BVERU_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>25</Length><Precision>0</Precision><Scale>0</Scale><AliasName>besnderer Verkaufsumstand</AliasName><ModelName>BVERU_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>WART</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Wohnungsart (Schlüssel)</AliasName><ModelName>WART</ModelName></Field><Field xsi:type='esri:Field'><Name>WART_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>20</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Wohnungsart</AliasName><ModelName>WART_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>JROHNF</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Jahresrohertrag / Summe der Wohn- und Nutzungsfläche (intern)</AliasName><ModelName>JROHNF</ModelName></Field><Field xsi:type='esri:Field'><Name>JROHNF_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>11</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Jahresrohertrag / Summe der Wohn- und Nutzungsfläche</AliasName><ModelName>JROHNF_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>MGRAD</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Modernisierungsgrad (Schlüssel)</AliasName><ModelName>MGRAD</ModelName></Field><Field xsi:type='esri:Field'><Name>MGRAD_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>60</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Modernisierungsgrad</AliasName><ModelName>MGRAD_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>WOLAKL</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Wohnlageklasse</AliasName><ModelName>WOLAKL</ModelName></Field><Field xsi:type='esri:Field'><Name>WOLAKL_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>17</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Wohnlageklasse</AliasName><ModelName>WOLAKL_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>GARSTP</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Garage/Stellplatz (Schlüssel)</AliasName><ModelName>GARSTP</ModelName></Field><Field xsi:type='esri:Field'><Name>GARSTP_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>40</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Garage/Stellplatz</AliasName><ModelName>GARSTP_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>TAGBAD</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Tageslichtbad (Schlüssel)</AliasName><ModelName>TAGBAD</ModelName></Field><Field xsi:type='esri:Field'><Name>TAGBAD_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>15</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Tageslichtbad</AliasName><ModelName>TAGBAD_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>GANU</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Gartennutzung (Schlüssel)</AliasName><ModelName>GANU</ModelName></Field><Field xsi:type='esri:Field'><Name>GANU_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>19</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Gartennutzung</AliasName><ModelName>GANU_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>OPTIK</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Optik (Schlüssel)</AliasName><ModelName>OPTIK</ModelName></Field><Field xsi:type='esri:Field'><Name>OPTIK_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>25</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Optik</AliasName><ModelName>OPTIK_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>ALTERJ</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Alter (intern)</AliasName><ModelName>ALTERJ</ModelName></Field><Field xsi:type='esri:Field'><Name>ALTERJ_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>12</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Alter</AliasName><ModelName>ALTERJ_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>WFNF</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>12</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Wohn- und Nutzungsfläche (intern)</AliasName><ModelName>WFNF</ModelName></Field><Field xsi:type='esri:Field'><Name>WFNF_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>20</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Wohn- und Nutzungsfläche</AliasName><ModelName>WFNF_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>GEANT</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Gewerbeanteil (intern)</AliasName><ModelName>GEANT</ModelName></Field><Field xsi:type='esri:Field'><Name>GEANT_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>10</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Gewerbeanteil</AliasName><ModelName>GEANT_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>RND</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Restnutzungsdauer (intern)</AliasName><ModelName>RND</ModelName></Field><Field xsi:type='esri:Field'><Name>RND_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>10</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Restnutzungsdauer</AliasName><ModelName>RND_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>HGELD</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Hausgeld (intern)</AliasName><ModelName>HGELD</ModelName></Field><Field xsi:type='esri:Field'><Name>HGELD_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>15</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Hausgeld</AliasName><ModelName>HGELD_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>GFLAE</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Gesamtgrundstücksgröße (intern)</AliasName><ModelName>GFLAE</ModelName></Field><Field xsi:type='esri:Field'><Name>GFLAE_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>25</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Gesamtgrundstücksgröße</AliasName><ModelName>GFLAE_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>AUFZUG</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Aufzug (Schlüssel)</AliasName><ModelName>AUFZUG</ModelName></Field><Field xsi:type='esri:Field'><Name>AUFZUG_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>15</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Aufzug</AliasName><ModelName>AUFZUG_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>GELA</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>true</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Gewerbelage (Schlüssel)</AliasName><ModelName>GELA</ModelName></Field><Field xsi:type='esri:Field'><Name>GELA_TXT</Name><Type>esriFieldTypeString</Type><IsNullable>true</IsNullable><Length>25</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Gewerbelage</AliasName><ModelName>GELA_TXT</ModelName></Field><Field xsi:type='esri:Field'><Name>SHAPE</Name><Type>esriFieldTypeGeometry</Type><IsNullable>true</IsNullable><Length>4</Length><Precision>0</Precision><Scale>0</Scale><Required>true</Required><GeometryDef xsi:type='esri:GeometryDef'><AvgNumPoints>0</AvgNumPoints><GeometryType>esriGeometryPoint</GeometryType><HasM>false</HasM><HasZ>false</HasZ><SpatialReference xsi:type='esri:ProjectedCoordinateSystem'><WKT>PROJCS[&quot;ETRS_1989_UTM_Zone_32N&quot;,GEOGCS[&quot;GCS_ETRS_1989&quot;,DATUM[&quot;D_ETRS_1989&quot;,SPHEROID[&quot;GRS_1980&quot;,6378137.0,298.257222101]],PRIMEM[&quot;Greenwich&quot;,0.0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;False_Easting&quot;,500000.0],PARAMETER[&quot;False_Northing&quot;,0.0],PARAMETER[&quot;Central_Meridian&quot;,9.0],PARAMETER[&quot;Scale_Factor&quot;,0.9996],PARAMETER[&quot;Latitude_Of_Origin&quot;,0.0],UNIT[&quot;Meter&quot;,1.0],AUTHORITY[&quot;EPSG&quot;,25832]]</WKT><XOrigin>-5120900</XOrigin><YOrigin>-9998100</YOrigin><XYScale>10000</XYScale><ZOrigin>0</ZOrigin><ZScale>1</ZScale><MOrigin>0</MOrigin><MScale>1</MScale><XYTolerance>0.001</XYTolerance><ZTolerance>0.001</ZTolerance><MTolerance>0.001</MTolerance><HighPrecision>true</HighPrecision><WKID>25832</WKID><LatestWKID>25832</LatestWKID></SpatialReference><GridSize0>0</GridSize0></GeometryDef><ModelName>SHAPE</ModelName></Field></FieldArray></Fields><Indexes xsi:type='esri:Indexes'><IndexArray xsi:type='esri:ArrayOfIndex'><Index xsi:type='esri:Index'><Name>NUMZ_1</Name><IsUnique>false</IsUnique><IsAscending>true</IsAscending><Fields xsi:type='esri:Fields'><FieldArray xsi:type='esri:ArrayOfField'><Field xsi:type='esri:Field'><Name>NUMZ</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Richtwertzonen ID</AliasName><ModelName>NUMZ</ModelName></Field></FieldArray></Fields></Index><Index xsi:type='esri:Index'><Name>R201678_SDE_ROWID_UK</Name><IsUnique>true</IsUnique><IsAscending>true</IsAscending><Fields xsi:type='esri:Fields'><FieldArray xsi:type='esri:ArrayOfField'><Field xsi:type='esri:Field'><Name>OBJECTID</Name><Type>esriFieldTypeOID</Type><IsNullable>false</IsNullable><Length>4</Length><Precision>10</Precision><Scale>0</Scale><Required>true</Required><Editable>false</Editable><ModelName>OBJECTID</ModelName></Field></FieldArray></Fields></Index><Index xsi:type='esri:Index'><Name>STAG</Name><IsUnique>false</IsUnique><IsAscending>true</IsAscending><Fields xsi:type='esri:Fields'><FieldArray xsi:type='esri:ArrayOfField'><Field xsi:type='esri:Field'><Name>STAG</Name><Type>esriFieldTypeDate</Type><IsNullable>false</IsNullable><Length>8</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Stichtag des Immobilienrichtwertes (intern)</AliasName><ModelName>STAG</ModelName></Field></FieldArray></Fields></Index><Index xsi:type='esri:Index'><Name>STAG_UND_TEILMA</Name><IsUnique>false</IsUnique><IsAscending>true</IsAscending><Fields xsi:type='esri:Fields'><FieldArray xsi:type='esri:ArrayOfField'><Field xsi:type='esri:Field'><Name>STAG</Name><Type>esriFieldTypeDate</Type><IsNullable>false</IsNullable><Length>8</Length><Precision>0</Precision><Scale>0</Scale><AliasName>Stichtag des Immobilienrichtwertes</AliasName><ModelName>STAG</ModelName></Field><Field xsi:type='esri:Field'><Name>TEILMA</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Teilmarkt (Schlüssel)</AliasName><ModelName>TEILMA</ModelName></Field></FieldArray></Fields></Index><Index xsi:type='esri:Index'><Name>TEILMA</Name><IsUnique>false</IsUnique><IsAscending>true</IsAscending><Fields xsi:type='esri:Fields'><FieldArray xsi:type='esri:ArrayOfField'><Field xsi:type='esri:Field'><Name>TEILMA</Name><Type>esriFieldTypeSmallInteger</Type><IsNullable>false</IsNullable><Length>2</Length><Precision>5</Precision><Scale>0</Scale><AliasName>Teilmarkt (Schlüssel)</AliasName><ModelName>TEILMA</ModelName></Field></FieldArray></Fields></Index><Index xsi:type='esri:Index'><Name>A2024_IX1</Name><IsUnique>true</IsUnique><IsAscending>true</IsAscending><Fields xsi:type='esri:Fields'><FieldArray xsi:type='esri:ArrayOfField'><Field xsi:type='esri:Field'><Name>SHAPE</Name><Type>esriFieldTypeGeometry</Type><IsNullable>true</IsNullable><Length>4</Length><Precision>0</Precision><Scale>0</Scale><Required>true</Required><GeometryDef xsi:type='esri:GeometryDef'><AvgNumPoints>0</AvgNumPoints><GeometryType>esriGeometryPoint</GeometryType><HasM>false</HasM><HasZ>false</HasZ><SpatialReference xsi:type='esri:ProjectedCoordinateSystem'><WKT>PROJCS[&quot;ETRS_1989_UTM_Zone_32N&quot;,GEOGCS[&quot;GCS_ETRS_1989&quot;,DATUM[&quot;D_ETRS_1989&quot;,SPHEROID[&quot;GRS_1980&quot;,6378137.0,298.257222101]],PRIMEM[&quot;Greenwich&quot;,0.0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;False_Easting&quot;,500000.0],PARAMETER[&quot;False_Northing&quot;,0.0],PARAMETER[&quot;Central_Meridian&quot;,9.0],PARAMETER[&quot;Scale_Factor&quot;,0.9996],PARAMETER[&quot;Latitude_Of_Origin&quot;,0.0],UNIT[&quot;Meter&quot;,1.0],AUTHORITY[&quot;EPSG&quot;,25832]]</WKT><XOrigin>-5120900</XOrigin><YOrigin>-9998100</YOrigin><XYScale>10000</XYScale><ZOrigin>0</ZOrigin><ZScale>1</ZScale><MOrigin>0</MOrigin><MScale>1</MScale><XYTolerance>0.001</XYTolerance><ZTolerance>0.001</ZTolerance><MTolerance>0.001</MTolerance><HighPrecision>true</HighPrecision><WKID>25832</WKID><LatestWKID>25832</LatestWKID></SpatialReference><GridSize0>0</GridSize0></GeometryDef><ModelName>SHAPE</ModelName></Field></FieldArray></Fields></Index></IndexArray></Indexes><CLSID>{52353152-891A-11D0-BEC6-00805F7C4268}</CLSID><EXTCLSID></EXTCLSID><RelationshipClassNames xsi:type='esri:Names'></RelationshipClassNames><AliasName></AliasName><ModelName></ModelName><HasGlobalID>false</HasGlobalID><GlobalIDFieldName></GlobalIDFieldName><RasterFieldName></RasterFieldName><ExtensionProperties xsi:type='esri:PropertySet'><PropertyArray xsi:type='esri:ArrayOfPropertySetProperty'></PropertyArray></ExtensionProperties><ControllerMemberships xsi:type='esri:ArrayOfControllerMembership'></ControllerMemberships><EditorTrackingEnabled>false</EditorTrackingEnabled><CreatorFieldName></CreatorFieldName><CreatedAtFieldName></CreatedAtFieldName><EditorFieldName></EditorFieldName><EditedAtFieldName></EditedAtFieldName><IsTimeInUTC>true</IsTimeInUTC><FeatureType>esriFTSimple</FeatureType><ShapeType>esriGeometryPoint</ShapeType><ShapeFieldName>Shape</ShapeFieldName><HasM>false</HasM><HasZ>false</HasZ><HasSpatialIndex>true</HasSpatialIndex><AreaFieldName></AreaFieldName><LengthFieldName></LengthFieldName><Extent xsi:type='esri:EnvelopeN'><XMin>NaN</XMin><YMin>NaN</YMin><XMax>NaN</XMax><YMax>NaN</YMax><SpatialReference xsi:type='esri:ProjectedCoordinateSystem'><WKT>PROJCS[&quot;ETRS_1989_UTM_Zone_32N&quot;,GEOGCS[&quot;GCS_ETRS_1989&quot;,DATUM[&quot;D_ETRS_1989&quot;,SPHEROID[&quot;GRS_1980&quot;,6378137.0,298.257222101]],PRIMEM[&quot;Greenwich&quot;,0.0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;False_Easting&quot;,500000.0],PARAMETER[&quot;False_Northing&quot;,0.0],PARAMETER[&quot;Central_Meridian&quot;,9.0],PARAMETER[&quot;Scale_Factor&quot;,0.9996],PARAMETER[&quot;Latitude_Of_Origin&quot;,0.0],UNIT[&quot;Meter&quot;,1.0],AUTHORITY[&quot;EPSG&quot;,25832]]</WKT><XOrigin>-5120900</XOrigin><YOrigin>-9998100</YOrigin><XYScale>10000</XYScale><ZOrigin>0</ZOrigin><ZScale>1</ZScale><MOrigin>0</MOrigin><MScale>1</MScale><XYTolerance>0.001</XYTolerance><ZTolerance>0.001</ZTolerance><MTolerance>0.001</MTolerance><HighPrecision>true</HighPrecision><WKID>25832</WKID><LatestWKID>25832</LatestWKID></SpatialReference></Extent><SpatialReference xsi:type='esri:ProjectedCoordinateSystem'><WKT>PROJCS[&quot;ETRS_1989_UTM_Zone_32N&quot;,GEOGCS[&quot;GCS_ETRS_1989&quot;,DATUM[&quot;D_ETRS_1989&quot;,SPHEROID[&quot;GRS_1980&quot;,6378137.0,298.257222101]],PRIMEM[&quot;Greenwich&quot;,0.0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;False_Easting&quot;,500000.0],PARAMETER[&quot;False_Northing&quot;,0.0],PARAMETER[&quot;Central_Meridian&quot;,9.0],PARAMETER[&quot;Scale_Factor&quot;,0.9996],PARAMETER[&quot;Latitude_Of_Origin&quot;,0.0],UNIT[&quot;Meter&quot;,1.0],AUTHORITY[&quot;EPSG&quot;,25832]]</WKT><XOrigin>-5120900</XOrigin><YOrigin>-9998100</YOrigin><XYScale>10000</XYScale><ZOrigin>-100000</ZOrigin><ZScale>10000</ZScale><MOrigin>-100000</MOrigin><MScale>10000</MScale><XYTolerance>0.001</XYTolerance><ZTolerance>0.001</ZTolerance><MTolerance>0.001</MTolerance><HighPrecision>true</HighPrecision><WKID>25832</WKID><LatestWKID>25832</LatestWKID></SpatialReference><ChangeTracked>false</ChangeTracked></DataElement></DatasetDefinitions></WorkspaceDefinition><WorkspaceData xsi:type='esri:WorkspaceData'></WorkspaceData></esri:Workspace>
+<esri:Workspace xmlns:esri='http://www.esri.com/schemas/ArcGIS/10.6' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+<WorkspaceDefinition xsi:type='esri:WorkspaceDefinition'>
+<WorkspaceType>esriRemoteDatabaseWorkspace</WorkspaceType>
+<Version>KPB_GUTACHTER.DEFAULT</Version>
+<Domains xsi:type='esri:ArrayOfDomain'>
+</Domains>
+<DatasetDefinitions xsi:type='esri:ArrayOfDataElement'>
+<DataElement xsi:type='esri:DEFeatureClass'>
+<CatalogPath>/V=KPB_GUTACHTER.DEFAULT/FC=KPB_GUTACHTER.IRW_ZONEN</CatalogPath>
+<Name>KPB_GUTACHTER.IRW_ZONEN</Name>
+<DatasetType>esriDTFeatureClass</DatasetType>
+<DSID>975</DSID>
+<Versioned>false</Versioned>
+<CanVersion>true</CanVersion>
+<ConfigurationKeyword>
+</ConfigurationKeyword>
+<HasOID>true</HasOID>
+<OIDFieldName>OBJECTID</OIDFieldName>
+<Fields xsi:type='esri:Fields'>
+<FieldArray xsi:type='esri:ArrayOfField'>
+<Field xsi:type='esri:Field'>
+<Name>OBJECTID</Name>
+<Type>esriFieldTypeOID</Type>
+<IsNullable>false</IsNullable>
+<Length>4</Length>
+<Precision>10</Precision>
+<Scale>0</Scale>
+<Required>true</Required>
+<Editable>false</Editable>
+<ModelName>OBJECTID</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>WNUM</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Immobilienrichtwertnummer</AliasName>
+<ModelName>WNUM</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>IMRW</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Immobilienrichtwert (intern)</AliasName>
+<ModelName>IMRW</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>IMRW_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>10</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Immobilienrichtwert</AliasName>
+<ModelName>IMRW_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>STAG</Name>
+<Type>esriFieldTypeDate</Type>
+<IsNullable>false</IsNullable>
+<Length>8</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Stichtag des Immobilienrichtwertes (intern)</AliasName>
+<ModelName>STAG</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>STAG_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>10</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>STAG_TXT</AliasName>
+<ModelName>STAG_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>XWERT</Name>
+<Type>esriFieldTypeInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>4</Length>
+<Precision>10</Precision>
+<Scale>0</Scale>
+<AliasName>Hochwert</AliasName>
+<ModelName>XWERT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>YWERT</Name>
+<Type>esriFieldTypeInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>4</Length>
+<Precision>10</Precision>
+<Scale>0</Scale>
+<AliasName>Rechtswert</AliasName>
+<ModelName>YWERT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BEZUG</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>12</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Bezugssystem</AliasName>
+<ModelName>BEZUG</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>UDOK</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Örtliche Fachinformation</AliasName>
+<ModelName>UDOK</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>NUMZ</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Richtwertzonen ID</AliasName>
+<ModelName>NUMZ</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>TEILMA</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Teilmarkt (Schlüssel)</AliasName>
+<ModelName>TEILMA</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>TEILMA_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>100</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Teilmarkt</AliasName>
+<ModelName>TEILMA_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>OBJGR</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Objektgruppe (Schlüssel)</AliasName>
+<ModelName>OBJGR</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>OBJGR_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>50</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Objektgruppe</AliasName>
+<ModelName>OBJGR_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>EGART</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Ergänzende Gebäudeart (Schlüssel)</AliasName>
+<ModelName>EGART</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>EGART_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>30</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Ergänzende Gebäudeart</AliasName>
+<ModelName>EGART_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BJ</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Baujahr</AliasName>
+<ModelName>BJ</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>WHNFL</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>12</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Wohnfläche (intern)</AliasName>
+<ModelName>WHNFL</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>WHNFL_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>20</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Wohnfläche</AliasName>
+<ModelName>WHNFL_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>FLAE</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>12</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Grundstücksgröße (intern)</AliasName>
+<ModelName>FLAE</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>FLAE_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>25</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Grundstücksgröße</AliasName>
+<ModelName>FLAE_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BOWL</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Boden-/ Lagewert (intern)</AliasName>
+<ModelName>BOWL</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BOWL_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>8</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Boden/Lagewert</AliasName>
+<ModelName>BOWL_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>IRWTYP</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Immobilienrichtwerttyp (Schlüssel)</AliasName>
+<ModelName>IRWTYP</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>IRWTYP_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>70</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Immobilienrichtwerttyp</AliasName>
+<ModelName>IRWTYP_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BRWTYP</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Bodenrichtwerttyp (Schlüssel)</AliasName>
+<ModelName>BRWTYP</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BRWTYP_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>50</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Bodenrichtwerttyp</AliasName>
+<ModelName>BRWTYP_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BRECHV</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Berechnungsverfahren Umrechnungskoeffizienten (Schlüssel)</AliasName>
+<ModelName>BRECHV</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BRECHV_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>30</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Berechnungsverfahren Umrechnungskoeffizienten</AliasName>
+<ModelName>BRECHV_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GSTAND</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Gebäudestandard (Schlüssel)</AliasName>
+<ModelName>GSTAND</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GSTAND_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>30</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Gebäudestandard</AliasName>
+<ModelName>GSTAND_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>ANZEGEB</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>10</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Anzahl der Einheiten im Gebäude</AliasName>
+<ModelName>ANZEGEB</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>FARBE</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Farbliche Immobilienrichtwerte</AliasName>
+<ModelName>FARBE</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>FARBE_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>70</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Farbliche Immobilienrichtwerte</AliasName>
+<ModelName>FARBE_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GEBIET</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>50</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Gebietsgliederung</AliasName>
+<ModelName>GEBIET</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>WHNLA</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Wohnlage (Schlüssel)</AliasName>
+<ModelName>WHNLA</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>WHNLA_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>20</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Wohnlage</AliasName>
+<ModelName>WHNLA_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GART</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Gebäudeart (Schlüssel)</AliasName>
+<ModelName>GART</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GART_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>70</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Gebäudeart</AliasName>
+<ModelName>GART_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>AKL</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Ausstattungsklasse (Schlüssel)</AliasName>
+<ModelName>AKL</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>AKL_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>40</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Ausstattungsklasse</AliasName>
+<ModelName>AKL_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>MTYP</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Modernisierungstyp (Schlüssel)</AliasName>
+<ModelName>MTYP</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>MTYP_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>60</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Modernisierungstyp</AliasName>
+<ModelName>MTYP_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>KELLER</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Keller (Schlüssel)</AliasName>
+<ModelName>KELLER</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>KELLER_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>30</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Keller</AliasName>
+<ModelName>KELLER_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>DGA</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Dachgeschoss (Schlüssel)</AliasName>
+<ModelName>DGA</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>DGA_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>40</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Dachgeschoss</AliasName>
+<ModelName>DGA_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GESLA</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Geschosslage (Schlüssel)</AliasName>
+<ModelName>GESLA</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GESLA_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>40</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Geschosslage</AliasName>
+<ModelName>GESLA_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BK</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Balkon/Terrasse (Schlüssel)</AliasName>
+<ModelName>BK</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BK_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>40</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Balkon/Terrasse</AliasName>
+<ModelName>BK_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BEHING</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Ausbau behindertengerecht (Schlüssel)</AliasName>
+<ModelName>BEHING</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BEHING_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>4</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Ausbau behindertengerecht</AliasName>
+<ModelName>BEHING_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>RANZ</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Raumzahl</AliasName>
+<ModelName>RANZ</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>WHNA</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>10</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Anzahl der Einheiten in der Wohnanlage</AliasName>
+<ModelName>WHNA</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>ANZG</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>12</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Anzahl der Geschosse</AliasName>
+<ModelName>ANZG</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GRDA</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Grundstücksart (Schlüssel)</AliasName>
+<ModelName>GRDA</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GRDA_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>60</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Grundstücksart</AliasName>
+<ModelName>GRDA_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BEIT</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>beitragsrechtlicher Zustand (Schlüssel)</AliasName>
+<ModelName>BEIT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BEIT_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>150</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>beitragsrechtlicher Zustand</AliasName>
+<ModelName>BEIT_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GTIE</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Tiefe (intern)</AliasName>
+<ModelName>GTIE</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GTIE_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>8</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Tiefe</AliasName>
+<ModelName>GTIE_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GBREI</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Breite (intern)</AliasName>
+<ModelName>GBREI</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GBREI_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>8</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Breite</AliasName>
+<ModelName>GBREI_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GFZ</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>wertrelevante Geschossflächenzahl (intern)</AliasName>
+<ModelName>GFZ</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GFZ_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>10</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>wertrelevante Geschossflächenzahl</AliasName>
+<ModelName>GFZ_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GRZ</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Grundflächenzahl (intern)</AliasName>
+<ModelName>GRZ</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GRZ_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>10</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Grundflächenzahl</AliasName>
+<ModelName>GRZ_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>MIETS</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Mietsituation (Schlüssel)</AliasName>
+<ModelName>MIETS</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>MIETS_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>40</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Mietsituation</AliasName>
+<ModelName>MIETS_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BEM</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>255</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Bemerkung</AliasName>
+<ModelName>BEM</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>FREI</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>255</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Freies Feld</AliasName>
+<ModelName>FREI</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>NUZFL</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>12</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Nutzungsfläche (intern)</AliasName>
+<ModelName>NUZFL</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>NUZFL_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>25</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Nutzungsfläche</AliasName>
+<ModelName>NUZFL_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BGF</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>12</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Brutto-Grundfläche (intern)</AliasName>
+<ModelName>BGF</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BGF_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>25</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Brutto-Grundfläche</AliasName>
+<ModelName>BGF_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>IMMIS</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Immissionen (Schlüssel)</AliasName>
+<ModelName>IMMIS</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>IMMIS_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>20</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Immissionen</AliasName>
+<ModelName>IMMIS_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>DENKS</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Denkmalschutz (Schlüssel)</AliasName>
+<ModelName>DENKS</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>DENKS_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>4</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Denkmalschutz</AliasName>
+<ModelName>DENKS_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>VERAN</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Verkehrsanbindung (Schlüssel)</AliasName>
+<ModelName>VERAN</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>VERAN_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>10</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Verkehrsanbindung</AliasName>
+<ModelName>VERAN_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BAUGP</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Baujahrsgruppe (Schlüssel)</AliasName>
+<ModelName>BAUGP</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BAUGP_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>25</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Baujahrsgruppe</AliasName>
+<ModelName>BAUGP_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BVERU</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>besonderer Verkaufsumstand (Schlüssel)</AliasName>
+<ModelName>BVERU</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>BVERU_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>25</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>besnderer Verkaufsumstand</AliasName>
+<ModelName>BVERU_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>WART</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Wohnungsart (Schlüssel)</AliasName>
+<ModelName>WART</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>WART_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>20</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Wohnungsart</AliasName>
+<ModelName>WART_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>JROHNF</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Jahresrohertrag / Summe der Wohn- und Nutzungsfläche (intern)</AliasName>
+<ModelName>JROHNF</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>JROHNF_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>11</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Jahresrohertrag / Summe der Wohn- und Nutzungsfläche</AliasName>
+<ModelName>JROHNF_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>MGRAD</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Modernisierungsgrad (Schlüssel)</AliasName>
+<ModelName>MGRAD</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>MGRAD_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>60</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Modernisierungsgrad</AliasName>
+<ModelName>MGRAD_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>WOLAKL</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Wohnlageklasse</AliasName>
+<ModelName>WOLAKL</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>WOLAKL_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>17</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Wohnlageklasse</AliasName>
+<ModelName>WOLAKL_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GARSTP</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Garage/Stellplatz (Schlüssel)</AliasName>
+<ModelName>GARSTP</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GARSTP_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>40</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Garage/Stellplatz</AliasName>
+<ModelName>GARSTP_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>TAGBAD</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Tageslichtbad (Schlüssel)</AliasName>
+<ModelName>TAGBAD</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>TAGBAD_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>15</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Tageslichtbad</AliasName>
+<ModelName>TAGBAD_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GANU</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Gartennutzung (Schlüssel)</AliasName>
+<ModelName>GANU</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GANU_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>19</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Gartennutzung</AliasName>
+<ModelName>GANU_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>OPTIK</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Optik (Schlüssel)</AliasName>
+<ModelName>OPTIK</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>OPTIK_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>25</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Optik</AliasName>
+<ModelName>OPTIK_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>ALTERJ</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Alter (intern)</AliasName>
+<ModelName>ALTERJ</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>ALTERJ_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>12</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Alter</AliasName>
+<ModelName>ALTERJ_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>WFNF</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>12</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Wohn- und Nutzungsfläche (intern)</AliasName>
+<ModelName>WFNF</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>WFNF_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>20</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Wohn- und Nutzungsfläche</AliasName>
+<ModelName>WFNF_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GEANT</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Gewerbeanteil (intern)</AliasName>
+<ModelName>GEANT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GEANT_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>10</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Gewerbeanteil</AliasName>
+<ModelName>GEANT_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>RND</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Restnutzungsdauer (intern)</AliasName>
+<ModelName>RND</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>RND_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>10</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Restnutzungsdauer</AliasName>
+<ModelName>RND_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>HGELD</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Hausgeld (intern)</AliasName>
+<ModelName>HGELD</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>HGELD_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>15</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Hausgeld</AliasName>
+<ModelName>HGELD_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GFLAE</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Gesamtgrundstücksgröße (intern)</AliasName>
+<ModelName>GFLAE</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GFLAE_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>25</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Gesamtgrundstücksgröße</AliasName>
+<ModelName>GFLAE_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>AUFZUG</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Aufzug (Schlüssel)</AliasName>
+<ModelName>AUFZUG</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>AUFZUG_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>15</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Aufzug</AliasName>
+<ModelName>AUFZUG_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GELA</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>true</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Gewerbelage (Schlüssel)</AliasName>
+<ModelName>GELA</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GELA_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>true</IsNullable>
+<Length>25</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Gewerbelage</AliasName>
+<ModelName>GELA_TXT</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>SHAPE</Name>
+<Type>esriFieldTypeGeometry</Type>
+<IsNullable>true</IsNullable>
+<Length>4</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<Required>true</Required>
+<GeometryDef xsi:type='esri:GeometryDef'>
+<AvgNumPoints>0</AvgNumPoints>
+<GeometryType>esriGeometryPoint</GeometryType>
+<HasM>false</HasM>
+<HasZ>false</HasZ>
+<SpatialReference xsi:type='esri:ProjectedCoordinateSystem'>
+<WKT>PROJCS[&quot;ETRS_1989_UTM_Zone_32N&quot;,GEOGCS[&quot;GCS_ETRS_1989&quot;,DATUM[&quot;D_ETRS_1989&quot;,SPHEROID[&quot;GRS_1980&quot;,6378137.0,298.257222101]],PRIMEM[&quot;Greenwich&quot;,0.0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;False_Easting&quot;,500000.0],PARAMETER[&quot;False_Northing&quot;,0.0],PARAMETER[&quot;Central_Meridian&quot;,9.0],PARAMETER[&quot;Scale_Factor&quot;,0.9996],PARAMETER[&quot;Latitude_Of_Origin&quot;,0.0],UNIT[&quot;Meter&quot;,1.0],AUTHORITY[&quot;EPSG&quot;,25832]]</WKT>
+<XOrigin>-5120900</XOrigin>
+<YOrigin>-9998100</YOrigin>
+<XYScale>10000</XYScale>
+<ZOrigin>0</ZOrigin>
+<ZScale>1</ZScale>
+<MOrigin>0</MOrigin>
+<MScale>1</MScale>
+<XYTolerance>0.001</XYTolerance>
+<ZTolerance>0.001</ZTolerance>
+<MTolerance>0.001</MTolerance>
+<HighPrecision>true</HighPrecision>
+<WKID>25832</WKID>
+<LatestWKID>25832</LatestWKID>
+</SpatialReference>
+<GridSize0>0</GridSize0>
+</GeometryDef>
+<ModelName>SHAPE</ModelName>
+</Field>
+</FieldArray>
+</Fields>
+<Indexes xsi:type='esri:Indexes'>
+<IndexArray xsi:type='esri:ArrayOfIndex'>
+<Index xsi:type='esri:Index'>
+<Name>NUMZ_1</Name>
+<IsUnique>false</IsUnique>
+<IsAscending>true</IsAscending>
+<Fields xsi:type='esri:Fields'>
+<FieldArray xsi:type='esri:ArrayOfField'>
+<Field xsi:type='esri:Field'>
+<Name>NUMZ</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Richtwertzonen ID</AliasName>
+<ModelName>NUMZ</ModelName>
+</Field>
+</FieldArray>
+</Fields>
+</Index>
+<Index xsi:type='esri:Index'>
+<Name>R201678_SDE_ROWID_UK</Name>
+<IsUnique>true</IsUnique>
+<IsAscending>true</IsAscending>
+<Fields xsi:type='esri:Fields'>
+<FieldArray xsi:type='esri:ArrayOfField'>
+<Field xsi:type='esri:Field'>
+<Name>OBJECTID</Name>
+<Type>esriFieldTypeOID</Type>
+<IsNullable>false</IsNullable>
+<Length>4</Length>
+<Precision>10</Precision>
+<Scale>0</Scale>
+<Required>true</Required>
+<Editable>false</Editable>
+<ModelName>OBJECTID</ModelName>
+</Field>
+</FieldArray>
+</Fields>
+</Index>
+<Index xsi:type='esri:Index'>
+<Name>STAG</Name>
+<IsUnique>false</IsUnique>
+<IsAscending>true</IsAscending>
+<Fields xsi:type='esri:Fields'>
+<FieldArray xsi:type='esri:ArrayOfField'>
+<Field xsi:type='esri:Field'>
+<Name>STAG</Name>
+<Type>esriFieldTypeDate</Type>
+<IsNullable>false</IsNullable>
+<Length>8</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Stichtag des Immobilienrichtwertes</AliasName>
+<ModelName>STAG</ModelName>
+</Field>
+</FieldArray>
+</Fields>
+</Index>
+<Index xsi:type='esri:Index'>
+<Name>STAG_UND_TEILMA</Name>
+<IsUnique>false</IsUnique>
+<IsAscending>true</IsAscending>
+<Fields xsi:type='esri:Fields'>
+<FieldArray xsi:type='esri:ArrayOfField'>
+<Field xsi:type='esri:Field'>
+<Name>STAG</Name>
+<Type>esriFieldTypeDate</Type>
+<IsNullable>false</IsNullable>
+<Length>8</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Stichtag des Immobilienrichtwertes</AliasName>
+<ModelName>STAG</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>TEILMA</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Teilmarkt (Schlüssel)</AliasName>
+<ModelName>TEILMA</ModelName>
+</Field>
+</FieldArray>
+</Fields>
+</Index>
+<Index xsi:type='esri:Index'>
+<Name>TEILMA</Name>
+<IsUnique>false</IsUnique>
+<IsAscending>true</IsAscending>
+<Fields xsi:type='esri:Fields'>
+<FieldArray xsi:type='esri:ArrayOfField'>
+<Field xsi:type='esri:Field'>
+<Name>TEILMA</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Teilmarkt (Schlüssel)</AliasName>
+<ModelName>TEILMA</ModelName>
+</Field>
+</FieldArray>
+</Fields>
+</Index>
+<Index xsi:type='esri:Index'>
+<Name>A2024_IX1</Name>
+<IsUnique>true</IsUnique>
+<IsAscending>true</IsAscending>
+<Fields xsi:type='esri:Fields'>
+<FieldArray xsi:type='esri:ArrayOfField'>
+<Field xsi:type='esri:Field'>
+<Name>SHAPE</Name>
+<Type>esriFieldTypeGeometry</Type>
+<IsNullable>true</IsNullable>
+<Length>4</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<Required>true</Required>
+<GeometryDef xsi:type='esri:GeometryDef'>
+<AvgNumPoints>0</AvgNumPoints>
+<GeometryType>esriGeometryPoint</GeometryType>
+<HasM>false</HasM>
+<HasZ>false</HasZ>
+<SpatialReference xsi:type='esri:ProjectedCoordinateSystem'>
+<WKT>PROJCS[&quot;ETRS_1989_UTM_Zone_32N&quot;,GEOGCS[&quot;GCS_ETRS_1989&quot;,DATUM[&quot;D_ETRS_1989&quot;,SPHEROID[&quot;GRS_1980&quot;,6378137.0,298.257222101]],PRIMEM[&quot;Greenwich&quot;,0.0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;False_Easting&quot;,500000.0],PARAMETER[&quot;False_Northing&quot;,0.0],PARAMETER[&quot;Central_Meridian&quot;,9.0],PARAMETER[&quot;Scale_Factor&quot;,0.9996],PARAMETER[&quot;Latitude_Of_Origin&quot;,0.0],UNIT[&quot;Meter&quot;,1.0],AUTHORITY[&quot;EPSG&quot;,25832]]</WKT>
+<XOrigin>-5120900</XOrigin>
+<YOrigin>-9998100</YOrigin>
+<XYScale>10000</XYScale>
+<ZOrigin>0</ZOrigin>
+<ZScale>1</ZScale>
+<MOrigin>0</MOrigin>
+<MScale>1</MScale>
+<XYTolerance>0.001</XYTolerance>
+<ZTolerance>0.001</ZTolerance>
+<MTolerance>0.001</MTolerance>
+<HighPrecision>true</HighPrecision>
+<WKID>25832</WKID>
+<LatestWKID>25832</LatestWKID>
+</SpatialReference>
+<GridSize0>0</GridSize0>
+</GeometryDef>
+<ModelName>SHAPE</ModelName>
+</Field>
+</FieldArray>
+</Fields>
+</Index>
+</IndexArray>
+</Indexes>
+<CLSID>{52353152-891A-11D0-BEC6-00805F7C4268}</CLSID>
+<EXTCLSID>
+</EXTCLSID>
+<RelationshipClassNames xsi:type='esri:Names'>
+</RelationshipClassNames>
+<AliasName>
+</AliasName>
+<ModelName>
+</ModelName>
+<HasGlobalID>false</HasGlobalID>
+<GlobalIDFieldName>
+</GlobalIDFieldName>
+<RasterFieldName>
+</RasterFieldName>
+<ExtensionProperties xsi:type='esri:PropertySet'>
+<PropertyArray xsi:type='esri:ArrayOfPropertySetProperty'>
+</PropertyArray>
+</ExtensionProperties>
+<ControllerMemberships xsi:type='esri:ArrayOfControllerMembership'>
+</ControllerMemberships>
+<EditorTrackingEnabled>false</EditorTrackingEnabled>
+<CreatorFieldName>
+</CreatorFieldName>
+<CreatedAtFieldName>
+</CreatedAtFieldName>
+<EditorFieldName>
+</EditorFieldName>
+<EditedAtFieldName>
+</EditedAtFieldName>
+<IsTimeInUTC>true</IsTimeInUTC>
+<FeatureType>esriFTSimple</FeatureType>
+<ShapeType>esriGeometryPoint</ShapeType>
+<ShapeFieldName>Shape</ShapeFieldName>
+<HasM>false</HasM>
+<HasZ>false</HasZ>
+<HasSpatialIndex>true</HasSpatialIndex>
+<AreaFieldName>
+</AreaFieldName>
+<LengthFieldName>
+</LengthFieldName>
+<Extent xsi:type='esri:EnvelopeN'>
+<XMin>NaN</XMin>
+<YMin>NaN</YMin>
+<XMax>NaN</XMax>
+<YMax>NaN</YMax>
+<SpatialReference xsi:type='esri:ProjectedCoordinateSystem'>
+<WKT>PROJCS[&quot;ETRS_1989_UTM_Zone_32N&quot;,GEOGCS[&quot;GCS_ETRS_1989&quot;,DATUM[&quot;D_ETRS_1989&quot;,SPHEROID[&quot;GRS_1980&quot;,6378137.0,298.257222101]],PRIMEM[&quot;Greenwich&quot;,0.0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;False_Easting&quot;,500000.0],PARAMETER[&quot;False_Northing&quot;,0.0],PARAMETER[&quot;Central_Meridian&quot;,9.0],PARAMETER[&quot;Scale_Factor&quot;,0.9996],PARAMETER[&quot;Latitude_Of_Origin&quot;,0.0],UNIT[&quot;Meter&quot;,1.0],AUTHORITY[&quot;EPSG&quot;,25832]]</WKT>
+<XOrigin>-5120900</XOrigin>
+<YOrigin>-9998100</YOrigin>
+<XYScale>10000</XYScale>
+<ZOrigin>0</ZOrigin>
+<ZScale>1</ZScale>
+<MOrigin>0</MOrigin>
+<MScale>1</MScale>
+<XYTolerance>0.001</XYTolerance>
+<ZTolerance>0.001</ZTolerance>
+<MTolerance>0.001</MTolerance>
+<HighPrecision>true</HighPrecision>
+<WKID>25832</WKID>
+<LatestWKID>25832</LatestWKID>
+</SpatialReference>
+</Extent>
+<SpatialReference xsi:type='esri:ProjectedCoordinateSystem'>
+<WKT>PROJCS[&quot;ETRS_1989_UTM_Zone_32N&quot;,GEOGCS[&quot;GCS_ETRS_1989&quot;,DATUM[&quot;D_ETRS_1989&quot;,SPHEROID[&quot;GRS_1980&quot;,6378137.0,298.257222101]],PRIMEM[&quot;Greenwich&quot;,0.0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;False_Easting&quot;,500000.0],PARAMETER[&quot;False_Northing&quot;,0.0],PARAMETER[&quot;Central_Meridian&quot;,9.0],PARAMETER[&quot;Scale_Factor&quot;,0.9996],PARAMETER[&quot;Latitude_Of_Origin&quot;,0.0],UNIT[&quot;Meter&quot;,1.0],AUTHORITY[&quot;EPSG&quot;,25832]]</WKT>
+<XOrigin>-5120900</XOrigin>
+<YOrigin>-9998100</YOrigin>
+<XYScale>10000</XYScale>
+<ZOrigin>-100000</ZOrigin>
+<ZScale>10000</ZScale>
+<MOrigin>-100000</MOrigin>
+<MScale>10000</MScale>
+<XYTolerance>0.001</XYTolerance>
+<ZTolerance>0.001</ZTolerance>
+<MTolerance>0.001</MTolerance>
+<HighPrecision>true</HighPrecision>
+<WKID>25832</WKID>
+<LatestWKID>25832</LatestWKID>
+</SpatialReference>
+<ChangeTracked>false</ChangeTracked>
+</DataElement>
+</DatasetDefinitions>
+</WorkspaceDefinition>
+<WorkspaceData xsi:type='esri:WorkspaceData'>
+</WorkspaceData>
+</esri:Workspace>
