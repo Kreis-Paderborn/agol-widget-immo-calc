@@ -437,6 +437,25 @@ define([
             // wertBWO.textbox.value = aWertBWOValue;
 
         },
+
+        /**
+         * Zeigt einen DIJIT-Dialog an.
+         * Zum Schließen des Dialogs wird ein einfacher OK-Button angeboten.
+         * 
+         * 
+         * @param {String} title Text, der in der Titelzeile angezeigt wrid.
+         * @param {String} message Text der innerhalb des Dialogs angezeigt wird.
+         */
+        showDialog : function(title, message) {
+            var okButtonOnlyHide = "<br><button data-dojo-type=\"dijit/form/Button\" type=\"submit\">OK</button>";  
+            var dialog = new dijitDialog({
+                title: title,
+                style: "width: 250px;text-align:center",
+                content: message + "<br/>" + okButtonOnlyHide,
+                closable: false
+            });
+            dialog.show();
+        }
     })
 }
 );

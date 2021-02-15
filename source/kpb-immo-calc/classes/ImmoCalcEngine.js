@@ -16,10 +16,13 @@ define([
         _displayNames: null,
         _headerConfig: null,
         _tableConfig: null,
-        coefficients: null,
+        _uiControls: null,
+        _coefficients: null,
+
+        handleError: null,
 
         constructor: function (options) {
-
+            this.handleError = options.handleError;
         },
 
         getHeaderConfig() {
@@ -37,18 +40,18 @@ define([
                     "TEILMA": {
                         "01.01.2021": [ // Sortiert nach ID
                             {
-                                name: "Eigentumswohnungen", // TEILMA_TXT
+                                name: "[TEILMA:1]", // TEILMA_TXT
                                 id: 1                       // TEILMA
                             },
                             {
-                                name: "Ein- und Zweifamilienhäuser freistehend",  // TEILMA_TXT
+                                name: "[TEILMA:2]",  // TEILMA_TXT
                                 id: 2                                             // TEILMA
                             }
                         ]
                     },
                     "ZONEN": {
                         "01.01.2021": {
-                            "Eigentumswohnungen": [  // Sortiert nach NAME
+                            "[TEILMA:1]": [  // Sortiert nach NAME
                                 {
                                     name: "Bad Lippspringe",        // IRW_NAME
                                     id: 2                           // NUMZ
@@ -58,7 +61,7 @@ define([
                                     id: 1                           // NUMZ
                                 }
                             ],
-                            "Ein- und Zweifamilienhäuser freistehend": [
+                            "[TEILMA:2]": [
                                 {
                                     name: "Delbrück",       // IRW_NAME
                                     id: 6                   // NUMZ
@@ -81,7 +84,8 @@ define([
             var uiControls = this.deriveUiControlConfig(stag, teilma);
             var tableConfig = this._tableConfig;
 
-            if (uiControls === undefined) {
+            if (uiControls === null || tableConfig === null) {
+
                 uiControls = {
                     "BJ": {
                         "Typ": "ZAHLENEINGABE",
@@ -100,34 +104,26 @@ define([
                         ]
                     }
                 };
-            }
-
-            if (tableConfig === null) {
-
-                if (teilma === 1) {
-                    teilma_txt = "Eigentumswohnungen";
-                } else {
-                    teilma_txt = "Ein- und Zweifamilienhäuser freistehend";
-                }
-
 
                 tableConfig = {
                     "01.01.2021": { // Aus IRW_KOEFF (Komplett) mit DISTINCT auf JAHR + Ableitung von 2020 --> "01.01.2021"
-                        "Eigentumswohnungen": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=1)
+                        "[TEILMA:1]": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=1)
                             "Bad Lippspringe": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
-                                "zonenIrw": "1550 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                                "zonenIrw": 1550, // Aus IRW_ZONEN IRWE
+                                "zonenIrw_txt": "1550 €/m²", // Aus IRW_ZONEN IRWE_TXT
                                 "Eigenschaften": {
                                     "BJ": { // Aus IRW_KOEFF 
                                         "Titel": "Baujahr",
-                                        "Richtwert": 1955,
+                                        "Richtwert": 1995,
                                         "Steuerelement": uiControls["BJ"],
-                                        "WertInSteuerelement": 1955,
-                                        "RichtwertKoeffizient": 1.7845
+                                        "WertInSteuerelement": 1995,
+                                        "RichtwertKoeffizient": 1.9554
                                     }
                                 }
                             },
                             "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
-                                "zonenIrw": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                                "zonenIrw": 1750, // Aus IRW_ZONEN IRWE
+                                "zonenIrw_txt": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
                                 "Eigenschaften": {
                                     "BJ": { // Aus IRW_KOEFF 
                                         "Titel": "Baujahr",
@@ -140,9 +136,10 @@ define([
                             }
 
                         },
-                        "Ein- und Zweifamilienhäuser freistehend": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=2
+                        "[TEILMA:2]": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=2
                             "Delbrück": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
-                                "zonenIrw": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                                "zonenIrw": 1750, // Aus IRW_ZONEN IRWE
+                                "zonenIrw_txt": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
                                 "Eigenschaften": {
                                     "BJ": { // Aus IRW_KOEFF 
                                         "Titel": "Baujahr",
@@ -153,15 +150,16 @@ define([
                                     },
                                     "GSTAND": {
                                         "Titel": "Gebäudestandard",
-                                        "Richtwert": "Mittel",
+                                        "Richtwert": "Toll",
                                         "Steuerelement": uiControls["GSTAND"],
-                                        "WertInSteuerelement": "Mittel",
-                                        "RichtwertKoeffizient": 1.0
+                                        "WertInSteuerelement": "Toll",
+                                        "RichtwertKoeffizient": 1.856
                                     }
                                 }
                             },
                             "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
-                                "zonenIrw": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                                "zonenIrw": 1750, // Aus IRW_ZONEN IRWE
+                                "zonenIrw_txt": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
                                 "Eigenschaften": {
                                     "BJ": { // Aus IRW_KOEFF 
                                         "Titel": "Baujahr",
@@ -172,10 +170,10 @@ define([
                                     },
                                     "GSTAND": {
                                         "Titel": "Gebäudestandard",
-                                        "Richtwert": "Mittel",
+                                        "Richtwert": "Mies",
                                         "Steuerelement": uiControls["GSTAND"],
-                                        "WertInSteuerelement": "Mittel",
-                                        "RichtwertKoeffizient": 1.0
+                                        "WertInSteuerelement": "Mies",
+                                        "RichtwertKoeffizient": 0.856
                                     }
                                 }
                             }
@@ -202,10 +200,10 @@ define([
          */
         deriveUiControlConfig: function (stag, teilma) {
 
-            if (this.coefficients !== null) {
+            if (this._coefficients !== null) {
                 var config = {};
 
-                for (const row of this.coefficients) {
+                for (const row of this._coefficients) {
                     if (row.STAG === stag && row.TEILMA === teilma) {
                         if (config[row.EIGN_BORIS] === undefined) {
                             config[row.EIGN_BORIS] = {};
@@ -271,7 +269,12 @@ define([
         mapDisplayNames: function (eignBoris, wertBoris) {
             var returnVal = "[" + eignBoris + ":" + wertBoris + "]"
 
-            if (this._displayNames !== null) {
+            // Wenn eine der Haupttabellen nicht von der DB lesbar war, fallen
+            // wir auf die statische Dummy-Konfig zurück.
+            if (this._displayNames !== null
+                && this._coefficients !== null
+                && this._tableConfig !== null) {
+
                 var myDisplayNames = this._displayNames[eignBoris];
 
                 if (myDisplayNames !== undefined) {
@@ -307,6 +310,11 @@ define([
                 obj["TXT_REAL"] = row.TXT_REAL;
                 this._displayNames[row.EIGN_BORIS].push(obj);
             }
+        },
+
+
+        setCoefficients: function (coefficientsArray) {
+            this._coefficients = coefficientsArray;
         },
 
         /**
@@ -370,50 +378,55 @@ define([
         setZones: function (zonesArray) {
             var usedZoneFieldsArray = this.detectUsedZoneFields(zonesArray);
 
-            // Initiale Struktur für die Header- und TableConfig.
-            this._headerConfig = {
-                "STAG": new Array(),
-                "TEILMA": {},
-                "ZONEN": {}
-            };
-            this._tableConfig = {};
+            // Da die Konfiguration nur vollständig aufgebaut werden kann,
+            // wenn auch die Koeffizienten geladen wurden, pürfen wir das hier als Erstes.
+            if (this._coefficients !== null) {
 
-            for (const fieldsObj of usedZoneFieldsArray) {
+                // Initiale Struktur für die Header- und TableConfig.
+                this._headerConfig = {
+                    "STAG": new Array(),
+                    "TEILMA": {},
+                    "ZONEN": {}
+                };
+                this._tableConfig = {};
 
-                // Die erste Ebene ist immer STAG. Mit dieser werden 
-                // alle Liste initialisiert.
-                var stagMilliSec = fieldsObj["STAG"];
-                var stagId = new Date(stagMilliSec).getFullYear();
-                var stag = this.convertDate(stagMilliSec);
+                for (const fieldsObj of usedZoneFieldsArray) {
 
-                if (this._tableConfig[stag] === undefined) {
-                    this._tableConfig[stag] = {};
-                    this._headerConfig["STAG"].push({ "name": stag, "id": stagId });
-                    this._headerConfig["STAG"].sort(function (a, b) { return a.id - b.id });
-                    this._headerConfig["TEILMA"][stag] = new Array();
-                    this._headerConfig["ZONEN"][stag] = {};
-                }
+                    // Die erste Ebene ist immer STAG. Mit dieser werden 
+                    // alle Liste initialisiert.
+                    var stagMilliSec = fieldsObj["STAG"];
+                    var stagId = new Date(stagMilliSec).getFullYear();
+                    var stag = this.convertDate(stagMilliSec);
 
-                // die zweite Ebene ist der Teilmarkt.
-                var teilma = fieldsObj["TEILMA"];
-                var teilmaTxt = fieldsObj["TEILMA_TXT"];
-                if (this._tableConfig[stag][teilmaTxt] === undefined) {
-                    this._tableConfig[stag][teilmaTxt] = {};
-                    this._headerConfig["TEILMA"][stag].push({ "name": teilmaTxt, "id": teilma });
-                    this._headerConfig["TEILMA"][stag].sort(function (a, b) { return a.id - b.id });
-                    this._headerConfig["ZONEN"][stag][teilmaTxt] = new Array();
-                }
+                    if (this._tableConfig[stag] === undefined) {
+                        this._tableConfig[stag] = {};
+                        this._headerConfig["STAG"].push({ "name": stag, "id": stagId });
+                        this._headerConfig["STAG"].sort(function (a, b) { return a.id - b.id });
+                        this._headerConfig["TEILMA"][stag] = new Array();
+                        this._headerConfig["ZONEN"][stag] = {};
+                    }
 
-                // die dritte Ebene ist der IRW-Name mit hrere Richtwertzonen-ID.
-                // Damit ist die Header-Config auch schon komplett
-                var irwName = fieldsObj["NAME_IRW"];
-                var numz = fieldsObj["NUMZ"];
-                if (this._tableConfig[stag][teilmaTxt][irwName] === undefined) {
-                    this._headerConfig["ZONEN"][stag][teilmaTxt].push({ "name": irwName, "id": numz });
-                    this._headerConfig["ZONEN"][stag][teilmaTxt].sort(function (a, b) { return a.name.localeCompare(b.name); });
+                    // die zweite Ebene ist der Teilmarkt.
+                    var teilma = fieldsObj["TEILMA"];
+                    var teilmaTxt = fieldsObj["TEILMA_TXT"];
+                    if (this._tableConfig[stag][teilmaTxt] === undefined) {
+                        this._tableConfig[stag][teilmaTxt] = {};
+                        this._headerConfig["TEILMA"][stag].push({ "name": teilmaTxt, "id": teilma });
+                        this._headerConfig["TEILMA"][stag].sort(function (a, b) { return a.id - b.id });
+                        this._headerConfig["ZONEN"][stag][teilmaTxt] = new Array();
+                    }
 
-                    // Hier werden nun die Bestandteile für alle vier Spalten der Tabelle festgelegt.
-                    this._tableConfig[stag][teilmaTxt][irwName] = this.deriveZoneDetails(fieldsObj, stag, teilma);
+                    // die dritte Ebene ist der IRW-Name mit hrere Richtwertzonen-ID.
+                    // Damit ist die Header-Config auch schon komplett
+                    var irwName = fieldsObj["NAME_IRW"];
+                    var numz = fieldsObj["NUMZ"];
+                    if (this._tableConfig[stag][teilmaTxt][irwName] === undefined) {
+                        this._headerConfig["ZONEN"][stag][teilmaTxt].push({ "name": irwName, "id": numz });
+                        this._headerConfig["ZONEN"][stag][teilmaTxt].sort(function (a, b) { return a.name.localeCompare(b.name); });
+
+                        // Hier werden nun die Bestandteile für alle vier Spalten der Tabelle festgelegt.
+                        this._tableConfig[stag][teilmaTxt][irwName] = this.deriveZoneDetails(fieldsObj, stag, teilma);
+                    }
                 }
             }
         },
@@ -423,49 +436,50 @@ define([
             var detailsObj = {};
             var uiControls = this.deriveUiControlConfig(stag, teilma);
 
-            // Setzen des IRWs für die Zone
-            detailsObj["zonenIrw"] = fieldsObj.IMRW_TXT;
+            if (uiControls !== null) {
+                // Setzen des IRWs für die Zone
+                detailsObj["zonenIrw"] = fieldsObj.IMRW;
+                detailsObj["zonenIrw_txt"] = fieldsObj.IMRW_TXT;
 
-            // Ermitteln und Setzen der Eigenschaften abhängig von STAG und TEILMA
-            eignObj = {};
+                // Ermitteln und Setzen der Eigenschaften abhängig von STAG und TEILMA
+                eignObj = {};
 
-            for (const coeffRow of this.coefficients) {
-                if (coeffRow.STAG === stag && coeffRow.TEILMA === teilma) {
-                    var eign = coeffRow.EIGN_BORIS;
-                    if (eignObj[eign] === undefined) {
-                        eignObj[eign] = {};
+                for (const coeffRow of this._coefficients) {
+                    if (coeffRow.STAG === stag && coeffRow.TEILMA === teilma) {
+                        var eign = coeffRow.EIGN_BORIS;
+                        if (eignObj[eign] === undefined) {
+                            eignObj[eign] = {};
+                        }
                     }
                 }
-            }
 
-            for (const eign in eignObj) {
-                var obj = {};
-                var uiControlConfig = uiControls[eign];
-                var internalValue = fieldsObj[eign];
-                var valueInControl = null;
+                for (const eign in eignObj) {
+                    var obj = {};
+                    var uiControlConfig = uiControls[eign];
+                    var internalValue = fieldsObj[eign];
+                    var valueInControl = null;
 
-                obj["Titel"] = this._externalFieldNames[eign];
-                obj["Steuerelement"] = uiControlConfig;
+                    obj["Titel"] = this._externalFieldNames[eign];
+                    obj["Steuerelement"] = uiControlConfig;
 
-                // Wenn ein Anzeigetext verfügbar ist, verwenden wir diesen.
-                var eignTxt = eign + "_TXT";
-                if (fieldsObj[eignTxt] !== undefined) {
-                    obj["Richtwert"] = fieldsObj[eignTxt];
-                    valueInControl = this.detectValueForControl(internalValue, fieldsObj[eignTxt], uiControlConfig);
-                } else {
-                    obj["Richtwert"] = internalValue;
-                    valueInControl = internalValue;
+                    // Wenn ein Anzeigetext verfügbar ist, verwenden wir diesen.
+                    var eignTxt = eign + "_TXT";
+                    if (fieldsObj[eignTxt] !== undefined) {
+                        obj["Richtwert"] = fieldsObj[eignTxt];
+                        valueInControl = this.detectValueForControl(internalValue, fieldsObj[eignTxt], uiControlConfig);
+                    } else {
+                        obj["Richtwert"] = internalValue;
+                        valueInControl = internalValue;
+                    }
+
+                    obj["WertInSteuerelement"] = valueInControl;
+                    obj["RichtwertKoeffizient"] = this.mapValueToCoeff(valueInControl, uiControlConfig);
+
+                    eignObj[eign] = obj;
                 }
 
-                obj["WertInSteuerelement"] = valueInControl;
-                obj["RichtwertKoeffizient"] = this.mapValueToCoeff(valueInControl, uiControlConfig);
-
-                eignObj[eign] = obj;
+                detailsObj["Eigenschaften"] = eignObj;
             }
-
-            detailsObj["Eigenschaften"] = eignObj;
-
-
 
             return detailsObj;
         },
@@ -529,6 +543,8 @@ define([
                         break;
                     }
                 }
+            } else {
+                this.handleError("0002", "Ungültiger Steuerelement-Typ", "Der Typ: '" + uiControlConfig.Typ + "' wird nicht unterstützt", false);
             }
 
             return returnVal;
