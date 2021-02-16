@@ -2,17 +2,13 @@ define([
     'dojo/_base/declare',
     "dojo/_base/lang",
     'dojo/store/Memory',
-    'dijit/form/SimpleTextarea',
+    'dijit/form/TextBox',
     'dijit/form/NumberSpinner',
     'dijit/Dialog',
-    'dijit/form/RadioButton',
-    'dijit/form/Button',
     'dijit/form/ComboBox',
-    'dijit/layout/TabContainer',
-    'dijit/layout/ContentPane',
-    'dojo/domReady!',
-    'dojox/form/BusyButton',
     "dijit/_WidgetBase",
+    "jimu/PanelManager",
+    "dojo/dom-style",
     "dijit/_Container",
     'dijit/registry',
     'jimu/loaderplugins/jquery-loader!https://code.jquery.com/jquery-git1.min.js'
@@ -20,17 +16,13 @@ define([
     declare,
     lang,
     Memory,
-    dijitSimpleTextarea,
+    dijitTextbox,
     dijitNumberSpinner,
     dijitDialog,
-    dijitFormRadioButton,
-    dijitFormButton,
     FormComboBox,
-    LayoutTabContainer,
-    LayoutContentPane,
-    dijitReady,
-    BusyButton,
     _WidgetBase,
+    PanelManager, 
+    domStyle,
     _Container,
     dijitRegistry,
     $
@@ -42,6 +34,10 @@ define([
         engine: null,
         visElements: null,
         coeffStore: null,
+        headerStyle150: "width: 150px; height: 25px; background-color: lightblue; color: white; text-align:center",
+        headerStyle250: "width: 250px; height: 25px; background-color: lightblue; color: white; text-align:center",
+        stdStyle150: "width: 150px; height: 35px; background-color: white; color: black; text-align:center",
+        stdStyle250: "width: 250px; height: 35px; background-color: white; color: black; text-align:center",
 
         constructor: function (engine, options) {
 
@@ -56,64 +52,64 @@ define([
 
             var me = this;
 
-            var normLabel = document.getElementById("normLabel");
-            normLabel.innerText = "Richtwert";
+            // Panel Breite und Höhe
+            //  Fixme Widget id hardcodiert
+            var pm = PanelManager.getInstance().getPanelById("_5_panel");
+            pm.resize({w: 740,h: 500});
 
-            var bwoLabel = document.getElementById("bwoLabel");
-            bwoLabel.innerText = "BWO";
+            var elementName = "firstLabel";
+            var elementValue = "";
+            this.generateTextElement(elementName, elementValue,this.headerStyle250);
+            elementName = "normLabel";
+            elementValue = "Richtwert";
+            this.generateTextElement(elementName, elementValue, this.headerStyle150);
+            elementName = "bwoLabel";
+            elementValue =  "BWO";
+            this.generateTextElement(elementName, elementValue,this.headerStyle150);
+            elementName = "irwLabel";
+            elementValue = "IRW und UF";
+            this.generateTextElement(elementName, elementValue,this.headerStyle150);
 
-            var irwLabel = document.getElementById("irwLabel");
-            irwLabel.innerText = "IRW und UF";
+            elementName = "angIRWLabel";
+            elementValue = "angepasster IRW";
+            this.generateTextElement(elementName, elementValue,this.stdStyle250);
 
-            var angIRWLabel = document.getElementById("angIRWLabel");
-            angIRWLabel.innerText = "angepasster IRW";
+            elementName = "angIRWBWO";
+            elementValue = "berechneter Wert";
+            this.generateTextElement(elementName, elementValue);
 
-            var angIRWBWO = new dijitSimpleTextarea({
-                id: "angIRWBWO",
-                name: "angIRWBWO",
-                rows: "1",
-                cols: "15",
-                style: "width:150px",
-                value: 'berechneter Wert'
-            }, "angIRWBWO").startup();
+            elementName = "wertLabel";
+            elementValue = "geschätzter Wert";
+            this.generateTextElement(elementName, elementValue,this.stdStyle250);
 
-            var wertLabel = document.getElementById("wertLabel");
-            wertLabel.innerText = "geschätzter Wert";
-
-            var wertBWO = new dijitSimpleTextarea({
-                id: "wertBWO",
-                name: "wertBWO",
-                rows: "1",
-                cols: "15",
-                style: "width:150px",
-                value: 'berechneter Wert'
-            }, "wertBWO").startup();
+            elementName = "wertBWO";
+            elementValue = "berechneter Wert";
+            this.generateTextElement(elementName, elementValue);
 
         },
 
         initialiseHeader: function () {
             var me = this;
-            // var headerConfig = this.engine.getHeaderConfig();
-
             // teilmaLabel
-            elementLabelName = "teilmaLabel";
-            elementLabelValue = "Teilmarkt";
-            this.generateLabelElement(elementLabelName, elementLabelValue);
+            var elementName = "teilmaLabel";
+            var elementValue = "Teilmarkt";
+            this.generateTextElement(elementName, elementValue,this.stdStyle250);
 
             // teilmaBWO
             var teilmaBWO = new FormComboBox({
                 id: "teilmaBWO",
                 name: "teilmaBWO",
                 searchAttr: "name",
-                style: "width:300px",
+                style: "width: 300px;text-align:center",
                 onChange: function (newValue) {
                     me.refreshTable("teilma");
                 },
             }, "teilmaBWO").startup();
 
             // genaLabel
-            var genaLabel = document.getElementById("genaLabel");
-            genaLabel.innerText = "Gemeinde";
+            elementName = "genaLabel";
+            elementValue = "Gemeinde";
+            this.generateTextElement(elementName, elementValue,this.stdStyle250);
 
             // genaBWO
             var genaBWO = new FormComboBox({
@@ -121,35 +117,27 @@ define([
                 name: "genaBWO",
                 value: "Aus Karte vorbelegt",
                 searchAttr: "name",
-                style: "width:300px",
+                style: "width: 300px;text-align:center",
                 onChange: function (newValue) {
                     me.refreshTable("zone");
                 }
             }, "genaBWO").startup();
 
             // genaIRW
-            var genaIRW = new dijitSimpleTextarea({
-                id: "genaIRW",
-                name: "genaIRW",
-                rows: "1",
-                cols: "20",
-                style: "width:150px",
-                value: "aValue"
-            }, "genaIRW").startup();
-
+            elementName = "genaIRW";
+            elementValue = "aValue";
+            this.generateTextElement(elementName, elementValue);
+            
             // stagLabel
-            var stagLabel = document.getElementById("stagLabel");
-            stagLabel.innerText = "Stichtag des Immobilienrichtwertes";
+            elementName = "stagLabel";
+            elementValue = "Stichtag des Immobilienrichtwertes";
+            this.generateTextElement(elementName, elementValue,this.stdStyle250);
 
             //  stagNorm
-            var stagNorm = new dijitSimpleTextarea({
-                id: "stagNorm",
-                name: "stagNorm",
-                rows: "1",
-                cols: "15",
-                style: "width:150px",
-                value: '2021'
-            }, "stagNorm").startup();
+            elementName = "stagNorm";
+            elementValue = "2021";
+            this.generateTextElement(elementName, elementValue);
+            
 
             // stagBWO
             var stagBWO = new FormComboBox({
@@ -157,7 +145,7 @@ define([
                 name: "stagBWO",
                 value: "Bitte wählen",
                 searchAttr: "name",
-                style: "width:150px",
+                style: "width: 150px;text-align:center",
                 onChange: function (newValue) {
                     me.refreshTable("stag");
                 }
@@ -189,7 +177,7 @@ define([
 
                     var elementLabelName = lowerCaseValue + "Label";
                     var elementLabelValue = tableConfig["Eigenschaften"][value]["Titel"];
-                    this.generateLabelElement(elementLabelName, elementLabelValue);
+                    this.generateTextElement(elementLabelName, elementLabelValue,this.stdStyle250);
 
                     var elementNormName = lowerCaseValue + "Norm";
                     var elementNormValue = tableConfig["Eigenschaften"][value]["Richtwert"];
@@ -257,14 +245,18 @@ define([
             aLabelElement.innerText = elementLabelValue;
         },
 
-        // Erzeugt ein dijit Text Element
-        generateTextElement: function (elementTextName, elementTextValue) {
-            var aTextElement = new dijitSimpleTextarea({
+        // Erzeugt ein dijit Text Elementzur Anzeige
+        generateTextElement: function (elementTextName, elementTextValue,aStyle) {
+            if (aStyle == undefined){
+                aStyle = this.stdStyle150;
+            };
+            var aTextElement = new dijitTextbox({
                 id: elementTextName,
                 name: elementTextName,
                 rows: "1",
                 cols: "15",
-                style: "width:150px",
+                style: aStyle,
+                readOnly: true,
                 value: elementTextValue.toString()
             }, elementTextName).startup();
         },
@@ -279,11 +271,24 @@ define([
                         smallDelta: 1,
                         constraints: { min: elementBWOUIControl["Min"], max: elementBWOUIControl["Max"], places: 0 },
                         id: elementBWOName,
-                        style: "width:150px",
+                        style: "width: 150px;text-align:center",
                         onChange: function (newValue) {
                             IdIRW = elementBWOName.replace("BWO", "IRW");
                             me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
                             me.calculateIRW();
+                        // },
+                        // onKeyDown: function (newValue) {
+                        //     IdIRW = elementBWOName.replace("BWO", "IRW");
+                        //     me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                        //     me.calculateIRW();
+                        // },
+                        // onUpDown: function (newValue) {
+                        //     IdIRW = elementBWOName.replace("BWO", "IRW");
+                        //     me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                        //     me.calculateIRW();
+                        // },
+                        // onClick: function (event) {
+                        //     console.log(event);
                         }
                     }, elementBWOName).startup();
                     break;
@@ -293,7 +298,7 @@ define([
                         name: elementBWOName,
                         value: elementBWOValue.toString(),
                         searchAttr: "name",
-                        style: "width:150px",
+                        style: "width: 150px;text-align:center",
                         onChange: function (newValue) {
                             IdIRW = elementBWOName.replace("BWO", "IRW");
                             me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
