@@ -466,12 +466,11 @@ define([
                     var eignTxt = eign + "_TXT";
                     if (fieldsObj[eignTxt] !== undefined) {
                         obj["Richtwert"] = fieldsObj[eignTxt];
-                        valueInControl = this.detectValueForControl(internalValue, fieldsObj[eignTxt], uiControlConfig);
                     } else {
                         obj["Richtwert"] = internalValue;
-                        valueInControl = internalValue;
                     }
 
+                    valueInControl = this.detectValueForControl(internalValue, fieldsObj[eignTxt], uiControlConfig);
                     obj["WertInSteuerelement"] = valueInControl;
                     obj["RichtwertKoeffizient"] = this.mapValueToCoeff(valueInControl, uiControlConfig);
 
@@ -486,7 +485,7 @@ define([
 
         /**
          * Wenn es einen internen UND externen Wert gibt hängt es vom Typ des Steuerelementes ab, welcher
-         * Wert angezeigt werden soll.
+         * Wert angezeigt werden soll. Bei einer Spanne, wird als Wert für die Zahleneingabe der Mittelwert verwendet.
          * 
          * @param {*} internalValue 
          * @param {*} uiControlConfig 
@@ -496,6 +495,8 @@ define([
             var returnVal;
 
             if (type === "ZAHLENEINGABE") {
+
+                // Zeichenkette bei Zahleneingabe lässt auf eine Spanne schließen
                 if (typeof internalValue === "string") {
                     var range = this.splitRange(internalValue);
                     internalValue = (range.Max + range.Min) / 2;
@@ -503,7 +504,11 @@ define([
                 returnVal = internalValue;
 
             } else if (type === "AUSWAHL") {
-                returnVal = externalValue;
+                if (externalValue !== undefined) {
+                    returnVal = externalValue;
+                } else {
+                    returnVal = internalValue;
+                }
             }
 
             return returnVal;
