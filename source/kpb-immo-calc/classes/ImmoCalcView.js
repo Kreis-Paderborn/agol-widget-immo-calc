@@ -107,7 +107,7 @@ define([
                 searchAttr: "name",
                 style: "width:300px",
                 onChange: function (newValue) {
-                    me.refreshTable();
+                    me.refreshTable("teilma");
                 },
             }, "teilmaBWO").startup();
 
@@ -123,7 +123,7 @@ define([
                 searchAttr: "name",
                 style: "width:300px",
                 onChange: function (newValue) {
-                    me.refreshTable();
+                    me.refreshTable("zone");
                 }
             }, "genaBWO").startup();
 
@@ -159,7 +159,7 @@ define([
                 searchAttr: "name",
                 style: "width:150px",
                 onChange: function (newValue) {
-                    me.refreshTable();
+                    me.refreshTable("stag");
                 }
             }, "stagBWO").startup();
 
@@ -183,6 +183,7 @@ define([
             for (value in tableConfig["Eigenschaften"]) {
                 var lowerCaseValue = value.toLowerCase();
                 this.visElements.push(lowerCaseValue);
+                // nur wenn die Zeile noch nicht im DOM ist neu erzeugen
                 if (document.getElementById("row" + lowerCaseValue) == null) {
                     this.createHtmlElement(lowerCaseValue);
 
@@ -204,10 +205,12 @@ define([
                     var elementIRWValue = "0%";
                     this.generateTextElement(elementIRWName, elementIRWValue);
                 } else {
+                    // für die bestehenden Zeilen den Richtwert aktualisieren
                     var aNormTextBox = dijitRegistry.byId(lowerCaseValue + "Norm");
                     var elementNormValue = tableConfig["Eigenschaften"][value]["Richtwert"];
                     aNormTextBox.textbox.value = elementNormValue;
                 };
+                // Fixme die Auswahlmöglichkeiten und Spannen müssen nur bei einer Änderung des Teilmarktes angepasst werden.
                 var aComboBox = dijitRegistry.byId(lowerCaseValue + "BWO");
                 this.getStoreValuesForComboBox(aComboBox, value);
             }
@@ -303,7 +306,7 @@ define([
         },
 
         // erzeugt die Auswahlliste für ComboBoxen
-        getStoreValuesForComboBox: function (aComboBox, feld) {
+        getStoreValuesForComboBox: function (aDijitElement, feld) {
             var StagBWO = dijitRegistry.byId("stagBWO");
             var currentStag = StagBWO.textbox.value;
             var genaBWO = dijitRegistry.byId("genaBWO");
@@ -311,93 +314,134 @@ define([
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
             var currentTeilma = teilmaBWO.item.id;
             var config = this.engine.getTableConfig(currentStag, currentTeilma, currentGena);
-            var dataArray = config["Eigenschaften"][feld]["Steuerelement"]["Liste"];
-            aComboBox.store = new Memory({
-                data: dataArray
-            });
+            var aSteuerelement = config["Eigenschaften"][feld]["Steuerelement"]
+            switch (aSteuerelement["Typ"]) {
+                case "ZAHLENEINGABE":
+                    // aDijitElement.set(value: elementBWOValue);
+                    aDijitElement.constraints = { min: aSteuerelement["Min"], max: aSteuerelement["Max"], places: 0 };
+                    break;
+                case "AUSWAHL":
+                    var dataArray = aSteuerelement["Liste"];
+                    aDijitElement.store = new Memory({
+                        data: dataArray
+                    });
+                    break;
+            }
+
         },
 
         // Auswahlliste für Header Element Stichtag erzeugen
         getValuesStag: function (teilma, gena) {
             var headerConfig = this.engine.getHeaderConfig();
             var stagBWO = dijitRegistry.byId("stagBWO");
-            var dataArray = headerConfig["STAG"];
+            var stagArray = headerConfig["STAG"];
             stagBWO.store = new Memory({
-                data: dataArray
+                data: stagArray
             });
+            return stagArray;
         },
 
         // Auswahlliste für Header Element Gemeinde/Zone erzeugen
         getValuesGena: function (teilma, stag) {
             var headerConfig = this.engine.getHeaderConfig();
             var genaBWO = dijitRegistry.byId("genaBWO");
-            
+            // alle Zonen zu dem Stichtag und Teilmarkt
             var zonenArray = headerConfig["ZONEN"][stag][teilma];
             genaBWO.store = new Memory({
                 data: zonenArray
             });
+            return zonenArray;
         },
 
         // Auswahlliste für Header Element Teilmarkt erzeugen
         getValuesTeilma: function (stag, zone) {
             var headerConfig = this.engine.getHeaderConfig();
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
-        
             // alle Teilmärkte zu dem Stichtag
             var teilmaArray = headerConfig["TEILMA"][stag];
-            var resultArray = [];
-
-            // wenn für den Teilmarkt am Stichtag ein Eintrag für die Zone existiert, wird der Teilmark der Auswahl hinzugefügt. 
-            teilmaArray.forEach(function (aTeilma) {
-                headerConfig["ZONEN"][stag][aTeilma.name].forEach(function (aObject){
-                    if (aObject.name === zone){
-                        resultArray.push(aTeilma);
-                    }
-                })
-            })
             teilmaBWO.store = new Memory({
-                data: resultArray
+                data: teilmaArray
             });
+            return teilmaArray;
         },
 
         // Baut den dynamischen Teil der Gui neu auf, wird bei Änderungen in den Header Elementen Aufgerufen
-        refreshTable: function () {
-            var genaBWO = dijitRegistry.byId("genaBWO");
-            var zone = genaBWO.textbox.value;
+        refreshTable: function (changedElement) {
+            var stagBWO = dijitRegistry.byId("stagBWO");
+            var stag = stagBWO.textbox.value;
 
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
             var teilma = teilmaBWO.item.id;
 
-            var stagBWO = dijitRegistry.byId("stagBWO");
-            var stag = stagBWO.textbox.value;
+            var genaBWO = dijitRegistry.byId("genaBWO");
+            var zone = genaBWO.textbox.value;
 
-            // Auswahllisten für headerelemente aktualsieren
+            // Auswahllisten für Headerelemente aktualsieren
             var teilma_txt = this.engine.mapDisplayNames("TEILMA", teilma.toString());
-            this.getValuesStag(teilma_txt,zone);
-            this.getValuesTeilma(stag,zone);
-            this.getValuesGena(teilma_txt, stag);
+            switch (changedElement) {
+                case "stag":
+                    var teilmaValue = teilmaBWO.textbox.value;
+                    var teilmaStore = this.getValuesTeilma(stag, zone);
+                    this.getValuesGena(teilma_txt, stag);
+                    var teilmaValueOk = false;
+                    teilmaStore.forEach(function (aObject) {
+                        if (aObject.name == teilmaValue) {
+                            teilmaValueOk = true;
+                        };
+                    })
+                    if (teilmaValueOk == true) {
+                        // enable Eingaben
+                        genaBWO.disabled = false;
+                        teilmaBWO.disabled = false;
+                        this.disableBWOElements(false);
+                        this.showTable(stag, teilma, zone);
+                    } else {
+                        teilmaBWO.focus();
+                        // disable alle Eingaben ausser stag und teilma
+                        this.disableBWOElements(true);
+                        genaBWO.disabled = true;
+                    };
+                    break;
+                case "teilma":
+                    var genaValue = genaBWO.textbox.value;
+                    this.getValuesStag(teilma_txt, zone);
+                    var genaStore = this.getValuesGena(teilma_txt, stag);
+                    var genaValueOk = false;
+                    genaStore.forEach(function (aObject) {
+                        if (aObject.name == genaValue) {
+                            genaValueOk = true;
+                        };
+                    })
 
-            // // check header
-            // var auswahlOk = false;
-            // var headerConfig = this.engine.getHeaderConfig();
-            // var headerSelection = headerConfig["ZONEN"][stag][teilma_txt];
-            // if (headerSelection == undefined) {
-            //     console.log("Teilmarkt auswahl korrigieren");
-            //     // Auswahl Zone und dynamischen Teil sperren, neuen Teilmarkt bestimmen
-            // };
-            // headerSelection.forEach(function (aObject) {
-            //     if (aObject.name == zone) {
-            //         auswahlOk = true;
-            //         console.log("Alles ok");
-            //     };
-            // })
-            // if (auswahlOk = false) {
-            //     // Auswahl dynamische Elemente sperren, neue Zone bestimmen
-            //     var genaBWO = dijitRegistry.byId("genaBWO");
-            // };
+                    if (genaValueOk == true) {
+                        genaBWO.disabled = false;
+                        stagBWO.disabled = false;
+                        this.disableBWOElements(false);
+                        this.showTable(stag, teilma, zone);
+                    } else {
+                        genaBWO.focus();
+                        // disable alle Eingaben ausser teilma und gema
+                        this.disableBWOElements(true);
+                        stagBWO.disabled = true;
+                    };
+                    break;
+                case "zone":
+                    this.getValuesStag(teilma_txt, zone);
+                    this.getValuesTeilma(stag, zone);
+                    teilmaBWO.disabled = false;
+                    stagBWO.disabled = false;
+                    this.disableBWOElements(false);
+                    this.showTable(stag, teilma, zone);
+                    break;
+            };
 
+        },
 
-            this.showTable(stag, teilma, zone);
+        disableBWOElements: function (disable) {
+            this.visElements.forEach(function (lowerCaseValue) {
+                var aBWOElement = dijitRegistry.byId(lowerCaseValue + "BWO");
+                aBWOElement.disabled = disable;
+            })
         },
 
         // setzt die Werte im Header der Gui
@@ -411,7 +455,7 @@ define([
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
             teilmaBWO.textbox.value = teilma_txt;
             teilmaBWO.item = { name: teilma_txt, id: teilma };
-            this.getValuesTeilma(stag,zone);
+            this.getValuesTeilma(stag, zone);
 
             var stagBWO = dijitRegistry.byId("stagBWO");
             stagBWO.textbox.value = stag;
@@ -440,6 +484,7 @@ define([
         },
 
         calculateIRW: function () {
+            // Fixme 
             console.log("calculateIRW");
             // console.log(this.coeffStore);
 
@@ -453,13 +498,13 @@ define([
         /**
          * Zeigt einen DIJIT-Dialog an.
          * Zum Schließen des Dialogs wird ein einfacher OK-Button angeboten.
-         * 
-         * 
+         *
+         *
          * @param {String} title Text, der in der Titelzeile angezeigt wrid.
          * @param {String} message Text der innerhalb des Dialogs angezeigt wird.
          */
-        showDialog : function(title, message) {
-            var okButtonOnlyHide = "<br><button data-dojo-type=\"dijit/form/Button\" type=\"submit\">OK</button>";  
+        showDialog: function (title, message) {
+            var okButtonOnlyHide = "<br><button data-dojo-type=\"dijit/form/Button\" type=\"submit\">OK</button>";
             var dialog = new dijitDialog({
                 title: title,
                 style: "width: 250px;text-align:center",
