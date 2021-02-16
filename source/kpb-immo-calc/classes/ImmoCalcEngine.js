@@ -31,45 +31,52 @@ define([
 
             if (headerConfig === null) {
                 headerConfig = {
-                    "STAG": [ // sortiert nach ID
-                        {
-                            name: "01.01.2021",     // STAG als String
-                            id: 2021                // Jahr aus STAG
-                        }
+                    "STAG": [
+                        { name: "01.01.2021", id: 2021 },
+                        { name: "01.01.2022", id: 2022 },
+                        { name: "01.01.2023", id: 2023 }
                     ],
                     "TEILMA": {
-                        "01.01.2021": [ // Sortiert nach ID
-                            {
-                                name: "[TEILMA:1]", // TEILMA_TXT
-                                id: 1                       // TEILMA
-                            },
-                            {
-                                name: "[TEILMA:2]",  // TEILMA_TXT
-                                id: 2                                             // TEILMA
-                            }
+                        "01.01.2021": [
+                            { name: "[TEILMA:1]", id: 1 },
+                            { name: "[TEILMA:2]", id: 2 }
+                        ],
+                        "01.01.2022": [
+                            { name: "[TEILMA:1]", id: 1 },
+                            { name: "[TEILMA:2]", id: 2 },
+                            { name: "[TEILMA:3]", id: 3 }
+                        ],
+                        "01.01.2023": [
+                            { name: "[TEILMA:3]", id: 3 }
                         ]
                     },
                     "ZONEN": {
                         "01.01.2021": {
-                            "[TEILMA:1]": [  // Sortiert nach NAME
-                                {
-                                    name: "Bad Lippspringe",        // IRW_NAME
-                                    id: 2                           // NUMZ
-                                },
-                                {
-                                    name: "Altenbeken",              // IRW_NAME
-                                    id: 1                           // NUMZ
-                                }
+                            "[TEILMA:1]": [
+                                { name: "Bad Lippspringe", id: 2 },
+                                { name: "Altenbeken", id: 1 }
                             ],
                             "[TEILMA:2]": [
-                                {
-                                    name: "Delbrück",       // IRW_NAME
-                                    id: 6                   // NUMZ
-                                },
-                                {
-                                    name: "Altenbeken",      // IRW_NAME
-                                    id: 1                   // NUMZ
-                                }
+                                { name: "Delbrück", id: 6 },
+                                { name: "Altenbeken", id: 1 }
+                            ]
+                        },
+                        "01.01.2022": {
+                            "[TEILMA:1]": [
+                                { name: "Bad Lippspringe", id: 2 },
+                            ],
+                            "[TEILMA:2]": [
+                                { name: "Delbrück", id: 6 },
+                            ],
+                            "[TEILMA:3]": [
+                                { name: "Delbrück", id: 6 },
+                                { name: "Altenbeken", id: 1 }
+                            ]
+                        },
+                        "01.01.2023": {
+                            "[TEILMA:3]": [
+                                { name: "Delbrück", id: 6 },
+                                { name: "Altenbeken", id: 1 }
                             ]
                         }
                     }
@@ -106,13 +113,13 @@ define([
                 };
 
                 tableConfig = {
-                    "01.01.2021": { // Aus IRW_KOEFF (Komplett) mit DISTINCT auf JAHR + Ableitung von 2020 --> "01.01.2021"
-                        "[TEILMA:1]": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=1)
-                            "Bad Lippspringe": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
-                                "zonenIrw": 1550, // Aus IRW_ZONEN IRWE
-                                "zonenIrw_txt": "1550 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                    "01.01.2021": {
+                        "[TEILMA:1]": {
+                            "Bad Lippspringe": {
+                                "zonenIrw": 1550,
+                                "zonenIrw_txt": "1550 €/m²",
                                 "Eigenschaften": {
-                                    "BJ": { // Aus IRW_KOEFF 
+                                    "BJ": {
                                         "Titel": "Baujahr",
                                         "Richtwert": 1995,
                                         "Steuerelement": uiControls["BJ"],
@@ -121,11 +128,11 @@ define([
                                     }
                                 }
                             },
-                            "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
-                                "zonenIrw": 1750, // Aus IRW_ZONEN IRWE
-                                "zonenIrw_txt": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                            "Altenbeken": {
+                                "zonenIrw": 1750,
+                                "zonenIrw_txt": "1750 €/m²",
                                 "Eigenschaften": {
-                                    "BJ": { // Aus IRW_KOEFF 
+                                    "BJ": {
                                         "Titel": "Baujahr",
                                         "Richtwert": 1955,
                                         "Steuerelement": uiControls["BJ"],
@@ -134,14 +141,13 @@ define([
                                     }
                                 }
                             }
-
                         },
-                        "[TEILMA:2]": { // Aus IRW_KOEFF (Jahr=2020) mit DISTINCT auf TEILMA, dann über IRW_ANZEIGENAMEN (EIGN_BORIS=Teilma AND WERT_BORIS=2
-                            "Delbrück": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
-                                "zonenIrw": 1750, // Aus IRW_ZONEN IRWE
-                                "zonenIrw_txt": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                        "[TEILMA:2]": {
+                            "Delbrück": {
+                                "zonenIrw": 1750,
+                                "zonenIrw_txt": "1750 €/m²",
                                 "Eigenschaften": {
-                                    "BJ": { // Aus IRW_KOEFF 
+                                    "BJ": {
                                         "Titel": "Baujahr",
                                         "Richtwert": 1955,
                                         "Steuerelement": uiControls["BJ"],
@@ -157,11 +163,11 @@ define([
                                     }
                                 }
                             },
-                            "Altenbeken": { // AUS IRW_ZONEN (STAG=01.01.2021 AND TEILMA=1) GENA
-                                "zonenIrw": 1750, // Aus IRW_ZONEN IRWE
-                                "zonenIrw_txt": "1750 €/m²", // Aus IRW_ZONEN IRWE_TXT
+                            "Altenbeken": {
+                                "zonenIrw": 1750,
+                                "zonenIrw_txt": "1750 €/m²",
                                 "Eigenschaften": {
-                                    "BJ": { // Aus IRW_KOEFF 
+                                    "BJ": {
                                         "Titel": "Baujahr",
                                         "Richtwert": 1955,
                                         "Steuerelement": uiControls["BJ"],
@@ -177,11 +183,133 @@ define([
                                     }
                                 }
                             }
-
                         }
-
+                    },
+                    "01.01.2022": {
+                        "[TEILMA:1]": {
+                            "Bad Lippspringe": {
+                                "zonenIrw": 1550,
+                                "zonenIrw_txt": "1550 €/m²",
+                                "Eigenschaften": {
+                                    "BJ": {
+                                        "Titel": "Baujahr",
+                                        "Richtwert": 1995,
+                                        "Steuerelement": uiControls["BJ"],
+                                        "WertInSteuerelement": 1995,
+                                        "RichtwertKoeffizient": 1.9554
+                                    }
+                                }
+                            }
+                        },
+                        "[TEILMA:2]": {
+                            "Delbrück": {
+                                "zonenIrw": 1750,
+                                "zonenIrw_txt": "1750 €/m²",
+                                "Eigenschaften": {
+                                    "BJ": {
+                                        "Titel": "Baujahr",
+                                        "Richtwert": 1955,
+                                        "Steuerelement": uiControls["BJ"],
+                                        "WertInSteuerelement": 1955,
+                                        "RichtwertKoeffizient": 1.7845
+                                    },
+                                    "GSTAND": {
+                                        "Titel": "Gebäudestandard",
+                                        "Richtwert": "Toll",
+                                        "Steuerelement": uiControls["GSTAND"],
+                                        "WertInSteuerelement": "Toll",
+                                        "RichtwertKoeffizient": 1.856
+                                    }
+                                }
+                            }
+                        },
+                        "[TEILMA:3]": {
+                            "Delbrück": {
+                                "zonenIrw": 1750,
+                                "zonenIrw_txt": "1750 €/m²",
+                                "Eigenschaften": {
+                                    "BJ": {
+                                        "Titel": "Baujahr",
+                                        "Richtwert": 1955,
+                                        "Steuerelement": uiControls["BJ"],
+                                        "WertInSteuerelement": 1955,
+                                        "RichtwertKoeffizient": 1.7845
+                                    },
+                                    "GSTAND": {
+                                        "Titel": "Gebäudestandard",
+                                        "Richtwert": "Toll",
+                                        "Steuerelement": uiControls["GSTAND"],
+                                        "WertInSteuerelement": "Toll",
+                                        "RichtwertKoeffizient": 1.856
+                                    }
+                                }
+                            },
+                            "Altenbeken": {
+                                "zonenIrw": 1750,
+                                "zonenIrw_txt": "1750 €/m²",
+                                "Eigenschaften": {
+                                    "BJ": {
+                                        "Titel": "Baujahr",
+                                        "Richtwert": 1955,
+                                        "Steuerelement": uiControls["BJ"],
+                                        "WertInSteuerelement": 1955,
+                                        "RichtwertKoeffizient": 1.7845
+                                    },
+                                    "GSTAND": {
+                                        "Titel": "Gebäudestandard",
+                                        "Richtwert": "Mies",
+                                        "Steuerelement": uiControls["GSTAND"],
+                                        "WertInSteuerelement": "Mies",
+                                        "RichtwertKoeffizient": 0.856
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "01.01.2023": {
+                        "[TEILMA:3]": {
+                            "Delbrück": {
+                                "zonenIrw": 1750,
+                                "zonenIrw_txt": "1750 €/m²",
+                                "Eigenschaften": {
+                                    "BJ": {
+                                        "Titel": "Baujahr",
+                                        "Richtwert": 1955,
+                                        "Steuerelement": uiControls["BJ"],
+                                        "WertInSteuerelement": 1955,
+                                        "RichtwertKoeffizient": 1.7845
+                                    },
+                                    "GSTAND": {
+                                        "Titel": "Gebäudestandard",
+                                        "Richtwert": "Toll",
+                                        "Steuerelement": uiControls["GSTAND"],
+                                        "WertInSteuerelement": "Toll",
+                                        "RichtwertKoeffizient": 1.856
+                                    }
+                                }
+                            },
+                            "Altenbeken": {
+                                "zonenIrw": 1750,
+                                "zonenIrw_txt": "1750 €/m²",
+                                "Eigenschaften": {
+                                    "BJ": {
+                                        "Titel": "Baujahr",
+                                        "Richtwert": 1955,
+                                        "Steuerelement": uiControls["BJ"],
+                                        "WertInSteuerelement": 1955,
+                                        "RichtwertKoeffizient": 1.7845
+                                    },
+                                    "GSTAND": {
+                                        "Titel": "Gebäudestandard",
+                                        "Richtwert": "Mies",
+                                        "Steuerelement": uiControls["GSTAND"],
+                                        "WertInSteuerelement": "Mies",
+                                        "RichtwertKoeffizient": 0.856
+                                    }
+                                }
+                            }
+                        }
                     }
-
                 };
             }
 
@@ -466,12 +594,11 @@ define([
                     var eignTxt = eign + "_TXT";
                     if (fieldsObj[eignTxt] !== undefined) {
                         obj["Richtwert"] = fieldsObj[eignTxt];
-                        valueInControl = this.detectValueForControl(internalValue, fieldsObj[eignTxt], uiControlConfig);
                     } else {
                         obj["Richtwert"] = internalValue;
-                        valueInControl = internalValue;
                     }
 
+                    valueInControl = this.detectValueForControl(internalValue, fieldsObj[eignTxt], uiControlConfig);
                     obj["WertInSteuerelement"] = valueInControl;
                     obj["RichtwertKoeffizient"] = this.mapValueToCoeff(valueInControl, uiControlConfig);
 
@@ -486,7 +613,7 @@ define([
 
         /**
          * Wenn es einen internen UND externen Wert gibt hängt es vom Typ des Steuerelementes ab, welcher
-         * Wert angezeigt werden soll.
+         * Wert angezeigt werden soll. Bei einer Spanne, wird als Wert für die Zahleneingabe der Mittelwert verwendet.
          * 
          * @param {*} internalValue 
          * @param {*} uiControlConfig 
@@ -496,6 +623,8 @@ define([
             var returnVal;
 
             if (type === "ZAHLENEINGABE") {
+
+                // Zeichenkette bei Zahleneingabe lässt auf eine Spanne schließen
                 if (typeof internalValue === "string") {
                     var range = this.splitRange(internalValue);
                     internalValue = (range.Max + range.Min) / 2;
@@ -503,7 +632,11 @@ define([
                 returnVal = internalValue;
 
             } else if (type === "AUSWAHL") {
-                returnVal = externalValue;
+                if (externalValue !== undefined) {
+                    returnVal = externalValue;
+                } else {
+                    returnVal = internalValue;
+                }
             }
 
             return returnVal;
