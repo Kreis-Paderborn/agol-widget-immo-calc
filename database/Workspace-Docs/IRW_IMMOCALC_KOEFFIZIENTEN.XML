@@ -172,7 +172,7 @@
 <Type>esriFieldTypeSmallInteger</Type>
 <IsNullable>true</IsNullable>
 <Length>2</Length>
-<Precision>0</Precision>
+<Precision>5</Precision>
 <Scale>0</Scale>
 <AliasName>Richtwertzonen ID</AliasName>
 <ModelName>

@@ -1,18 +1,17 @@
-<esri:Workspace xmlns:esri='http://www.esri.com/schemas/ArcGIS/10.8' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+<esri:Workspace xmlns:esri='http://www.esri.com/schemas/ArcGIS/10.6' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
 <WorkspaceDefinition xsi:type='esri:WorkspaceDefinition'>
-<WorkspaceType>esriLocalDatabaseWorkspace</WorkspaceType>
-<Version>
-</Version>
+<WorkspaceType>esriRemoteDatabaseWorkspace</WorkspaceType>
+<Version>KPB_GUTACHTER.DEFAULT</Version>
 <Domains xsi:type='esri:ArrayOfDomain'>
 </Domains>
 <DatasetDefinitions xsi:type='esri:ArrayOfDataElement'>
 <DataElement xsi:type='esri:DEFeatureClass'>
-<CatalogPath>/FC=IRW_ANZEIGEWERTE</CatalogPath>
-<Name>IRW_ANZEIGEWERTE</Name>
+<CatalogPath>/V=KPB_GUTACHTER.DEFAULT/FC=KPB_GUTACHTER.IRW_ANZEIGEWERTE</CatalogPath>
+<Name>KPB_GUTACHTER.IRW_ANZEIGEWERTE</Name>
 <DatasetType>esriDTFeatureClass</DatasetType>
-<DSID>14</DSID>
+<DSID>969</DSID>
 <Versioned>false</Versioned>
-<CanVersion>false</CanVersion>
+<CanVersion>true</CanVersion>
 <ConfigurationKeyword>
 </ConfigurationKeyword>
 <HasOID>true</HasOID>
@@ -24,49 +23,13 @@
 <Type>esriFieldTypeOID</Type>
 <IsNullable>false</IsNullable>
 <Length>4</Length>
-<Precision>0</Precision>
+<Precision>10</Precision>
 <Scale>0</Scale>
 <Required>true</Required>
 <Editable>false</Editable>
 <DomainFixed>true</DomainFixed>
 <AliasName>OBJECTID</AliasName>
-<ModelName>
-</ModelName>
-</Field>
-<Field xsi:type='esri:Field'>
-<Name>SHAPE</Name>
-<Type>esriFieldTypeGeometry</Type>
-<IsNullable>true</IsNullable>
-<Length>0</Length>
-<Precision>0</Precision>
-<Scale>0</Scale>
-<Required>true</Required>
-<DomainFixed>true</DomainFixed>
-<GeometryDef xsi:type='esri:GeometryDef'>
-<AvgNumPoints>0</AvgNumPoints>
-<GeometryType>esriGeometryPoint</GeometryType>
-<HasM>false</HasM>
-<HasZ>false</HasZ>
-<SpatialReference xsi:type='esri:ProjectedCoordinateSystem'>
-<WKT>PROJCS[&quot;ETRS_1989_UTM_Zone_32N&quot;,GEOGCS[&quot;GCS_ETRS_1989&quot;,DATUM[&quot;D_ETRS_1989&quot;,SPHEROID[&quot;GRS_1980&quot;,6378137.0,298.257222101]],PRIMEM[&quot;Greenwich&quot;,0.0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;False_Easting&quot;,500000.0],PARAMETER[&quot;False_Northing&quot;,0.0],PARAMETER[&quot;Central_Meridian&quot;,9.0],PARAMETER[&quot;Scale_Factor&quot;,0.9996],PARAMETER[&quot;Latitude_Of_Origin&quot;,0.0],UNIT[&quot;Meter&quot;,1.0],AUTHORITY[&quot;EPSG&quot;,25832]]</WKT>
-<XOrigin>-5120900</XOrigin>
-<YOrigin>-9998100</YOrigin>
-<XYScale>10000</XYScale>
-<ZOrigin>-100000</ZOrigin>
-<ZScale>10000</ZScale>
-<MOrigin>-100000</MOrigin>
-<MScale>10000</MScale>
-<XYTolerance>0.001</XYTolerance>
-<ZTolerance>0.001</ZTolerance>
-<MTolerance>0.001</MTolerance>
-<HighPrecision>true</HighPrecision>
-<WKID>25832</WKID>
-<LatestWKID>25832</LatestWKID>
-</SpatialReference>
-<GridSize0>0</GridSize0>
-</GeometryDef>
-<ModelName>
-</ModelName>
+<ModelName>OBJECTID</ModelName>
 </Field>
 <Field xsi:type='esri:Field'>
 <Name>EIGN_BORIS</Name>
@@ -76,8 +39,7 @@
 <Precision>0</Precision>
 <Scale>0</Scale>
 <AliasName>Eigenschaft (Boris)</AliasName>
-<ModelName>
-</ModelName>
+<ModelName>EIGN_BORIS</ModelName>
 </Field>
 <Field xsi:type='esri:Field'>
 <Name>VERWENDET</Name>
@@ -87,8 +49,7 @@
 <Precision>0</Precision>
 <Scale>0</Scale>
 <AliasName>Wird verwendet</AliasName>
-<ModelName>
-</ModelName>
+<ModelName>VERWENDET</ModelName>
 </Field>
 <Field xsi:type='esri:Field'>
 <Name>WERT_BORIS</Name>
@@ -98,8 +59,7 @@
 <Precision>0</Precision>
 <Scale>0</Scale>
 <AliasName>Interner Wert (Boris)</AliasName>
-<ModelName>
-</ModelName>
+<ModelName>WERT_BORIS</ModelName>
 </Field>
 <Field xsi:type='esri:Field'>
 <Name>TXT_BORIS</Name>
@@ -109,8 +69,7 @@
 <Precision>0</Precision>
 <Scale>0</Scale>
 <AliasName>Anzeigewert (Boris)</AliasName>
-<ModelName>
-</ModelName>
+<ModelName>TXT_BORIS</ModelName>
 </Field>
 <Field xsi:type='esri:Field'>
 <Name>TXT_REAL</Name>
@@ -120,47 +79,13 @@
 <Precision>0</Precision>
 <Scale>0</Scale>
 <AliasName>Anzeigewert</AliasName>
-<ModelName>
-</ModelName>
+<ModelName>TXT_REAL</ModelName>
 </Field>
-</FieldArray>
-</Fields>
-<Indexes xsi:type='esri:Indexes'>
-<IndexArray xsi:type='esri:ArrayOfIndex'>
-<Index xsi:type='esri:Index'>
-<Name>FDO_OBJECTID</Name>
-<IsUnique>true</IsUnique>
-<IsAscending>true</IsAscending>
-<Fields xsi:type='esri:Fields'>
-<FieldArray xsi:type='esri:ArrayOfField'>
-<Field xsi:type='esri:Field'>
-<Name>OBJECTID</Name>
-<Type>esriFieldTypeOID</Type>
-<IsNullable>false</IsNullable>
-<Length>4</Length>
-<Precision>0</Precision>
-<Scale>0</Scale>
-<Required>true</Required>
-<Editable>false</Editable>
-<DomainFixed>true</DomainFixed>
-<AliasName>OBJECTID</AliasName>
-<ModelName>
-</ModelName>
-</Field>
-</FieldArray>
-</Fields>
-</Index>
-<Index xsi:type='esri:Index'>
-<Name>FDO_SHAPE</Name>
-<IsUnique>false</IsUnique>
-<IsAscending>true</IsAscending>
-<Fields xsi:type='esri:Fields'>
-<FieldArray xsi:type='esri:ArrayOfField'>
 <Field xsi:type='esri:Field'>
 <Name>SHAPE</Name>
 <Type>esriFieldTypeGeometry</Type>
 <IsNullable>true</IsNullable>
-<Length>0</Length>
+<Length>4</Length>
 <Precision>0</Precision>
 <Scale>0</Scale>
 <Required>true</Required>
@@ -175,10 +100,10 @@
 <XOrigin>-5120900</XOrigin>
 <YOrigin>-9998100</YOrigin>
 <XYScale>10000</XYScale>
-<ZOrigin>-100000</ZOrigin>
-<ZScale>10000</ZScale>
-<MOrigin>-100000</MOrigin>
-<MScale>10000</MScale>
+<ZOrigin>0</ZOrigin>
+<ZScale>1</ZScale>
+<MOrigin>0</MOrigin>
+<MScale>1</MScale>
 <XYTolerance>0.001</XYTolerance>
 <ZTolerance>0.001</ZTolerance>
 <MTolerance>0.001</MTolerance>
@@ -188,8 +113,73 @@
 </SpatialReference>
 <GridSize0>0</GridSize0>
 </GeometryDef>
-<ModelName>
-</ModelName>
+<ModelName>SHAPE</ModelName>
+</Field>
+</FieldArray>
+</Fields>
+<Indexes xsi:type='esri:Indexes'>
+<IndexArray xsi:type='esri:ArrayOfIndex'>
+<Index xsi:type='esri:Index'>
+<Name>R198406_SDE_ROWID_UK</Name>
+<IsUnique>true</IsUnique>
+<IsAscending>true</IsAscending>
+<Fields xsi:type='esri:Fields'>
+<FieldArray xsi:type='esri:ArrayOfField'>
+<Field xsi:type='esri:Field'>
+<Name>OBJECTID</Name>
+<Type>esriFieldTypeOID</Type>
+<IsNullable>false</IsNullable>
+<Length>4</Length>
+<Precision>10</Precision>
+<Scale>0</Scale>
+<Required>true</Required>
+<Editable>false</Editable>
+<DomainFixed>true</DomainFixed>
+<AliasName>OBJECTID</AliasName>
+<ModelName>OBJECTID</ModelName>
+</Field>
+</FieldArray>
+</Fields>
+</Index>
+<Index xsi:type='esri:Index'>
+<Name>A2006_IX1</Name>
+<IsUnique>true</IsUnique>
+<IsAscending>true</IsAscending>
+<Fields xsi:type='esri:Fields'>
+<FieldArray xsi:type='esri:ArrayOfField'>
+<Field xsi:type='esri:Field'>
+<Name>SHAPE</Name>
+<Type>esriFieldTypeGeometry</Type>
+<IsNullable>true</IsNullable>
+<Length>4</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<Required>true</Required>
+<DomainFixed>true</DomainFixed>
+<GeometryDef xsi:type='esri:GeometryDef'>
+<AvgNumPoints>0</AvgNumPoints>
+<GeometryType>esriGeometryPoint</GeometryType>
+<HasM>false</HasM>
+<HasZ>false</HasZ>
+<SpatialReference xsi:type='esri:ProjectedCoordinateSystem'>
+<WKT>PROJCS[&quot;ETRS_1989_UTM_Zone_32N&quot;,GEOGCS[&quot;GCS_ETRS_1989&quot;,DATUM[&quot;D_ETRS_1989&quot;,SPHEROID[&quot;GRS_1980&quot;,6378137.0,298.257222101]],PRIMEM[&quot;Greenwich&quot;,0.0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;False_Easting&quot;,500000.0],PARAMETER[&quot;False_Northing&quot;,0.0],PARAMETER[&quot;Central_Meridian&quot;,9.0],PARAMETER[&quot;Scale_Factor&quot;,0.9996],PARAMETER[&quot;Latitude_Of_Origin&quot;,0.0],UNIT[&quot;Meter&quot;,1.0],AUTHORITY[&quot;EPSG&quot;,25832]]</WKT>
+<XOrigin>-5120900</XOrigin>
+<YOrigin>-9998100</YOrigin>
+<XYScale>10000</XYScale>
+<ZOrigin>0</ZOrigin>
+<ZScale>1</ZScale>
+<MOrigin>0</MOrigin>
+<MScale>1</MScale>
+<XYTolerance>0.001</XYTolerance>
+<ZTolerance>0.001</ZTolerance>
+<MTolerance>0.001</MTolerance>
+<HighPrecision>true</HighPrecision>
+<WKID>25832</WKID>
+<LatestWKID>25832</LatestWKID>
+</SpatialReference>
+<GridSize0>0</GridSize0>
+</GeometryDef>
+<ModelName>SHAPE</ModelName>
 </Field>
 </FieldArray>
 </Fields>
@@ -246,10 +236,10 @@
 <XOrigin>-5120900</XOrigin>
 <YOrigin>-9998100</YOrigin>
 <XYScale>10000</XYScale>
-<ZOrigin>-100000</ZOrigin>
-<ZScale>10000</ZScale>
-<MOrigin>-100000</MOrigin>
-<MScale>10000</MScale>
+<ZOrigin>0</ZOrigin>
+<ZScale>1</ZScale>
+<MOrigin>0</MOrigin>
+<MScale>1</MScale>
 <XYTolerance>0.001</XYTolerance>
 <ZTolerance>0.001</ZTolerance>
 <MTolerance>0.001</MTolerance>
