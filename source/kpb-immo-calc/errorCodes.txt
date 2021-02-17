@@ -3,3 +3,5 @@ CODE    TITEL                               BEMERKUNG
 
 0001    Fehlende Datenanbindung             Möglicherweise ist der zugehörige Dienst nicht aktiv oder die ID eines FeatureLayers in der Config stimmt nicht.
 0002    Ungültiger Steuerelement-Typ        Es werden nur die Typen AUSWAHL und ZAHLENEINGABE unterstützt. Andere Werte in der DB führen zu einem Fehler.
+0003    Leerer FeatureLayer                 Ein benötigter FeatureLayer ist zwar vorhanden, enthält aber keine Daten.
+0004    Benötigtes Feld nicht belegt        Ein Feld, welches in der DB nicht als Pflichtfeld definiert ist, wird benötigt. Enthält aber keine Daten.

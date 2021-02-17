@@ -547,16 +547,25 @@ define([
                         this._headerConfig["ZONEN"][stag][teilmaTxt] = new Array();
                     }
 
-                    // die dritte Ebene ist der IRW-Name mit hrere Richtwertzonen-ID.
+                    // die dritte Ebene ist der IRW-Name mit ihrer Richtwertzonen-ID.
                     // Damit ist die Header-Config auch schon komplett
                     var irwName = fieldsObj["NAME_IRW"];
-                    var numz = fieldsObj["NUMZ"];
-                    if (this._tableConfig[stag][teilmaTxt][irwName] === undefined) {
-                        this._headerConfig["ZONEN"][stag][teilmaTxt].push({ "name": irwName, "id": numz });
-                        this._headerConfig["ZONEN"][stag][teilmaTxt].sort(function (a, b) { return a.name.localeCompare(b.name); });
 
-                        // Hier werden nun die Bestandteile für alle vier Spalten der Tabelle festgelegt.
-                        this._tableConfig[stag][teilmaTxt][irwName] = this.deriveZoneDetails(fieldsObj, stag, teilma);
+                    // Da NAME_IRW in der DB kein Pflichtfeld ist, müssen wir hier prüfen, ob es in der Datenbank belegt ist.
+                    if (irwName !== undefined) {
+                        var numz = fieldsObj["NUMZ"];
+                        if (this._tableConfig[stag][teilmaTxt][irwName] === undefined) {
+                            this._headerConfig["ZONEN"][stag][teilmaTxt].push({ "name": irwName, "id": numz });
+                            this._headerConfig["ZONEN"][stag][teilmaTxt].sort(function (a, b) { return a.name.localeCompare(b.name); });
+
+                            // Hier werden nun die Bestandteile für alle vier Spalten der Tabelle festgelegt.
+                            this._tableConfig[stag][teilmaTxt][irwName] = this.deriveZoneDetails(fieldsObj, stag, teilma);
+                        }
+                    } else {
+                        this.handleError("0004", "Benötigtes Feld nicht belegt", "Das Feld 'IRW_ZONEN_AREA.NAME_IRW' ist nicht belegt.", true);
+                        this._headerConfig = null;
+                        this._tableConfig = null;
+                        break;
                     }
                 }
             }
