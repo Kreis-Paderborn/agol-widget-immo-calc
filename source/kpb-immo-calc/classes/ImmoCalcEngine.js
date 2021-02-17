@@ -508,7 +508,10 @@ define([
 
             // Da die Konfiguration nur vollständig aufgebaut werden kann,
             // wenn auch die Koeffizienten geladen wurden, pürfen wir das hier als Erstes.
-            if (this._coefficients !== null) {
+            if (zonesArray !== null
+                && zonesArray !== undefined
+                && zonesArray.length > 0
+                && this._coefficients !== null) {
 
                 // Initiale Struktur für die Header- und TableConfig.
                 this._headerConfig = {

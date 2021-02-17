@@ -50,11 +50,11 @@ define([
 				// 	});
 				// });
 
-				this.engine = new ImmoCalcEngine({ 
+				this.engine = new ImmoCalcEngine({
 
 					// Wir übergeben hier den ErrorHandler, um der Engine die Möglichkeit zu geben,
 					// auf den zentral eingestellten MODE zuzugreifen und über die aktuelle VIEW einen Dialog zu schalten.
-					"handleError": this.errorHandler() 
+					"handleError": this.errorHandler()
 				});
 				this.view = new ImmoCalcView(this.engine);
 
@@ -136,6 +136,7 @@ define([
 				}
 
 				this.engine.setExternalFieldNames(extFieldArray);
+				
 			},
 
 
@@ -159,8 +160,17 @@ define([
 							obj["TXT_REAL"] = feature.attributes.TXT_REAL;
 							displayNameArray.push(obj);
 						}
-						me.engine.setDisplayNames(displayNameArray);
-						callback();
+
+						if (displayNameArray.length === 0) {
+							var continueAfterError = me.handleError("0003", "Leere Datenbank-Tabelle", "FeatureLayer IRW_ANZEIGEWERTE enthält keine Daten.", true);
+							if (continueAfterError) {
+								me.engine.setDisplayNames(displayNameArray);
+								callback();
+							}
+						} else {
+							me.engine.setDisplayNames(displayNameArray);
+							callback();
+						}
 					})
 				} else {
 					var continueAfterError = this.handleError("0001", "Fehlende Datenanbindung", "FeatureLayer IRW_ANZEIGEWERTE nicht verfügbar.", true);
@@ -200,9 +210,16 @@ define([
 							coeffArray.push(obj);
 						}
 
-						me.engine.setCoefficients(coeffArray);
-						callback();
-
+						if (coeffArray.length === 0) {
+							var continueAfterError = me.handleError("0003", "Leere Datenbank-Tabelle", "FeatureLayer IRW_IMMOCALC_KOEFFIZIENTEN enthält keine Daten.", true);
+							if (continueAfterError) {
+								me.engine.setCoefficients(coeffArray);
+								callback();
+							}
+						} else {
+							me.engine.setCoefficients(coeffArray);
+							callback();
+						}
 					})
 				} else {
 					var continueAfterError = this.handleError("0001", "Fehlende Datenanbindung", "FeatureLayer IRW_IMMOCALC_KOEFFIZIENTEN nicht verfügbar.", true);
@@ -245,9 +262,16 @@ define([
 							zonesArray.push(feature.attributes);
 						}
 
-						me.engine.setZones(zonesArray);
-						callback();
-
+						if (zonesArray.length === 0) {
+							var continueAfterError = me.handleError("0003", "Leere Datenbank-Tabelle", "FeatureLayer IRW_ZONEN enthält keine Daten.", true);
+							if (continueAfterError) {
+								me.engine.setZones(zonesArray);
+								callback();
+							}
+						} else {
+							me.engine.setZones(zonesArray);
+							callback();
+						}
 					})
 				} else {
 					var continueAfterError = this.handleError("0001", "Fehlende Datenanbindung", "FeatureLayer IRW_ZONEN nicht verfügbar.", true);
@@ -304,9 +328,9 @@ define([
 					dialogMessage += "<br><br>Fehlercode: " + errorCode;
 					this.view.showDialog(dialogTitle, dialogMessage);
 
-				// Im Produktionsbetrieb sollen die Fehlerdetails nicht an der Oberfläche erscheinen.
-				// Der Anwender wird nur informiert, dass es Fehler vorliegt. Mittels eines
-				// Fehlercodes kann er uns einen Tipp geben wo es hakt.
+					// Im Produktionsbetrieb sollen die Fehlerdetails nicht an der Oberfläche erscheinen.
+					// Der Anwender wird nur informiert, dass es Fehler vorliegt. Mittels eines
+					// Fehlercodes kann er uns einen Tipp geben wo es hakt.
 				} else if (this.mode === this.modes["PRODUCTION"]) {
 					continueAfterError = false;
 
