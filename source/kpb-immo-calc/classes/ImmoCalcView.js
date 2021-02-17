@@ -100,7 +100,8 @@ define([
                 id: "teilmaBWO",
                 name: "teilmaBWO",
                 searchAttr: "name",
-                style: "width: 300px;text-align:center",
+                style: "width: 300px;",
+                class: "comboTextAlign",
                 onChange: function (newValue) {
                     me.refreshTable("teilma");
                 },
@@ -117,7 +118,8 @@ define([
                 name: "genaBWO",
                 value: "Aus Karte vorbelegt",
                 searchAttr: "name",
-                style: "width: 300px;text-align:center",
+                style: "width: 300px;",
+                class: "comboTextAlign",
                 onChange: function (newValue) {
                     me.refreshTable("zone");
                 }
@@ -145,7 +147,8 @@ define([
                 name: "stagBWO",
                 value: "Bitte wählen",
                 searchAttr: "name",
-                style: "width: 150px;text-align:center",
+                style: "width: 150px;",
+                class: "comboTextAlign",
                 onChange: function (newValue) {
                     me.refreshTable("stag");
                 }
@@ -298,7 +301,8 @@ define([
                         name: elementBWOName,
                         value: elementBWOValue.toString(),
                         searchAttr: "name",
-                        style: "width: 150px;text-align:center",
+                        style: "width: 150px;",
+                        class: "comboTextAlign",
                         onChange: function (newValue) {
                             IdIRW = elementBWOName.replace("BWO", "IRW");
                             me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
