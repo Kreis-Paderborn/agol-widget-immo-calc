@@ -21,7 +21,7 @@ define([
     dijitDialog,
     FormComboBox,
     _WidgetBase,
-    PanelManager, 
+    PanelManager,
     domStyle,
     _Container,
     dijitRegistry,
@@ -53,19 +53,19 @@ define([
 
             var elementName = "firstLabel";
             var elementValue = "";
-            this.generateTextElement(elementName, elementValue,this.headerStyle150);
+            this.generateTextElement(elementName, elementValue, this.headerStyle150);
             // this.generateTextElement(elementName, elementValue,"headerTextBox");
             elementName = "normLabel";
             elementValue = "Richtwert";
             this.generateTextElement(elementName, elementValue, this.headerStyle150);
             // this.generateTextElement(elementName, elementValue,"headerTextBox");
             elementName = "bwoLabel";
-            elementValue =  "BWO";
-            this.generateTextElement(elementName, elementValue,this.headerStyle150);
+            elementValue = "BWO";
+            this.generateTextElement(elementName, elementValue, this.headerStyle150);
             // this.generateTextElement(elementName, elementValue,"headerTextBox");
             elementName = "irwLabel";
             elementValue = "IRW und UF";
-            this.generateTextElement(elementName, elementValue,this.headerStyle150);
+            this.generateTextElement(elementName, elementValue, this.headerStyle150);
             // this.generateTextElement(elementName, elementValue,"headerTextBox");
 
             elementName = "angIRWLabel";
@@ -134,11 +134,11 @@ define([
             elementValue = "aValue";
             this.generateTextElement(elementName, elementValue);
             // this.generateTextElement(elementName, elementValue,"stdTextBox");
-            
+
             // stagLabel
             elementName = "stagLabel";
             elementValue = "Stichtag des Immobilienrichtwertes";
-            this.generateTextElement(elementName, elementValue,this.stdStyle300);
+            this.generateTextElement(elementName, elementValue, this.stdStyle300);
             // this.generateTextElement(elementName, elementValue,"std300TextBox");
 
             // stagBWO
@@ -226,8 +226,8 @@ define([
             // Panel Breite und Höhe
             //  Fixme Widget id hardcodiert
             var pm = PanelManager.getInstance().getPanelById("_5_panel");
-            var height = this.visElements.length * 35 + 280; 
-            pm.resize({w: 640,h: height});
+            var height = this.visElements.length * 35 + 280;
+            pm.resize({ w: 640, h: height });
         },
 
         // Erzeugt das DOM für den "Standard" Teil des HTML Dokuments
@@ -259,14 +259,14 @@ define([
 
         // Erzeugt ein dijit Text Elementzur Anzeige
         // generateTextElement: function (elementTextName, elementTextValue,aClass) {
-        generateTextElement: function (elementTextName, elementTextValue,aStyle) {
-            if (aStyle == undefined){
+        generateTextElement: function (elementTextName, elementTextValue, aStyle) {
+            if (aStyle == undefined) {
                 aStyle = this.stdStyle150;
             };
             var aTextElement = new dijitTextbox({
                 id: elementTextName,
                 name: elementTextName,
-                // class: aClass,
+                class: "stdTextBox",
                 rows: "1",
                 style: aStyle,
                 readOnly: true,
@@ -285,24 +285,24 @@ define([
                         // pattern: "###0",
                         constraints: { min: elementBWOUIControl["Min"], max: elementBWOUIControl["Max"], places: 0 },
                         id: elementBWOName,
-                        style: "width: 150px;text-align:center",
+                        style: "width: 150px",
                         onChange: function (newValue) {
                             IdIRW = elementBWOName.replace("BWO", "IRW");
                             me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
                             me.calculateIRW();
-                        // },
-                        // onKeyDown: function (newValue) {
-                        //     IdIRW = elementBWOName.replace("BWO", "IRW");
-                        //     me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
-                        //     me.calculateIRW();
-                        // },
-                        // onUpDown: function (newValue) {
-                        //     IdIRW = elementBWOName.replace("BWO", "IRW");
-                        //     me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
-                        //     me.calculateIRW();
-                        // },
-                        // onClick: function (event) {
-                        //     console.log(event);
+                            // },
+                            // onKeyDown: function (newValue) {
+                            //     IdIRW = elementBWOName.replace("BWO", "IRW");
+                            //     me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                            //     me.calculateIRW();
+                            // },
+                            // onUpDown: function (newValue) {
+                            //     IdIRW = elementBWOName.replace("BWO", "IRW");
+                            //     me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                            //     me.calculateIRW();
+                            // },
+                            // onClick: function (event) {
+                            //     console.log(event);
                         }
                     }, elementBWOName).startup();
                     break;
@@ -402,24 +402,41 @@ define([
                 case "stag":
                     var teilmaValue = teilmaBWO.textbox.value;
                     var teilmaStore = this.getValuesTeilma(stag, zone);
-                    this.getValuesGena(teilma_txt, stag);
                     var teilmaValueOk = false;
-                    teilmaStore.forEach(function (aObject) {
-                        if (aObject.name == teilmaValue) {
-                            teilmaValueOk = true;
-                        };
-                    })
-                    if (teilmaValueOk == true) {
+                    if (teilmaStore != undefined) {
+                        teilmaStore.forEach(function (aObject) {
+                            if (aObject.name == teilmaValue) {
+                                teilmaValueOk = true;
+                            };
+                        })
+                    }
+                    var genaValue = genaBWO.textbox.value;
+                    var genaStore = this.getValuesGena(teilma_txt, stag);
+                    var genaValueOk = false;
+                    if (genaStore != undefined) {
+                        genaStore.forEach(function (aObject) {
+                            if (aObject.name == genaValue) {
+                                genaValueOk = true;
+                            };
+                        })
+                    }
+
+                    if (teilmaValueOk == true && genaValueOk == true) {
                         // enable Eingaben
                         genaBWO.disabled = false;
                         teilmaBWO.disabled = false;
                         this.disableBWOElements(false);
                         this.showTable(stag, teilma, zone);
-                    } else {
+                    } else if (teilmaValueOk != true) {
                         teilmaBWO.focus();
                         // disable alle Eingaben ausser stag und teilma
                         this.disableBWOElements(true);
                         genaBWO.disabled = true;
+                    } else if (genaValueOk != true) {
+                        genaBWO.focus();
+                        // disable alle Eingaben ausser teilma und gena
+                        this.disableBWOElements(true);
+                        stagBWO.disabled = true;
                     };
                     break;
                 case "teilma":
@@ -440,7 +457,7 @@ define([
                         this.showTable(stag, teilma, zone);
                     } else {
                         genaBWO.focus();
-                        // disable alle Eingaben ausser teilma und gema
+                        // disable alle Eingaben ausser teilma und gena
                         this.disableBWOElements(true);
                         stagBWO.disabled = true;
                     };
