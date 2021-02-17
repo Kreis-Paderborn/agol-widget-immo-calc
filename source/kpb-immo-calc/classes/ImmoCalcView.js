@@ -54,31 +54,39 @@ define([
             var elementName = "firstLabel";
             var elementValue = "";
             this.generateTextElement(elementName, elementValue,this.headerStyle150);
+            // this.generateTextElement(elementName, elementValue,"headerTextBox");
             elementName = "normLabel";
             elementValue = "Richtwert";
             this.generateTextElement(elementName, elementValue, this.headerStyle150);
+            // this.generateTextElement(elementName, elementValue,"headerTextBox");
             elementName = "bwoLabel";
             elementValue =  "BWO";
             this.generateTextElement(elementName, elementValue,this.headerStyle150);
+            // this.generateTextElement(elementName, elementValue,"headerTextBox");
             elementName = "irwLabel";
             elementValue = "IRW und UF";
             this.generateTextElement(elementName, elementValue,this.headerStyle150);
+            // this.generateTextElement(elementName, elementValue,"headerTextBox");
 
             elementName = "angIRWLabel";
             elementValue = "angepasster IRW";
             this.generateTextElement(elementName, elementValue);
+            // this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             elementName = "angIRWBWO";
             elementValue = "berechneter Wert";
             this.generateTextElement(elementName, elementValue);
+            // this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             elementName = "wertLabel";
             elementValue = "geschätzter Wert";
             this.generateTextElement(elementName, elementValue);
+            // this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             elementName = "wertBWO";
             elementValue = "berechneter Wert";
             this.generateTextElement(elementName, elementValue);
+            // this.generateTextElement(elementName, elementValue,"stdTextBox");
 
         },
 
@@ -88,6 +96,7 @@ define([
             var elementName = "teilmaLabel";
             var elementValue = "Teilmarkt";
             this.generateTextElement(elementName, elementValue);
+            // this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             // teilmaBWO
             var teilmaBWO = new FormComboBox({
@@ -105,6 +114,7 @@ define([
             elementName = "genaLabel";
             elementValue = "Name der Zone";
             this.generateTextElement(elementName, elementValue);
+            // this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             // genaBWO
             var genaBWO = new FormComboBox({
@@ -123,11 +133,13 @@ define([
             elementName = "genaIRW";
             elementValue = "aValue";
             this.generateTextElement(elementName, elementValue);
+            // this.generateTextElement(elementName, elementValue,"stdTextBox");
             
             // stagLabel
             elementName = "stagLabel";
             elementValue = "Stichtag des Immobilienrichtwertes";
             this.generateTextElement(elementName, elementValue,this.stdStyle300);
+            // this.generateTextElement(elementName, elementValue,"std300TextBox");
 
             // stagBWO
             var stagBWO = new FormComboBox({
@@ -169,10 +181,12 @@ define([
                     var elementLabelName = lowerCaseValue + "Label";
                     var elementLabelValue = tableConfig["Eigenschaften"][value]["Titel"];
                     this.generateTextElement(elementLabelName, elementLabelValue);
+                    // this.generateTextElement(elementLabelName, elementLabelValue,"stdTextBox");
 
                     var elementNormName = lowerCaseValue + "Norm";
                     var elementNormValue = tableConfig["Eigenschaften"][value]["Richtwert"];
                     this.generateTextElement(elementNormName, elementNormValue);
+                    // this.generateTextElement(elementNormName, elementNormValue,"stdTextBox");
 
                     var elementBWOName = lowerCaseValue + "BWO";
                     var elementBWOValue = tableConfig["Eigenschaften"][value]["WertInSteuerelement"];
@@ -183,6 +197,7 @@ define([
                     var elementIRWName = lowerCaseValue + "IRW";
                     var elementIRWValue = "0%";
                     this.generateTextElement(elementIRWName, elementIRWValue);
+                    // this.generateTextElement(elementIRWName, elementIRWValue,"stdTextBox");
                 } else {
                     // für die bestehenden Zeilen den Richtwert aktualisieren
                     var aNormTextBox = dijitRegistry.byId(lowerCaseValue + "Norm");
@@ -243,6 +258,7 @@ define([
         },
 
         // Erzeugt ein dijit Text Elementzur Anzeige
+        // generateTextElement: function (elementTextName, elementTextValue,aClass) {
         generateTextElement: function (elementTextName, elementTextValue,aStyle) {
             if (aStyle == undefined){
                 aStyle = this.stdStyle150;
@@ -250,8 +266,8 @@ define([
             var aTextElement = new dijitTextbox({
                 id: elementTextName,
                 name: elementTextName,
+                // class: aClass,
                 rows: "1",
-                // cols: "15",
                 style: aStyle,
                 readOnly: true,
                 value: elementTextValue.toString()
@@ -266,6 +282,7 @@ define([
                     var aBWOElement = new dijitNumberSpinner({
                         value: elementBWOValue,
                         smallDelta: 1,
+                        // pattern: "###0",
                         constraints: { min: elementBWOUIControl["Min"], max: elementBWOUIControl["Max"], places: 0 },
                         id: elementBWOName,
                         style: "width: 150px;text-align:center",
