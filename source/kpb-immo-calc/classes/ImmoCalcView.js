@@ -35,9 +35,8 @@ define([
         visElements: null,
         coeffStore: null,
         headerStyle150: "width: 150px; height: 25px; background-color: lightblue; color: white; text-align:center",
-        headerStyle250: "width: 250px; height: 25px; background-color: lightblue; color: white; text-align:center",
         stdStyle150: "width: 150px; height: 35px; background-color: white; color: black; text-align:center",
-        stdStyle250: "width: 250px; height: 35px; background-color: white; color: black; text-align:center",
+        stdStyle300: "width: 300px; height: 35px; background-color: white; color: black; text-align:center",
 
         constructor: function (engine, options) {
 
@@ -52,14 +51,9 @@ define([
 
             var me = this;
 
-            // Panel Breite und Höhe
-            //  Fixme Widget id hardcodiert
-            var pm = PanelManager.getInstance().getPanelById("_5_panel");
-            pm.resize({w: 740,h: 500});
-
             var elementName = "firstLabel";
             var elementValue = "";
-            this.generateTextElement(elementName, elementValue,this.headerStyle250);
+            this.generateTextElement(elementName, elementValue,this.headerStyle150);
             elementName = "normLabel";
             elementValue = "Richtwert";
             this.generateTextElement(elementName, elementValue, this.headerStyle150);
@@ -72,7 +66,7 @@ define([
 
             elementName = "angIRWLabel";
             elementValue = "angepasster IRW";
-            this.generateTextElement(elementName, elementValue,this.stdStyle250);
+            this.generateTextElement(elementName, elementValue);
 
             elementName = "angIRWBWO";
             elementValue = "berechneter Wert";
@@ -80,7 +74,7 @@ define([
 
             elementName = "wertLabel";
             elementValue = "geschätzter Wert";
-            this.generateTextElement(elementName, elementValue,this.stdStyle250);
+            this.generateTextElement(elementName, elementValue);
 
             elementName = "wertBWO";
             elementValue = "berechneter Wert";
@@ -93,7 +87,7 @@ define([
             // teilmaLabel
             var elementName = "teilmaLabel";
             var elementValue = "Teilmarkt";
-            this.generateTextElement(elementName, elementValue,this.stdStyle250);
+            this.generateTextElement(elementName, elementValue);
 
             // teilmaBWO
             var teilmaBWO = new FormComboBox({
@@ -108,8 +102,8 @@ define([
 
             // genaLabel
             elementName = "genaLabel";
-            elementValue = "Gemeinde";
-            this.generateTextElement(elementName, elementValue,this.stdStyle250);
+            elementValue = "Name der Zone";
+            this.generateTextElement(elementName, elementValue);
 
             // genaBWO
             var genaBWO = new FormComboBox({
@@ -131,13 +125,7 @@ define([
             // stagLabel
             elementName = "stagLabel";
             elementValue = "Stichtag des Immobilienrichtwertes";
-            this.generateTextElement(elementName, elementValue,this.stdStyle250);
-
-            //  stagNorm
-            elementName = "stagNorm";
-            elementValue = "2021";
-            this.generateTextElement(elementName, elementValue);
-            
+            this.generateTextElement(elementName, elementValue,this.stdStyle300);
 
             // stagBWO
             var stagBWO = new FormComboBox({
@@ -157,7 +145,7 @@ define([
         showTable: function (stag, teilma, zone, setControlsToNorm) {
             var tableConfig = this.engine.getTableConfig(stag, teilma, zone);
             var genaIRW = dijitRegistry.byId("genaIRW");
-            genaIRW.textbox.value = tableConfig["zonenIrw"];
+            genaIRW.textbox.value = tableConfig["zonenIrw_txt"];
             // initialer Aufruf der Gui
             if (setControlsToNorm) {
                 this.setValuesInHeaderGui(stag, teilma, zone);
@@ -177,7 +165,7 @@ define([
 
                     var elementLabelName = lowerCaseValue + "Label";
                     var elementLabelValue = tableConfig["Eigenschaften"][value]["Titel"];
-                    this.generateTextElement(elementLabelName, elementLabelValue,this.stdStyle250);
+                    this.generateTextElement(elementLabelName, elementLabelValue);
 
                     var elementNormName = lowerCaseValue + "Norm";
                     var elementNormValue = tableConfig["Eigenschaften"][value]["Richtwert"];
@@ -216,6 +204,12 @@ define([
                 var aElement = document.getElementById(elementId);
                 aElement.style = "display: none;"
             });
+
+            // Panel Breite und Höhe
+            //  Fixme Widget id hardcodiert
+            var pm = PanelManager.getInstance().getPanelById("_5_panel");
+            var height = this.visElements.length * 35 + 280; 
+            pm.resize({w: 640,h: height});
         },
 
         // Erzeugt das DOM für den "Standard" Teil des HTML Dokuments
@@ -254,7 +248,7 @@ define([
                 id: elementTextName,
                 name: elementTextName,
                 rows: "1",
-                cols: "15",
+                // cols: "15",
                 style: aStyle,
                 readOnly: true,
                 value: elementTextValue.toString()
