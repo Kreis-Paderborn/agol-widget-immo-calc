@@ -63,11 +63,11 @@ define([
             this.generateTextElement(elementName, elementValue, this.headerStyle150);
             // this.generateTextElement(elementName, elementValue,"headerTextBox");
             elementName = "bwoLabel";
-            elementValue = "BWO";
+            elementValue = "Ihre Immobilie";
             this.generateTextElement(elementName, elementValue, this.headerStyle150);
             // this.generateTextElement(elementName, elementValue,"headerTextBox");
             elementName = "irwLabel";
-            elementValue = "IRW und UF";
+            elementValue = "Anpassung";
             this.generateTextElement(elementName, elementValue, this.headerStyle150);
             // this.generateTextElement(elementName, elementValue,"headerTextBox");
 
@@ -304,13 +304,13 @@ define([
                             me.calculateIRW();
                         },
                         onKeyUp: function (event) {
-                            var newValue= this.textbox.value;
+                            var newValue = this.textbox.value;
                             IdIRW = elementBWOName.replace("BWO", "IRW");
                             me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
                             me.calculateIRW();
                         },
                         onClick: function (event) {
-                            var newValue= this.textbox.value;
+                            var newValue = this.textbox.value;
                             var IdIRW = elementBWOName.replace("BWO", "IRW");
                             me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
                             me.calculateIRW();
@@ -512,7 +512,10 @@ define([
         // Koeffizient für Auswahl in ComboBox bestimmen und in der IRW Spalte eintragen
         // FIXME der Wert muss in die prozentuale Abweichung vom Normkoeffizienten umgerechnet werden.
         getCoeffForBWO: function (newValue, aUIControl, IdIRW, elementBWORwKoeffizient) {
-            
+            // console.log(newValue);
+            // console.log(aUIControl);
+            // console.log(IdIRW);
+            // console.log(elementBWORwKoeffizient);
             // if (aUIControl["Typ"] == "AUSWAHL") {
             //     aUIControl["Liste"].forEach(function (object) {
             //         if (object["name"] == newValue) {
@@ -522,21 +525,17 @@ define([
             // } else {
             //     aCoeff = this.engine.mapValueToCoeff(newValue, aUIControl);
             // };
+            // console.log(aCoeff);
+            // if (aCoeff != undefined && elementBWORwKoeffizient != undefined){
+            //     var aIRWField = dijitRegistry.byId(IdIRW);
+            //     aIRWField.textbox.value = (aCoeff / elementBWORwKoeffizient).toFixed(2).toString() + "%";
+            // }
 
-            // var res = {key:IdIRW,value:aCoeff};
 
-            // this.coeffStore.push(aCoeff);
-
-            // var aIRWField = dijitRegistry.byId(IdIRW);
-            // aIRWField.textbox.value = aCoeff / elementBWORwKoeffizient;
-            // aIRWField.textbox.value = ((aCoeff - 1) * 100).toFixed(2).toString() + "%"
         },
 
+        // Fixme Koeffizienten werden nicht berücksichtigt!
         calculateIRW: function () {
-            // Fixme 
-            console.log("calculateIRW");
-            // console.log(this.coeffStore)
-
             var genaIRW = dijitRegistry.byId("genaIRW");
 
             var angIRWBWO = dijitRegistry.byId("angIRWBWO");
