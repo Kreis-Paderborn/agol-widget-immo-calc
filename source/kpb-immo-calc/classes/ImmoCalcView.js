@@ -33,10 +33,13 @@ define([
         dummyOption: null,
         engine: null,
         visElements: null,
+        currentZonenIRW: null,
         coeffStore: null,
-        headerStyle150: "width: 150px; height: 25px; background-color: lightblue; color: white; text-align:center",
-        stdStyle150: "width: 150px; height: 35px; background-color: white; color: black; text-align:center",
-        stdStyle300: "width: 300px; height: 35px; background-color: white; color: black; text-align:center",
+        headerStyle150: "width: 150px; height: 25px; background-color: lightblue; text-align:center",
+        headerStyle600: "width: 606px; height: 25px; background-color: lightblue; text-align:center",
+        stdStyle150: "width: 150px; height: 35px; background-color: white; text-align:center",
+        stdStyle300: "width: 302px; height: 35px; background-color: white; text-align:center",
+        stdStyle450: "width: 454px; height: 35px; background-color: white; text-align:center",
 
         constructor: function (engine, options) {
 
@@ -69,8 +72,8 @@ define([
             // this.generateTextElement(elementName, elementValue,"headerTextBox");
 
             elementName = "angIRWLabel";
-            elementValue = "angepasster IRW";
-            this.generateTextElement(elementName, elementValue);
+            elementValue = "angepasster Richtwert IRW pro m³";
+            this.generateTextElement(elementName, elementValue, this.stdStyle450);
             // this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             elementName = "angIRWBWO";
@@ -79,14 +82,18 @@ define([
             // this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             elementName = "wertLabel";
-            elementValue = "geschätzter Wert";
-            this.generateTextElement(elementName, elementValue);
+            elementValue = "geschätzter Wert der Immobilie";
+            this.generateTextElement(elementName, elementValue, this.stdStyle450);
             // this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             elementName = "wertBWO";
             elementValue = "berechneter Wert";
             this.generateTextElement(elementName, elementValue);
             // this.generateTextElement(elementName, elementValue,"stdTextBox");
+
+            elementName = "seperatorBottom";
+            elementValue = "";
+            this.generateTextElement(elementName, elementValue, this.headerStyle600);
 
         },
 
@@ -161,6 +168,7 @@ define([
             var tableConfig = this.engine.getTableConfig(stag, teilma, zone);
             var genaIRW = dijitRegistry.byId("genaIRW");
             genaIRW.textbox.value = tableConfig["zonenIrw_txt"];
+            this.currentZonenIRW = tableConfig["zonenIrw"];
             // initialer Aufruf der Gui
             if (setControlsToNorm) {
                 this.setValuesInHeaderGui(stag, teilma, zone);
@@ -223,11 +231,15 @@ define([
                 aElement.style = "display: none;"
             });
 
+            // Ergebnisfelder aktualisieren
+            this.calculateIRW()
+
             // Panel Breite und Höhe
             //  Fixme Widget id hardcodiert
-            var pm = PanelManager.getInstance().getPanelById("_5_panel");
-            var height = this.visElements.length * 35 + 280;
-            pm.resize({ w: 640, h: height });
+            var pm = PanelManager.getInstance()
+            var aPanel = pm.getPanelById("_5_panel");
+            var height = this.visElements.length * 35 + 310;
+            aPanel.resize({ w: 640, h: height });
         },
 
         // Erzeugt das DOM für den "Standard" Teil des HTML Dokuments
@@ -246,9 +258,9 @@ define([
             col3.innerHTML = "<div id=" + value + "BWO></div>";
             col4.innerHTML = "<div id=" + value + "IRW></div>";
 
-            var rowAngIRW = document.getElementById("rowAngIRW");
+            var rowBottom = document.getElementById("rowBottom");
             var parentNode = document.getElementById("tableBody");
-            parentNode.insertBefore(htmlFrag, rowAngIRW);
+            parentNode.insertBefore(htmlFrag, rowBottom);
         },
 
         // Erzeugt ein Label Element, fügt elementLabelValue im Element elementLabelName ein
@@ -266,7 +278,7 @@ define([
             var aTextElement = new dijitTextbox({
                 id: elementTextName,
                 name: elementTextName,
-                class: "stdTextBox",
+                // class: "stdTextBox",
                 rows: "1",
                 style: aStyle,
                 readOnly: true,
@@ -282,27 +294,26 @@ define([
                     var aBWOElement = new dijitNumberSpinner({
                         value: elementBWOValue,
                         smallDelta: 1,
-                        // pattern: "###0",
+                        // pattern: "###",
                         constraints: { min: elementBWOUIControl["Min"], max: elementBWOUIControl["Max"], places: 0 },
                         id: elementBWOName,
                         style: "width: 150px",
                         onChange: function (newValue) {
+                            var IdIRW = elementBWOName.replace("BWO", "IRW");
+                            me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                            me.calculateIRW();
+                        },
+                        onKeyUp: function (event) {
+                            var newValue= this.textbox.value;
                             IdIRW = elementBWOName.replace("BWO", "IRW");
                             me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
                             me.calculateIRW();
-                            // },
-                            // onKeyDown: function (newValue) {
-                            //     IdIRW = elementBWOName.replace("BWO", "IRW");
-                            //     me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
-                            //     me.calculateIRW();
-                            // },
-                            // onUpDown: function (newValue) {
-                            //     IdIRW = elementBWOName.replace("BWO", "IRW");
-                            //     me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
-                            //     me.calculateIRW();
-                            // },
-                            // onClick: function (event) {
-                            //     console.log(event);
+                        },
+                        onClick: function (event) {
+                            var newValue= this.textbox.value;
+                            var IdIRW = elementBWOName.replace("BWO", "IRW");
+                            me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                            me.calculateIRW();
                         }
                     }, elementBWOName).startup();
                     break;
@@ -501,34 +512,40 @@ define([
         // Koeffizient für Auswahl in ComboBox bestimmen und in der IRW Spalte eintragen
         // FIXME der Wert muss in die prozentuale Abweichung vom Normkoeffizienten umgerechnet werden.
         getCoeffForBWO: function (newValue, aUIControl, IdIRW, elementBWORwKoeffizient) {
-            if (aUIControl["Typ"] == "AUSWAHL") {
-                aUIControl["Liste"].forEach(function (object) {
-                    if (object["name"] == newValue) {
-                        aCoeff = object["value"];
-                    };
-                });
-            } else {
-                aCoeff = this.engine.mapValueToCoeff(newValue, aUIControl);
-            };
+            
+            // if (aUIControl["Typ"] == "AUSWAHL") {
+            //     aUIControl["Liste"].forEach(function (object) {
+            //         if (object["name"] == newValue) {
+            //             aCoeff = object["value"];
+            //         };
+            //     });
+            // } else {
+            //     aCoeff = this.engine.mapValueToCoeff(newValue, aUIControl);
+            // };
 
             // var res = {key:IdIRW,value:aCoeff};
 
             // this.coeffStore.push(aCoeff);
 
-            var aIRWField = dijitRegistry.byId(IdIRW);
+            // var aIRWField = dijitRegistry.byId(IdIRW);
             // aIRWField.textbox.value = aCoeff / elementBWORwKoeffizient;
-            aIRWField.textbox.value = ((aCoeff - 1) * 100).toFixed(2).toString() + "%"
+            // aIRWField.textbox.value = ((aCoeff - 1) * 100).toFixed(2).toString() + "%"
         },
 
         calculateIRW: function () {
             // Fixme 
             console.log("calculateIRW");
-            // console.log(this.coeffStore);
+            // console.log(this.coeffStore)
 
-            // var angIRWBWO = dijitRegistry.byId("angIRWBWO");
-            // angIRWBWO.textbox.value = aAngIRWBWOValue;
-            // var wertBWO = dijitRegistry.byId("wertBWO");
-            // wertBWO.textbox.value = aWertBWOValue;
+            var genaIRW = dijitRegistry.byId("genaIRW");
+
+            var angIRWBWO = dijitRegistry.byId("angIRWBWO");
+            angIRWBWO.textbox.value = genaIRW.textbox.value;
+
+            var whnflBWO = dijitRegistry.byId("whnflBWO");
+            var aWertBWOValue = this.currentZonenIRW * whnflBWO.textbox.value;
+            var wertBWO = dijitRegistry.byId("wertBWO");
+            wertBWO.textbox.value = aWertBWOValue + " €";
 
         },
 
