@@ -103,6 +103,15 @@ define([
                             { "Min": 1990, "Max": 2021, "Koeffizient": 1.9554 }
                         ]
                     },
+                    "WHNFL": {
+                        "Typ": "ZAHLENEINGABE",
+                        "Min": 0,
+                        "Max": 1000,
+                        "Spannen": [
+                            { "Min": 0, "Max": 80, "Koeffizient": 1.234 },
+                            { "Min": 80, "Max": 1000, "Koeffizient": 0.987 }
+                        ]
+                    },
                     "GSTAND": {
                         "Typ": "AUSWAHL",
                         "Liste": [
@@ -125,6 +134,13 @@ define([
                                         "Steuerelement": uiControls["BJ"],
                                         "WertInSteuerelement": 1995,
                                         "RichtwertKoeffizient": 1.9554
+                                    },
+                                    "WHNFL": {
+                                        "Titel": "Wohnfäche",
+                                        "Richtwert": 80,
+                                        "Steuerelement": uiControls["WHNFL"],
+                                        "WertInSteuerelement": 80,
+                                        "RichtwertKoeffizient": 1.026
                                     }
                                 }
                             },
@@ -138,6 +154,13 @@ define([
                                         "Steuerelement": uiControls["BJ"],
                                         "WertInSteuerelement": 1955,
                                         "RichtwertKoeffizient": 1.7845
+                                    },
+                                    "WHNFL": {
+                                        "Titel": "Wohnfäche",
+                                        "Richtwert": 60,
+                                        "Steuerelement": uiControls["WHNFL"],
+                                        "WertInSteuerelement": 60,
+                                        "RichtwertKoeffizient": 1.111
                                     }
                                 }
                             }
@@ -160,6 +183,13 @@ define([
                                         "Steuerelement": uiControls["GSTAND"],
                                         "WertInSteuerelement": "Toll",
                                         "RichtwertKoeffizient": 1.856
+                                    },
+                                    "WHNFL": {
+                                        "Titel": "Wohnfäche",
+                                        "Richtwert": 130,
+                                        "Steuerelement": uiControls["WHNFL"],
+                                        "WertInSteuerelement": 130,
+                                        "RichtwertKoeffizient": 1.222
                                     }
                                 }
                             },
@@ -180,6 +210,13 @@ define([
                                         "Steuerelement": uiControls["GSTAND"],
                                         "WertInSteuerelement": "Mies",
                                         "RichtwertKoeffizient": 0.856
+                                    },
+                                    "WHNFL": {
+                                        "Titel": "Wohnfäche",
+                                        "Richtwert": 100,
+                                        "Steuerelement": uiControls["WHNFL"],
+                                        "WertInSteuerelement": 100,
+                                        "RichtwertKoeffizient": 1.234
                                     }
                                 }
                             }
