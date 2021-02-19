@@ -35,6 +35,7 @@ define([
         visElements: null,
         currentZonenIRW: null,
         coeffStore: new Map(),
+        rwStore: new Map(),
         headerStyle150: "width: 150px; height: 25px; background-color: lightblue; text-align:center",
         headerStyle600: "width: 606px; height: 25px; background-color: lightblue; text-align:center",
         stdStyle150: "width: 150px; height: 35px; background-color: white; text-align:center",
@@ -42,8 +43,6 @@ define([
         stdStyle450: "width: 454px; height: 35px; background-color: white; text-align:center",
 
         constructor: function (engine, options) {
-
-            this.coeffStore.set("abc", 123.456);
 
             this.visElements = [];
 
@@ -183,6 +182,7 @@ define([
             for (value in tableConfig["Eigenschaften"]) {
                 var lowerCaseValue = value.toLowerCase();
                 this.visElements.push(lowerCaseValue);
+                this.rwStore.set(lowerCaseValue,tableConfig["Eigenschaften"][value]["RichtwertKoeffizient"]);
                 // nur wenn die Zeile noch nicht im DOM ist neu erzeugen
                 if (document.getElementById("row" + lowerCaseValue) == null) {
                     this.createHtmlElement(lowerCaseValue);
@@ -197,11 +197,9 @@ define([
                     this.generateTextElement(elementNormName, elementNormValue);
                     // this.generateTextElement(elementNormName, elementNormValue,"stdTextBox");
 
-                    var elementBWOName = lowerCaseValue + "BWO";
                     var elementBWOValue = tableConfig["Eigenschaften"][value]["WertInSteuerelement"];
                     var elementBWOUIControl = tableConfig["Eigenschaften"][value]["Steuerelement"];
-                    var elementBWORwKoeffizient = tableConfig["Eigenschaften"][value]["RichtwertKoeffizient"];
-                    this.generateBWOElement(elementBWOName, elementBWOValue, elementBWOUIControl, elementBWORwKoeffizient);
+                    this.generateBWOElement(lowerCaseValue, elementBWOValue, elementBWOUIControl);
 
                     var elementIRWName = lowerCaseValue + "IRW";
                     var elementIRWValue = "0%";
@@ -216,6 +214,11 @@ define([
                 // Fixme die Auswahlmöglichkeiten und Spannen müssen nur bei einer Änderung des Teilmarktes angepasst werden.
                 var aComboBox = dijitRegistry.byId(lowerCaseValue + "BWO");
                 this.getStoreValuesForComboBox(aComboBox, value);
+                
+                // Fixme nur beim Ändern der Zone muss InSteuerelement und RichtwertKoeffizient angepasst werden
+                var newValue = aComboBox.textbox.value;
+                var elementBWOUIControl = tableConfig["Eigenschaften"][value]["Steuerelement"];
+                this.getCoeffForBWO(newValue, elementBWOUIControl, lowerCaseValue);
             }
             // aktuelle Elemente sichtbar schalten
             this.visElements.forEach(function (aValue) {
@@ -288,8 +291,10 @@ define([
         },
 
         // Erzeugt ein dijit Auswahl oder Nummer Element
-        generateBWOElement: function (elementBWOName, elementBWOValue, elementBWOUIControl, elementBWORwKoeffizient) {
+        generateBWOElement: function (elementPrefix, elementBWOValue, elementBWOUIControl) {
             me = this;
+            var elementBWOName = elementPrefix + "BWO";
+
             switch (elementBWOUIControl["Typ"]) {
                 case "ZAHLENEINGABE":
                     var aBWOElement = new dijitNumberSpinner({
@@ -300,20 +305,17 @@ define([
                         id: elementBWOName,
                         style: "width: 150px",
                         onChange: function (newValue) {
-                            var IdIRW = elementBWOName.replace("BWO", "IRW");
-                            me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                            me.getCoeffForBWO(newValue, elementBWOUIControl, elementPrefix);
                             me.calculateIRW();
                         },
                         onKeyUp: function (event) {
                             var newValue = this.textbox.value;
-                            IdIRW = elementBWOName.replace("BWO", "IRW");
-                            me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                            me.getCoeffForBWO(newValue, elementBWOUIControl, elementPrefix);
                             me.calculateIRW();
                         },
                         onClick: function (event) {
                             var newValue = this.textbox.value;
-                            var IdIRW = elementBWOName.replace("BWO", "IRW");
-                            me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                            me.getCoeffForBWO(newValue, elementBWOUIControl, elementPrefix);
                             me.calculateIRW();
                         }
                     }, elementBWOName).startup();
@@ -327,8 +329,7 @@ define([
                         style: "width: 150px;",
                         class: "comboTextAlign",
                         onChange: function (newValue) {
-                            IdIRW = elementBWOName.replace("BWO", "IRW");
-                            me.getCoeffForBWO(newValue, elementBWOUIControl, IdIRW, elementBWORwKoeffizient);
+                            me.getCoeffForBWO(newValue, elementBWOUIControl, elementPrefix);
                             me.calculateIRW();
                         }
                     }, elementBWOName).startup();
@@ -511,8 +512,11 @@ define([
         },
 
         // Koeffizient für Auswahl in ComboBox bestimmen und in der IRW Spalte eintragen
-        getCoeffForBWO: function (newValue, aUIControl, IdIRW, elementBWORwKoeffizient) {
+        getCoeffForBWO: function (newValue, aUIControl, elementPrefix) {
             var aCoeff;
+            var IdIRW = elementPrefix +"IRW";
+
+            // Fixme: prüfen ob demnächst auch this.engine.mapValueToCoeff funktioniert
             if (aUIControl["Typ"] == "AUSWAHL") {
                 aUIControl["Liste"].forEach(function (object) {
                     if (object["name"] == newValue) {
@@ -522,13 +526,17 @@ define([
             } else {
                 aCoeff = this.engine.mapValueToCoeff(newValue, aUIControl);
             };
-            if (aCoeff != undefined && elementBWORwKoeffizient != undefined) {
+
+            aRichtwertCoeff = this.rwStore.get(elementPrefix);
+            console.log(aCoeff," :",aRichtwertCoeff);
+
+            if (aCoeff != undefined && aRichtwertCoeff != undefined) {
                 var aIRWField = dijitRegistry.byId(IdIRW);
-                var anpassungFaktor = (aCoeff / elementBWORwKoeffizient);
+                var anpassungFaktor = (aCoeff / aRichtwertCoeff);
 
                 this.coeffStore.set(IdIRW, anpassungFaktor);
                 var anpassungProzent = (anpassungFaktor - 1) * 100;
-                aIRWField.textbox.value = Math.round(anpassungProzent).toString() + "%";
+                aIRWField.textbox.value = Math.round(anpassungProzent) + "%";
             }
         },
 
