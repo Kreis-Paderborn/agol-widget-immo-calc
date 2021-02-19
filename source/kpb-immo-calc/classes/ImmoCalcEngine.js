@@ -115,8 +115,8 @@ define([
                     "GSTAND": {
                         "Typ": "AUSWAHL",
                         "Liste": [
-                            { "name": "Toll", "id": 1, "value:": 1.856 },
-                            { "name": "Mies", "id": 2, "value:": 0.856 }
+                            { "name": "Toll", "id": 1, "value": 1.856 },
+                            { "name": "Mies", "id": 2, "value": 0.856 }
                         ]
                     }
                 };
