@@ -34,7 +34,7 @@ define([
         engine: null,
         visElements: null,
         currentZonenIRW: null,
-        coeffStore: null,
+        coeffStore: new Map(),
         headerStyle150: "width: 150px; height: 25px; background-color: lightblue; text-align:center",
         headerStyle600: "width: 606px; height: 25px; background-color: lightblue; text-align:center",
         stdStyle150: "width: 150px; height: 35px; background-color: white; text-align:center",
@@ -43,7 +43,7 @@ define([
 
         constructor: function (engine, options) {
 
-            this.coeffStore = null;
+            this.coeffStore.set("abc", 123.456);
 
             this.visElements = [];
 
@@ -72,7 +72,7 @@ define([
             // this.generateTextElement(elementName, elementValue,"headerTextBox");
 
             elementName = "angIRWLabel";
-            elementValue = "angepasster Richtwert IRW pro m³";
+            elementValue = "angepasster Richtwert IRW pro m³ (gerundet)";
             this.generateTextElement(elementName, elementValue, this.stdStyle450);
             // this.generateTextElement(elementName, elementValue,"stdTextBox");
 
@@ -82,7 +82,7 @@ define([
             // this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             elementName = "wertLabel";
-            elementValue = "geschätzter Wert der Immobilie";
+            elementValue = "geschätzter Wert der Immobilie (gerundet)";
             this.generateTextElement(elementName, elementValue, this.stdStyle450);
             // this.generateTextElement(elementName, elementValue,"stdTextBox");
 
@@ -166,6 +166,7 @@ define([
         // Baut die Gui auf
         showTable: function (stag, teilma, zone, setControlsToNorm) {
             var tableConfig = this.engine.getTableConfig(stag, teilma, zone);
+            console.log(tableConfig);
             var genaIRW = dijitRegistry.byId("genaIRW");
             genaIRW.textbox.value = tableConfig["zonenIrw_txt"];
             this.currentZonenIRW = tableConfig["zonenIrw"];
@@ -510,42 +511,53 @@ define([
         },
 
         // Koeffizient für Auswahl in ComboBox bestimmen und in der IRW Spalte eintragen
-        // FIXME der Wert muss in die prozentuale Abweichung vom Normkoeffizienten umgerechnet werden.
         getCoeffForBWO: function (newValue, aUIControl, IdIRW, elementBWORwKoeffizient) {
-            // console.log(newValue);
-            // console.log(aUIControl);
-            // console.log(IdIRW);
-            // console.log(elementBWORwKoeffizient);
-            // if (aUIControl["Typ"] == "AUSWAHL") {
-            //     aUIControl["Liste"].forEach(function (object) {
-            //         if (object["name"] == newValue) {
-            //             aCoeff = object["value"];
-            //         };
-            //     });
-            // } else {
-            //     aCoeff = this.engine.mapValueToCoeff(newValue, aUIControl);
-            // };
-            // console.log(aCoeff);
-            // if (aCoeff != undefined && elementBWORwKoeffizient != undefined){
-            //     var aIRWField = dijitRegistry.byId(IdIRW);
-            //     aIRWField.textbox.value = (aCoeff / elementBWORwKoeffizient).toFixed(2).toString() + "%";
-            // }
+            var aCoeff;
+            if (aUIControl["Typ"] == "AUSWAHL") {
+                aUIControl["Liste"].forEach(function (object) {
+                    if (object["name"] == newValue) {
+                        aCoeff = object["value"];
+                    };
+                });
+            } else {
+                aCoeff = this.engine.mapValueToCoeff(newValue, aUIControl);
+            };
+            if (aCoeff != undefined && elementBWORwKoeffizient != undefined) {
+                var aIRWField = dijitRegistry.byId(IdIRW);
+                var anpassungFaktor = (aCoeff / elementBWORwKoeffizient);
 
-
+                this.coeffStore.set(IdIRW, anpassungFaktor);
+                var anpassungProzent = (anpassungFaktor - 1) * 100;
+                aIRWField.textbox.value = Math.round(anpassungProzent).toString() + "%";
+            }
         },
 
-        // Fixme Koeffizienten werden nicht berücksichtigt!
+        // Berechnung angepasste Werte
         calculateIRW: function () {
-            var genaIRW = dijitRegistry.byId("genaIRW");
-
             var angIRWBWO = dijitRegistry.byId("angIRWBWO");
-            angIRWBWO.textbox.value = genaIRW.textbox.value;
+            var richtwertZone = this.currentZonenIRW;
+            var myCoeffs = this.coeffStore;
+            this.visElements.forEach(function (prefix) {
+                var myName = (prefix + "IRW");
+                var myCoeff = myCoeffs.get(myName);
+                if (myCoeff != undefined) {
+                    richtwertZone = richtwertZone * myCoeff;
+                } 
+            })
+            // Richtwert pro m*m
+            // auf 10 runden
+            var faktor = 10;
+            richtwertZone = Math.round(richtwertZone/faktor) * faktor;
+            angIRWBWO.textbox.value =  richtwertZone + " €/m²";
 
+            //  Richtwert Immobilie
             var whnflBWO = dijitRegistry.byId("whnflBWO");
-            var aWertBWOValue = this.currentZonenIRW * whnflBWO.textbox.value;
+            var aWertBWOValue = richtwertZone * whnflBWO.textbox.value;
+            // auf 10K runden
+            faktor = 10000;
+            aWertBWOValue = Math.round(aWertBWOValue/faktor) * faktor;
             var wertBWO = dijitRegistry.byId("wertBWO");
             wertBWO.textbox.value = aWertBWOValue + " €";
-
         },
 
         /**
