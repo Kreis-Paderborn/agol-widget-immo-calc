@@ -118,6 +118,14 @@ define([
                             { "name": "Toll", "id": 1, "value": 1.856 },
                             { "name": "Mies", "id": 2, "value": 0.856 }
                         ]
+                    },
+                    "KELLER": {
+                        "Typ": "AUSWAHL",
+                        "Liste": [
+                            { "name": "nicht vorhanden", "id": 1, "value": 0.6 },
+                            { "name": "vorhanden", "id": 2, "value": 1.000 },
+                            { "name": "teilunterkellert", "id": 3, "value": 0.8 }
+                        ]
                     }
                 };
 
@@ -322,6 +330,13 @@ define([
                                         "Steuerelement": uiControls["GSTAND"],
                                         "WertInSteuerelement": "Toll",
                                         "RichtwertKoeffizient": 1.856
+                                    },
+                                    "KELLER": {
+                                        "Titel": "Keller",
+                                        "Richtwert": "vorhanden",
+                                        "Steuerelement": uiControls["KELLER"],
+                                        "WertInSteuerelement": "vorhanden",
+                                        "RichtwertKoeffizient": 1.0
                                     }
                                 }
                             },
@@ -699,7 +714,7 @@ define([
          * @param {*} internalValue 
          * @param {*} uiControlConfig 
          */
-        mapValueToCoeff: function (internalValue, uiControlConfig) {
+        mapValueToCoeff: function (valueInControl, uiControlConfig) {
             var type = uiControlConfig.Typ;
             var returnVal;
 
@@ -708,7 +723,7 @@ define([
                 // Hier wird der Koeffizient anhand der hinterlegen Spannen ermittelt.
                 // Es wird angenommen, das der Wert vom Typ Number ist.
                 for (const range of uiControlConfig.Spannen) {
-                    if (internalValue >= range.Min && internalValue <= range.Max) {
+                    if (valueInControl >= range.Min && valueInControl <= range.Max) {
                         returnVal = range.Koeffizient;
                         break;
                     }
@@ -720,7 +735,7 @@ define([
                 // Ob der Typ des Wertes ein String oder eine Number ist, sollte ignoriert werden.
                 // Das ist wichtig, da die ID mal so mal so belegt ist.
                 for (const listEntry of uiControlConfig.Liste) {
-                    if (listEntry.id.toString() === internalValue.toString()) {
+                    if (listEntry.name.toString() === valueInControl.toString()) {
                         returnVal = listEntry.value;
                         break;
                     }
