@@ -25,9 +25,22 @@ table {
     text-align:center;
 }
 
+.std450TextBox input {
+    width: 454px; 
+    height: 35px; 
+    text-align:center;
+}
+
 .headerTextBox input {
     width: 150px; 
     height: 25px; 
     background-color: lightblue;
+    text-align:center;
+}
+
+.header600TextBox input {
+    width: 606px; 
+    height: 25px; 
+    background-color: lightblue; 
     text-align:center;
 }
