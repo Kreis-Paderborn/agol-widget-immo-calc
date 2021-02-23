@@ -1,4 +1,4 @@
-td { 
+/* td { 
     background-color: white;
     color: black;
     width: 150px;
@@ -6,7 +6,7 @@ td {
 
 table {
     background-color: lightgray;
-} 
+}  */
 
 
 .comboTextAlign input  {
@@ -19,28 +19,46 @@ table {
     text-align:center;
 }
 
-.std300TextBox input {
-    width: 300px; 
+.std300TextBox div {
+    width: 302px; 
     height: 35px; 
     text-align:center;
 }
 
-.std450TextBox input {
+.std450TextBox div {
     width: 454px; 
     height: 35px; 
     text-align:center;
 }
 
-.headerTextBox input {
+.headerTextBox div {
     width: 150px; 
     height: 25px; 
     background-color: lightblue;
     text-align:center;
 }
 
-.header600TextBox input {
-    width: 606px; 
+.header600TextBox div {
+    width: 612px; 
     height: 25px; 
     background-color: lightblue; 
-    text-align:center;
+    border-color: white;
+}
+.stdInputBox input {
+    width: 150px; 
+    height: 35px; 
+    text-align:right;
+}
+
+.std300InputBox input {
+    width: 284px !important;
+    height: 35px; 
+}
+
+.dijitTextBox {
+    width: unset;
+}
+
+.dijitArrowButtonInner {
+    width: 16px;
 }

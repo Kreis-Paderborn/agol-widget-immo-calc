@@ -39,12 +39,7 @@ define([
         coeffStore: new Map(),
         rwStore: new Map(),
         changedInput: new Array(),
-        headerStyle150: "width: 150px; height: 25px; background-color: lightblue; text-align:center",
-        headerStyle600: "width: 606px; height: 25px; background-color: lightblue; text-align:center",
-        stdStyle150: "width: 150px; height: 35px; background-color: white; text-align:center",
-        stdStyle300: "width: 302px; height: 35px; background-color: white; text-align:center",
-        stdStyle450: "width: 454px; height: 35px; background-color: white; text-align:center",
-
+        
         constructor: function (engine, options) {
 
             this.visElements = [];
@@ -58,50 +53,40 @@ define([
 
             var elementName = "firstLabel";
             var elementValue = "";
-            this.generateTextElement(elementName, elementValue, this.headerStyle150);
-            // this.generateTextElement(elementName, elementValue,"headerTextBox");
+            this.generateTextElement(elementName, elementValue,"headerTextBox");
             elementName = "normLabel";
             elementValue = "Richtwert";
-            this.generateTextElement(elementName, elementValue, this.headerStyle150);
-            // this.generateTextElement(elementName, elementValue,"headerTextBox");
+            this.generateTextElement(elementName, elementValue,"headerTextBox");
             elementName = "bwoLabel";
             elementValue = "Ihre Immobilie";
-            this.generateTextElement(elementName, elementValue, this.headerStyle150);
-            // this.generateTextElement(elementName, elementValue,"headerTextBox");
+            this.generateTextElement(elementName, elementValue,"headerTextBox");
             elementName = "irwLabel";
             elementValue = "Anpassung";
-            this.generateTextElement(elementName, elementValue, this.headerStyle150);
-            // this.generateTextElement(elementName, elementValue,"headerTextBox");
+            this.generateTextElement(elementName, elementValue,"headerTextBox");
 
             elementName = "seperatorBottom";
             elementValue = "";
-            this.generateTextElement(elementName, elementValue, this.headerStyle600);
-            // this.generateTextElement(elementName, elementValue,"header600TextBox");
+            this.generateTextElement(elementName, elementValue,"header600TextBox");
 
             elementName = "angIRWLabel";
             elementValue = "angepasster Richtwert IRW pro m³ (gerundet)";
-            this.generateTextElement(elementName, elementValue, this.stdStyle450);
-            // this.generateTextElement(elementName, elementValue,"stdTextBox");
+            this.generateTextElement(elementName, elementValue,"std450TextBox");
 
             elementName = "angIRWBWO";
             elementValue = "berechneter Wert";
-            this.generateTextElement(elementName, elementValue);
-            // this.generateTextElement(elementName, elementValue,"stdTextBox");
+            this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             elementName = "wertLabel";
             elementValue = "geschätzter Wert der Immobilie (gerundet)";
-            this.generateTextElement(elementName, elementValue, this.stdStyle450);
-            // this.generateTextElement(elementName, elementValue,"stdTextBox");
+            this.generateTextElement(elementName, elementValue,"std450TextBox");
 
             elementName = "wertBWO";
             elementValue = "berechneter Wert";
-            this.generateTextElement(elementName, elementValue);
-            // this.generateTextElement(elementName, elementValue,"stdTextBox");
+            this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             elementName = "seperatorBottom2";
             elementValue = "";
-            this.generateTextElement(elementName, elementValue, this.headerStyle600);
-            // this.generateTextElement(elementName, elementValue,"header600TextBox");
+            this.generateTextElement(elementName, elementValue,"header600TextBox");
 
             var standardButton = new Button({
                 label: "Standard",
@@ -119,21 +104,22 @@ define([
 
         },
 
+        /**
+         * genreriert die Headerelemente
+         */
         initialiseHeader: function () {
             var me = this;
             // teilmaLabel
             var elementName = "teilmaLabel";
             var elementValue = "Teilmarkt";
-            this.generateTextElement(elementName, elementValue);
-            // this.generateTextElement(elementName, elementValue,"stdTextBox");
+            this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             // teilmaBWO
             var teilmaBWO = new FormComboBox({
                 id: "teilmaBWO",
                 name: "teilmaBWO",
                 searchAttr: "name",
-                style: "width: 300px;",
-                class: "comboTextAlign",
+                class: "std300InputBox",
                 onChange: function (newValue) {
                     me.refreshTable("teilma");
                 },
@@ -142,8 +128,7 @@ define([
             // genaLabel
             elementName = "genaLabel";
             elementValue = "Name der Zone";
-            this.generateTextElement(elementName, elementValue);
-            // this.generateTextElement(elementName, elementValue,"stdTextBox");
+            this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             // genaBWO
             var genaBWO = new FormComboBox({
@@ -151,8 +136,7 @@ define([
                 name: "genaBWO",
                 value: "Aus Karte vorbelegt",
                 searchAttr: "name",
-                style: "width: 300px;",
-                class: "comboTextAlign",
+                class: "std300InputBox",
                 onChange: function (newValue) {
                     me.refreshTable("zone");
                 }
@@ -161,14 +145,12 @@ define([
             // genaIRW
             elementName = "genaIRW";
             elementValue = "aValue";
-            this.generateTextElement(elementName, elementValue);
-            // this.generateTextElement(elementName, elementValue,"stdTextBox");
+            this.generateTextElement(elementName, elementValue,"stdTextBox");
 
             // stagLabel
             elementName = "stagLabel";
             elementValue = "Stichtag des Immobilienrichtwertes";
-            this.generateTextElement(elementName, elementValue, this.stdStyle300);
-            // this.generateTextElement(elementName, elementValue,"std300TextBox");
+            this.generateTextElement(elementName, elementValue,"std300TextBox");
 
             // stagBWO
             var stagBWO = new FormComboBox({
@@ -176,8 +158,7 @@ define([
                 name: "stagBWO",
                 value: "Bitte wählen",
                 searchAttr: "name",
-                style: "width: 150px;",
-                class: "comboTextAlign",
+                class: "stdInputBox",
                 onChange: function (newValue) {
                     me.refreshTable("stag");
                 }
@@ -217,13 +198,11 @@ define([
 
                     var elementLabelName = lowerCaseValue + "Label";
                     var elementLabelValue = tableConfig["Eigenschaften"][value]["Titel"];
-                    this.generateTextElement(elementLabelName, elementLabelValue);
-                    // this.generateTextElement(elementLabelName, elementLabelValue,"stdTextBox");
+                    this.generateTextElement(elementLabelName, elementLabelValue,"stdTextBox");
 
                     var elementNormName = lowerCaseValue + "Norm";
                     var elementNormValue = tableConfig["Eigenschaften"][value]["Richtwert"];
-                    this.generateTextElement(elementNormName, elementNormValue);
-                    // this.generateTextElement(elementNormName, elementNormValue,"stdTextBox");
+                    this.generateTextElement(elementNormName, elementNormValue,"stdTextBox");
 
                     var elementBWOValue = tableConfig["Eigenschaften"][value]["WertInSteuerelement"];
                     var elementBWOUIControl = tableConfig["Eigenschaften"][value]["Steuerelement"];
@@ -231,8 +210,7 @@ define([
 
                     var elementIRWName = lowerCaseValue + "IRW";
                     var elementIRWValue = "0%";
-                    this.generateTextElement(elementIRWName, elementIRWValue);
-                    // this.generateTextElement(elementIRWName, elementIRWValue,"stdTextBox");
+                    this.generateTextElement(elementIRWName, elementIRWValue,"stdTextBox");
                 } else {
                     // für die bestehenden Zeilen den Richtwert aktualisieren
                     var aNormTextBox = dijitRegistry.byId(lowerCaseValue + "Norm");
@@ -280,7 +258,10 @@ define([
             aPanel.resize({ w: 640, h: height });
         },
 
-        // Erzeugt das DOM für den "Standard" Teil des HTML Dokuments
+        /**
+         * Erzeugt das DOM für den "Standard" Teil des HTML Dokuments
+         * @param {*} value Post- bzw Prefix des Elemetes 
+         */
         createHtmlElement: function (value) {
             var htmlFrag = document.createDocumentFragment();
             var aTr = document.createElement("tr");
@@ -301,18 +282,17 @@ define([
             parentNode.insertBefore(htmlFrag, rowBottom);
         },
 
-        // Erzeugt ein dijit Text Element zur Anzeige
-        // generateTextElement: function (elementTextName, elementTextValue,aClass) {
-        generateTextElement: function (elementTextName, elementTextValue, aStyle) {
-            if (aStyle == undefined) {
-                aStyle = this.stdStyle150;
-            };
+        /**
+         * Erzeugt ein dijit Text Element zur Anzeige
+         * @param {*} elementTextName Name des neuenElements
+         * @param {*} elementTextValue Wert des neuen Elementse
+         * @param {*} aClass Klasse aus style.css 
+         */
+        generateTextElement: function (elementTextName, elementTextValue,aClass) {
             var aTextElement = new dijitTextbox({
                 id: elementTextName,
                 name: elementTextName,
-                // class: "stdTextBox",
-                rows: "1",
-                style: aStyle,
+                class: aClass,
                 readOnly: true,
                 value: elementTextValue.toString()
             }, elementTextName).startup();
@@ -336,7 +316,7 @@ define([
                         // pattern: "###",
                         constraints: { min: elementBWOUIControl["Min"], max: elementBWOUIControl["Max"], places: 0 },
                         id: elementBWOName,
-                        style: "width: 150px",
+                        class: "stdInputBox",
                         onChange: function (newValue) {
                             me.changedInput.push(elementPrefix);
                             me.getCoeffForBWO(newValue, elementPrefix);
@@ -362,8 +342,7 @@ define([
                         name: elementBWOName,
                         value: elementBWOValue.toString(),
                         searchAttr: "name",
-                        style: "width: 150px;",
-                        class: "comboTextAlign",
+                        class: "stdInputBox",
                         onChange: function (newValue) {
                             me.changedInput.push(elementPrefix);
                             me.getCoeffForBWO(newValue, elementPrefix);
@@ -391,7 +370,6 @@ define([
             var aSteuerelement = config["Eigenschaften"][feld]["Steuerelement"]
             switch (aSteuerelement["Typ"]) {
                 case "ZAHLENEINGABE":
-                    // aDijitElement.set(value: elementBWOValue);
                     aDijitElement.constraints = { min: aSteuerelement["Min"], max: aSteuerelement["Max"], places: 0 };
                     break;
                 case "AUSWAHL":
@@ -553,9 +531,9 @@ define([
 
         /**
          * setzt die Werte im Header der Gui
-         * @param {*} stag Stichtag
-         * @param {*} teilma Teilmarkt
-         * @param {*} zone Zone/Gemeinde
+         * @param {string} stag Stichtag
+         * @param {string} teilma Teilmarkt
+         * @param {string} zone Zone/Gemeinde
          */
         setValuesInHeaderGui: function (stag, teilma, zone) {
             this.getValuesStag();
@@ -576,7 +554,7 @@ define([
         /**
          * Koeffizient für Auswahl in ComboBox bestimmen und in der IRW Spalte eintragen
          * @param {*} newValue im Eingabeelement ausgewählter Wert
-         * @param {*} elementPrefix Prefix der Elementbezeichnung
+         * @param {string} elementPrefix Prefix der Elementbezeichnung
          */
         getCoeffForBWO: function (newValue, elementPrefix) {
             var aCoeff;
@@ -637,6 +615,9 @@ define([
             };
         },
 
+        /**
+         * Callback des Standard Buttons, setzt alle gewählten werte auf den Richtwert zurück
+         */
         resetToRichtwert: function () {
             me = this;
             this.visElements.forEach(function (elementPrefix) {
