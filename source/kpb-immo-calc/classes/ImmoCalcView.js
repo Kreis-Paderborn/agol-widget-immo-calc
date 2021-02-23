@@ -62,31 +62,31 @@ define([
             this.generateTextElement(elementName, elementValue, "headerTextBox");
             elementName = "irwLabel";
             elementValue = "Anpassung";
-            this.generateTextElement(elementName, elementValue, "headerTextBox");
+            this.generateTextElement(elementName, elementValue, "headerTextBoxSmall");
 
             elementName = "seperatorBottom";
             elementValue = "";
-            this.generateTextElement(elementName, elementValue, "header600TextBox");
+            this.generateTextElement(elementName, elementValue, "headerBoxLarge");
 
             elementName = "angIRWLabel";
             elementValue = "angepasster Richtwert IRW pro m³ (gerundet)";
-            this.generateTextElement(elementName, elementValue, "std450TextBox");
+            this.generateTextElement(elementName, elementValue, "textBoxXtraLarge");
 
             elementName = "angIRWBWO";
             elementValue = "berechneter Wert";
-            this.generateTextElement(elementName, elementValue, "stdTextBox");
+            this.generateTextElement(elementName, elementValue, "textBoxSmall");
 
             elementName = "wertLabel";
             elementValue = "geschätzter Wert der Immobilie (gerundet)";
-            this.generateTextElement(elementName, elementValue, "std450TextBox");
+            this.generateTextElement(elementName, elementValue, "textBoxXtraLarge");
 
             elementName = "wertBWO";
             elementValue = "berechneter Wert";
-            this.generateTextElement(elementName, elementValue, "stdTextBox");
+            this.generateTextElement(elementName, elementValue, "textBoxSmall");
 
             elementName = "seperatorBottom2";
             elementValue = "";
-            this.generateTextElement(elementName, elementValue, "header600TextBox");
+            this.generateTextElement(elementName, elementValue, "headerBoxLarge");
 
             var standardButton = new Button({
                 label: "Standard",
@@ -119,7 +119,7 @@ define([
                 id: "teilmaBWO",
                 name: "teilmaBWO",
                 searchAttr: "name",
-                class: "std300InputBox",
+                class: "stdInputBoxLarge",
                 onChange: function (newValue) {
                     me.refreshTable("teilma");
                 },
@@ -136,7 +136,7 @@ define([
                 name: "genaBWO",
                 value: "Aus Karte vorbelegt",
                 searchAttr: "name",
-                class: "std300InputBox",
+                class: "stdInputBoxLarge",
                 onChange: function (newValue) {
                     me.refreshTable("zone");
                 }
@@ -145,12 +145,12 @@ define([
             // genaIRW
             elementName = "genaIRW";
             elementValue = "aValue";
-            this.generateTextElement(elementName, elementValue, "stdTextBox");
+            this.generateTextElement(elementName, elementValue, "textBoxSmall");
 
             // stagLabel
             elementName = "stagLabel";
             elementValue = "Stichtag des Immobilienrichtwertes";
-            this.generateTextElement(elementName, elementValue, "std300TextBox");
+            this.generateTextElement(elementName, elementValue, "textBoxLarge");
 
             // stagBWO
             var stagBWO = new FormComboBox({
@@ -210,7 +210,7 @@ define([
 
                     var elementIRWName = lowerCaseValue + "IRW";
                     var elementIRWValue = "0%";
-                    this.generateTextElement(elementIRWName, elementIRWValue, "stdTextBox");
+                    this.generateTextElement(elementIRWName, elementIRWValue, "textBoxSmall");
                 } else {
                     // für die bestehenden Zeilen den Richtwert aktualisieren
                     var aNormTextBox = dijitRegistry.byId(lowerCaseValue + "Norm");
@@ -255,7 +255,8 @@ define([
             var pm = PanelManager.getInstance()
             var aPanel = pm.getPanelById("_5_panel");
             var height = this.visElements.length * 35 + 370;
-            aPanel.resize({ w: 640, h: height });
+            // aPanel.resize({ w: 640, h: height });
+            aPanel.resize({ w: 750, h: height });
         },
 
         /**
