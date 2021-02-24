@@ -69,7 +69,7 @@ define([
             this.generateTextElement(elementName, elementValue, "headerBoxLarge");
 
             elementName = "angIRWLabel";
-            elementValue = "angepasster Richtwert IRW pro m³ (gerundet)";
+            elementValue = "angepasster Richtwert IRW pro m² (gerundet)";
             this.generateTextElement(elementName, elementValue, "textBoxXtraLarge");
 
             elementName = "angIRWBWO";
@@ -176,7 +176,7 @@ define([
         showTable: function (stag, teilma, zone, setControlsToNorm) {
             var tableConfig = this.engine.getTableConfig(stag, teilma, zone);
             var genaIRW = dijitRegistry.byId("genaIRW");
-            genaIRW.textbox.value = tableConfig["zonenIrw_txt"];
+            genaIRW.set("value",tableConfig["zonenIrw_txt"]);
             this.currentZonenIRW = tableConfig["zonenIrw"];
             // initialer Aufruf der Gui
             if (setControlsToNorm) {
@@ -215,7 +215,7 @@ define([
                     // für die bestehenden Zeilen den Richtwert aktualisieren
                     var aNormTextBox = dijitRegistry.byId(lowerCaseValue + "Norm");
                     var elementNormValue = tableConfig["Eigenschaften"][value]["Richtwert"];
-                    aNormTextBox.textbox.value = elementNormValue;
+                    aNormTextBox.set("value",elementNormValue);
                 };
                 // Fixme die Auswahlmöglichkeiten und Spannen müssen nur bei einer Änderung des Teilmarktes angepasst werden.
                 var aComboBox = dijitRegistry.byId(lowerCaseValue + "BWO");
@@ -319,21 +319,27 @@ define([
                         id: elementBWOName,
                         class: "stdInputBox",
                         onChange: function (newValue) {
-                            me.changedInput.push(elementPrefix);
-                            me.getCoeffForBWO(newValue, elementPrefix);
-                            me.calculateIRW();
+                            if (this.disabled === false) {
+                                me.changedInput.push(elementPrefix);
+                                me.getCoeffForBWO(newValue, elementPrefix);
+                                me.calculateIRW();
+                            }
                         },
                         onKeyUp: function (event) {
-                            me.changedInput.push(elementPrefix);
-                            var newValue = this.textbox.value;
-                            me.getCoeffForBWO(newValue, elementPrefix);
-                            me.calculateIRW();
+                            if (this.disabled === false) {
+                                me.changedInput.push(elementPrefix);
+                                var newValue = this.value;
+                                me.getCoeffForBWO(newValue, elementPrefix);
+                                me.calculateIRW();
+                            }
                         },
                         onClick: function (event) {
-                            me.changedInput.push(elementPrefix);
-                            var newValue = this.textbox.value;
-                            me.getCoeffForBWO(newValue, elementPrefix);
-                            me.calculateIRW();
+                            if (this.disabled === false) {
+                                me.changedInput.push(elementPrefix);
+                                var newValue = this.value;
+                                me.getCoeffForBWO(newValue, elementPrefix);
+                                me.calculateIRW();
+                            }
                         }
                     }, elementBWOName).startup();
                     break;
@@ -362,9 +368,9 @@ define([
          */
         getStoreValuesForComboBox: function (aDijitElement, feld) {
             var StagBWO = dijitRegistry.byId("stagBWO");
-            var currentStag = StagBWO.textbox.value;
+            var currentStag = StagBWO.value;
             var genaBWO = dijitRegistry.byId("genaBWO");
-            var currentGena = genaBWO.textbox.value;
+            var currentGena = genaBWO.value;
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
             var currentTeilma = teilmaBWO.item.id;
             var config = this.engine.getTableConfig(currentStag, currentTeilma, currentGena);
@@ -433,19 +439,19 @@ define([
          */
         refreshTable: function (changedElement) {
             var stagBWO = dijitRegistry.byId("stagBWO");
-            var stag = stagBWO.textbox.value;
+            var stag = stagBWO.value;
 
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
             var teilma = teilmaBWO.item.id;
 
             var genaBWO = dijitRegistry.byId("genaBWO");
-            var zone = genaBWO.textbox.value;
+            var zone = genaBWO.value;
 
             // Auswahllisten für Headerelemente aktualsieren
             var teilma_txt = this.engine.mapDisplayNames("TEILMA", teilma.toString());
             switch (changedElement) {
                 case "stag":
-                    var teilmaValue = teilmaBWO.textbox.value;
+                    var teilmaValue = teilmaBWO.value;
                     var teilmaStore = this.getValuesTeilma(stag);
                     var teilmaValueOk = false;
                     if (teilmaStore != undefined) {
@@ -455,7 +461,7 @@ define([
                             };
                         })
                     }
-                    var genaValue = genaBWO.textbox.value;
+                    var genaValue = genaBWO.value;
                     var genaStore = this.getValuesGena(teilma_txt, stag);
                     var genaValueOk = false;
                     if (genaStore != undefined) {
@@ -468,24 +474,24 @@ define([
 
                     if (teilmaValueOk == true && genaValueOk == true) {
                         // enable Eingaben
-                        genaBWO.disabled = false;
-                        teilmaBWO.disabled = false;
+                        genaBWO.set("disabled", false);
+                        teilmaBWO.set("disabled", false);
                         this.disableBWOElements(false);
                         this.showTable(stag, teilma, zone);
                     } else if (teilmaValueOk != true) {
                         teilmaBWO.focus();
                         // disable alle Eingaben ausser stag und teilma
                         this.disableBWOElements(true);
-                        genaBWO.disabled = true;
+                        genaBWO.set("disabled", true);
                     } else if (genaValueOk != true) {
                         genaBWO.focus();
                         // disable alle Eingaben ausser teilma und gena
                         this.disableBWOElements(true);
-                        stagBWO.disabled = true;
+                        stagBWO.set("disabled", true);
                     };
                     break;
                 case "teilma":
-                    var genaValue = genaBWO.textbox.value;
+                    var genaValue = genaBWO.value;
                     this.getValuesStag();
                     var genaStore = this.getValuesGena(teilma_txt, stag);
                     var genaValueOk = false;
@@ -496,22 +502,23 @@ define([
                     })
 
                     if (genaValueOk == true) {
-                        genaBWO.disabled = false;
-                        stagBWO.disabled = false;
+                        genaBWO.set("disabled", false);
+                        stagBWO.set("disabled", false);
                         this.disableBWOElements(false);
                         this.showTable(stag, teilma, zone);
                     } else {
                         genaBWO.focus();
                         // disable alle Eingaben ausser teilma und gena
                         this.disableBWOElements(true);
-                        stagBWO.disabled = true;
+                        stagBWO.set("disabled", true);
+                        genaBWO.set("disabled", false);
                     };
                     break;
                 case "zone":
                     this.getValuesStag();
                     this.getValuesTeilma(stag);
-                    teilmaBWO.disabled = false;
-                    stagBWO.disabled = false;
+                    teilmaBWO.set("disabled", false);
+                    stagBWO.set("disabled", false);
                     this.disableBWOElements(false);
                     this.showTable(stag, teilma, zone);
                     break;
@@ -526,7 +533,7 @@ define([
         disableBWOElements: function (disable) {
             this.visElements.forEach(function (lowerCaseValue) {
                 var aBWOElement = dijitRegistry.byId(lowerCaseValue + "BWO");
-                aBWOElement.disabled = disable;
+                aBWOElement.set("disabled", disable);
             })
         },
 
@@ -539,17 +546,17 @@ define([
         setValuesInHeaderGui: function (stag, teilma, zone) {
             this.getValuesStag();
             var genaBWO = dijitRegistry.byId("genaBWO");
-            genaBWO.textbox.value = zone;
+            genaBWO.set("value", zone);
             var teilma_txt = this.engine.mapDisplayNames("TEILMA", teilma.toString());
             this.getValuesGena(teilma_txt, stag);
 
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
-            teilmaBWO.textbox.value = teilma_txt;
+            teilmaBWO.set("value",teilma_txt);
             teilmaBWO.item = { name: teilma_txt, id: teilma };
             this.getValuesTeilma(stag);
 
             var stagBWO = dijitRegistry.byId("stagBWO");
-            stagBWO.textbox.value = stag;
+            stagBWO.set("value",stag);
         },
 
         /**
@@ -562,9 +569,9 @@ define([
             var IdIRW = elementPrefix + "IRW";
 
             var StagBWO = dijitRegistry.byId("stagBWO");
-            var currentStag = StagBWO.textbox.value;
+            var currentStag = StagBWO.value;
             var genaBWO = dijitRegistry.byId("genaBWO");
-            var currentGena = genaBWO.textbox.value;
+            var currentGena = genaBWO.value;
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
             var currentTeilma = teilmaBWO.item.id;
             var config = this.engine.getTableConfig(currentStag, currentTeilma, currentGena);
@@ -578,7 +585,7 @@ define([
 
                 this.coeffStore.set(IdIRW, anpassungFaktor);
                 var anpassungProzent = (anpassungFaktor - 1) * 100;
-                aIRWField.textbox.value = Math.round(anpassungProzent) + "%";
+                aIRWField.set("value",Math.round(anpassungProzent) + "%");
             }
         },
 
@@ -600,19 +607,19 @@ define([
             // auf 10 runden
             var faktor = 10;
             richtwertZone = Math.round(richtwertZone / faktor) * faktor;
-            angIRWBWO.textbox.value = richtwertZone + " €/m²";
+            angIRWBWO.set("value",richtwertZone + " €/m²");
 
             //  Richtwert Immobilie
             var whnflBWO = dijitRegistry.byId("whnflBWO");
-            var aWertBWOValue = richtwertZone * whnflBWO.textbox.value;
+            var aWertBWOValue = richtwertZone * whnflBWO.value;
             // auf 10K runden
             faktor = 10000;
             aWertBWOValue = Math.round(aWertBWOValue / faktor) * 10;
             var wertBWO = dijitRegistry.byId("wertBWO");
             if (aWertBWOValue > 0) {
-                wertBWO.textbox.value = aWertBWOValue + ".000 €";
+                wertBWO.set("value",aWertBWOValue + ".000 €")
             } else {
-                wertBWO.textbox.value = "0 €";
+                wertBWO.set("value","0 €")
             };
         },
 
@@ -621,18 +628,23 @@ define([
          */
         resetToRichtwert: function () {
             me = this;
+            console.log(this.visElements);
+            console.log(this.changedInput);
             this.visElements.forEach(function (elementPrefix) {
                 var myName = (elementPrefix + "BWO");
                 var myBWO = dijitRegistry.byId(myName);
                 var StagBWO = dijitRegistry.byId("stagBWO");
-                var currentStag = StagBWO.textbox.value;
+                // var currentStag = StagBWO.textbox.value;
+                var currentStag = StagBWO.value;
                 var genaBWO = dijitRegistry.byId("genaBWO");
-                var currentGena = genaBWO.textbox.value;
+                // var currentGena = genaBWO.textbox.value;
+                var currentGena = genaBWO.value;
                 var teilmaBWO = dijitRegistry.byId("teilmaBWO");
                 var currentTeilma = teilmaBWO.item.id;
                 var config = me.engine.getTableConfig(currentStag, currentTeilma, currentGena);
                 var richtwertValue = config["Eigenschaften"][elementPrefix.toUpperCase()]["WertInSteuerelement"];
-                myBWO.textbox.value = richtwertValue;
+                // myBWO.textbox.value = richtwertValue;
+                myBWO.set("value",richtwertValue);
                 me.getCoeffForBWO(richtwertValue, elementPrefix);
                 me.changedInput.pop(elementPrefix);
             });
