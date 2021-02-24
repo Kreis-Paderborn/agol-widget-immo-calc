@@ -99,6 +99,8 @@
 <AliasName>Rechtswert</AliasName>
 <ModelName>YWERT</ModelName>
 </Field>
+
+
 <Field xsi:type='esri:Field'>
 <Name>BEZUG</Name>
 <Type>esriFieldTypeString</Type>
@@ -116,8 +118,18 @@
 <Length>2</Length>
 <Precision>5</Precision>
 <Scale>0</Scale>
-<AliasName>Örtliche Fachinformation</AliasName>
+<AliasName>Örtliche Fachinformation (intern)</AliasName>
 <ModelName>UDOK</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>UDOK_URL</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>300</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Örtliche Fachinformation</AliasName>
+<ModelName>UDOK_URL</ModelName>
 </Field>
 <Field xsi:type='esri:Field'>
 <Name>NUMZ</Name>
