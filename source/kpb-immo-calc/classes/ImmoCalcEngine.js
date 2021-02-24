@@ -54,11 +54,11 @@ define([
                         "01.01.2021": {
                             "[TEILMA:1]": [
                                 { name: "Bad Lippspringe", id: 2 },
-                                { name: "Altenbeken", id: 1 }
+                                { name: "Borchen", id: 1 }
                             ],
                             "[TEILMA:2]": [
                                 { name: "Delbrück", id: 6 },
-                                { name: "Altenbeken", id: 1 }
+                                { name: "Borchen", id: 1 }
                             ]
                         },
                         "01.01.2022": {
@@ -70,13 +70,13 @@ define([
                             ],
                             "[TEILMA:3]": [
                                 { name: "Delbrück", id: 6 },
-                                { name: "Altenbeken", id: 1 }
+                                { name: "Borchen", id: 1 }
                             ]
                         },
                         "01.01.2023": {
                             "[TEILMA:3]": [
                                 { name: "Delbrück", id: 6 },
-                                { name: "Altenbeken", id: 1 }
+                                { name: "Borchen", id: 1 }
                             ]
                         }
                     }
@@ -152,7 +152,7 @@ define([
                                     }
                                 }
                             },
-                            "Altenbeken": {
+                            "Borchen": {
                                 "zonenIrw": 1750,
                                 "zonenIrw_txt": "1750 €/m²",
                                 "Eigenschaften": {
@@ -201,7 +201,7 @@ define([
                                     }
                                 }
                             },
-                            "Altenbeken": {
+                            "Borchen": {
                                 "zonenIrw": 1750,
                                 "zonenIrw_txt": "1750 €/m²",
                                 "Eigenschaften": {
@@ -289,7 +289,7 @@ define([
                                     }
                                 }
                             },
-                            "Altenbeken": {
+                            "Borchen": {
                                 "zonenIrw": 1750,
                                 "zonenIrw_txt": "1750 €/m²",
                                 "Eigenschaften": {
@@ -340,7 +340,7 @@ define([
                                     }
                                 }
                             },
-                            "Altenbeken": {
+                            "Borchen": {
                                 "zonenIrw": 1750,
                                 "zonenIrw_txt": "1750 €/m²",
                                 "Eigenschaften": {

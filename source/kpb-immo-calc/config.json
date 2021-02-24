@@ -12,6 +12,10 @@
             "serviceName": "KPB_Immobilienrichtwerte_Secure",
             "layerId": 3
         },
+        "IRW_ZONEN_AREA": {
+            "serviceName": "KPB_Immobilienrichtwerte_Secure",
+            "layerId": 4
+        },
         "Gemeindegrenzen": {
             "serviceName": "KPB_Gebietsgrenzen",
             "layerId": 0

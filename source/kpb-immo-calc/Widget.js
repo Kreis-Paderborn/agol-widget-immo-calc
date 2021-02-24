@@ -136,7 +136,7 @@ define([
 				}
 
 				this.engine.setExternalFieldNames(extFieldArray);
-				
+
 			},
 
 
@@ -288,15 +288,82 @@ define([
 			ready: function () {
 				console.log("Fertig!");
 				gEngine = this.engine;
+				var me = this;
 
-				this.view.initialiseHeader();
+				var startCalculator = function (startSTAG, startTEILMA, startZONE) {
+					me.view.initialiseHeader();
+					me.view.showTable(
+						startSTAG, 		   // Stichtag
+						startTEILMA,  	   // Teilmarkt
+						startZONE,         // Zone
+						true               // Steuerelemente auf Norm?
+					)
 
-				this.view.showTable(
-					"01.01.2021", 		   // Stichtag
-					2,  			       // Teilmarkt
-					"Altenbeken",          // Zone
-					true                   // Steuerelemente auf Norm?
-				)
+				}
+
+				var startSTAG = "01.01.2021";
+				var startTEILMA = 2;
+				var startZONE = "Borchen";
+
+				// Start mit Standard-Einstellung, wenn DB nicht geladen werden konnte.
+				// FIXME-AT: Ein zentrales FLAG auf der engine, was anzeigt, 
+				//           ob DB Daten vorhandne sind, wäre hilfreich.
+				if (this.engine._coefficients === null) {
+					startCalculator(startSTAG, startTEILMA, startZONE);
+				} else {
+
+					// Starte mit der Zone, die zuletzt im Popup aktiv war
+					if (this.map.infoWindow !== undefined
+						&& this.map.infoWindow.getSelectedFeature() !== undefined
+
+						// Sicherstellen, dass es sich nicht um das Popup der Adresssuche handelt.
+						&& this.map.infoWindow.getSelectedFeature().attributes["Addr_type"] === undefined) {
+
+						var featureFromPopup = this.map.infoWindow.getSelectedFeature();
+						for (const fullFieldname in featureFromPopup.attributes) {
+
+							if (fullFieldname.endsWith("STAG_TXT")) {
+								startSTAG = featureFromPopup.attributes[fullFieldname];
+							}
+							if (fullFieldname.endsWith("TEILMA")) {
+								startTEILMA = featureFromPopup.attributes[fullFieldname];
+							}
+							if (fullFieldname.endsWith("NAME_IRW")) {
+								startZONE = featureFromPopup.attributes[fullFieldname];
+							}
+						}
+						startCalculator(startSTAG, startTEILMA, startZONE);
+					}
+
+					// Start bei der Zone, die am Mittelpunkt der Karte liegt
+					else if (this.map.getZoom() > 1
+						&& this.map.extent !== undefined
+						&& this.map.extent.getCenter() !== undefined) {
+
+						var centerPoint = this.map.extent.getCenter();
+						var query = new esri.tasks.Query();
+						query.geometry = centerPoint;
+						query.outFields = ["*"];
+						var aFeatureLayer = this.featureLayers.IRW_ZONEN_AREA;
+						aFeatureLayer.queryFeatures(query, function (featureSet) {
+							startZONE = featureSet.features[0].attributes["NAME_IRW"];
+
+							// FIXME-AT: STAG und TEILMA wird hier auf Standardwerte gelassen,
+							//           ohne zu prüfe, ob es die Komination für die Zone gibt.
+							//           Außerdem könnten auch mehrer Zonen an einer Steller vorkommen.
+							//           Wie verwenden aber nur das 1. aus den gefundenen Features.
+							startCalculator(startSTAG, startTEILMA, startZONE);
+						});
+
+					}
+
+					// Rückfallebene: Start mit Standardwert "Borchen"
+					else {
+						startCalculator(startSTAG, startTEILMA, startZONE);
+					}
+				}
+
+
 			},
 			readyHandler: function () {
 				me = this;
