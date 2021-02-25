@@ -88,6 +88,15 @@ define([
             elementValue = "";
             this.generateTextElement(elementName, elementValue, "headerBoxLarge");
 
+            elementName = "anmerkungLabel";
+            elementValue = "Der berechnete Immobilienpreis entspricht nicht dem Verkehrswert gem. §194 BauGB. Dieser kann nur duch ein Verkehrswert- gutachten ermittelt werden.";
+            document.getElementById(elementName).innerHTML = elementValue;
+
+            elementName = "anmerkungLabel2";
+            aLink = "<a href='https://www.kreis-paderborn.de/gutachterausschuss/Erreichbarkeit/erreichbarkeit.html'>Gutachterausschuss </a>";
+            elementValue = "Bei inhaltlichen Fragen wenden Sie sich bitte an den " + aLink;
+            document.getElementById(elementName).innerHTML = elementValue;
+
             var standardButton = new Button({
                 label: "Standard",
                 onClick: function () {
@@ -176,7 +185,7 @@ define([
         showTable: function (stag, teilma, zone, setControlsToNorm) {
             var tableConfig = this.engine.getTableConfig(stag, teilma, zone);
             var genaIRW = dijitRegistry.byId("genaIRW");
-            genaIRW.set("value",tableConfig["zonenIrw_txt"]);
+            genaIRW.set("value", tableConfig["zonenIrw_txt"]);
             this.currentZonenIRW = tableConfig["zonenIrw"];
             // initialer Aufruf der Gui
             if (setControlsToNorm) {
@@ -215,7 +224,7 @@ define([
                     // für die bestehenden Zeilen den Richtwert aktualisieren
                     var aNormTextBox = dijitRegistry.byId(lowerCaseValue + "Norm");
                     var elementNormValue = tableConfig["Eigenschaften"][value]["Richtwert"];
-                    aNormTextBox.set("value",elementNormValue);
+                    aNormTextBox.set("value", elementNormValue);
                 };
                 // Fixme die Auswahlmöglichkeiten und Spannen müssen nur bei einer Änderung des Teilmarktes angepasst werden.
                 var aComboBox = dijitRegistry.byId(lowerCaseValue + "BWO");
@@ -254,8 +263,7 @@ define([
             //  Fixme Widget id hardcodiert
             var pm = PanelManager.getInstance()
             var aPanel = pm.getPanelById("_5_panel");
-            var height = this.visElements.length * 35 + 370;
-            // aPanel.resize({ w: 640, h: height });
+            var height = this.visElements.length * 35 + 385;
             aPanel.resize({ w: 750, h: height });
         },
 
@@ -551,12 +559,12 @@ define([
             this.getValuesGena(teilma_txt, stag);
 
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
-            teilmaBWO.set("value",teilma_txt);
+            teilmaBWO.set("value", teilma_txt);
             teilmaBWO.item = { name: teilma_txt, id: teilma };
             this.getValuesTeilma(stag);
 
             var stagBWO = dijitRegistry.byId("stagBWO");
-            stagBWO.set("value",stag);
+            stagBWO.set("value", stag);
         },
 
         /**
@@ -577,6 +585,17 @@ define([
             var config = this.engine.getTableConfig(currentStag, currentTeilma, currentGena);
             var aUIControl = config["Eigenschaften"][elementPrefix.toUpperCase()]["Steuerelement"];
 
+            // Vom Richtwert abweichende Werte fett darstellen
+            var IdBWO = elementPrefix + "BWO";
+            var refValue = config["Eigenschaften"][elementPrefix.toUpperCase()]["WertInSteuerelement"];
+            var aBWOField = dijitRegistry.byId(IdBWO);
+            if (refValue == aBWOField.textbox.value) {
+                aBWOField.set("class", "stdInputBox");
+                this.changedInput.pop(elementPrefix);
+            } else {
+                aBWOField.set("class", "stdInputBoxBold");
+            };
+
             aCoeff = this.engine.mapValueToCoeff(newValue, aUIControl);
             aRichtwertCoeff = this.rwStore.get(elementPrefix);
             if (aCoeff != undefined && aRichtwertCoeff != undefined) {
@@ -585,7 +604,14 @@ define([
 
                 this.coeffStore.set(IdIRW, anpassungFaktor);
                 var anpassungProzent = (anpassungFaktor - 1) * 100;
-                aIRWField.set("value",Math.round(anpassungProzent) + "%");
+                var roundAnpassungProzent = Math.round(anpassungProzent)
+                if (roundAnpassungProzent != 0) {
+                    aIRWField.set("class", "textBoxSmallBold");
+                } else {
+                    aIRWField.set("class", "textBoxSmall");
+                }
+
+                aIRWField.set("value", roundAnpassungProzent + "%");
             }
         },
 
@@ -607,7 +633,7 @@ define([
             // auf 10 runden
             var faktor = 10;
             richtwertZone = Math.round(richtwertZone / faktor) * faktor;
-            angIRWBWO.set("value",richtwertZone + " €/m²");
+            angIRWBWO.set("value", richtwertZone + " €/m²");
 
             //  Richtwert Immobilie
             var whnflBWO = dijitRegistry.byId("whnflBWO");
@@ -617,9 +643,9 @@ define([
             aWertBWOValue = Math.round(aWertBWOValue / faktor) * 10;
             var wertBWO = dijitRegistry.byId("wertBWO");
             if (aWertBWOValue > 0) {
-                wertBWO.set("value",aWertBWOValue + ".000 €")
+                wertBWO.set("value", aWertBWOValue + ".000 €")
             } else {
-                wertBWO.set("value","0 €")
+                wertBWO.set("value", "0 €")
             };
         },
 
@@ -628,23 +654,18 @@ define([
          */
         resetToRichtwert: function () {
             me = this;
-            console.log(this.visElements);
-            console.log(this.changedInput);
             this.visElements.forEach(function (elementPrefix) {
                 var myName = (elementPrefix + "BWO");
                 var myBWO = dijitRegistry.byId(myName);
                 var StagBWO = dijitRegistry.byId("stagBWO");
-                // var currentStag = StagBWO.textbox.value;
                 var currentStag = StagBWO.value;
                 var genaBWO = dijitRegistry.byId("genaBWO");
-                // var currentGena = genaBWO.textbox.value;
                 var currentGena = genaBWO.value;
                 var teilmaBWO = dijitRegistry.byId("teilmaBWO");
                 var currentTeilma = teilmaBWO.item.id;
                 var config = me.engine.getTableConfig(currentStag, currentTeilma, currentGena);
                 var richtwertValue = config["Eigenschaften"][elementPrefix.toUpperCase()]["WertInSteuerelement"];
-                // myBWO.textbox.value = richtwertValue;
-                myBWO.set("value",richtwertValue);
+                myBWO.set("value", richtwertValue);
                 me.getCoeffForBWO(richtwertValue, elementPrefix);
                 me.changedInput.pop(elementPrefix);
             });
