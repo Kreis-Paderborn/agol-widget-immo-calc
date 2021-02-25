@@ -691,7 +691,7 @@ define([
                 // Zeichenkette bei Zahleneingabe lässt auf eine Spanne schließen
                 if (typeof internalValue === "string") {
                     var range = this.splitRange(internalValue);
-                    internalValue = (range.Max + range.Min) / 2;
+                    internalValue = Math.round((range.Max + range.Min) / 2);
                 }
                 returnVal = internalValue;
 
