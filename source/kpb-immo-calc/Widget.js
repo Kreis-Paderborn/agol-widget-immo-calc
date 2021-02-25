@@ -189,6 +189,8 @@ define([
 
 				if (aKoeffFeatureLayer !== undefined) {
 
+					var myDateInMillisecs = new Date(me.config.maxSTAG).getTime();
+
 					// Frage alle Koeffizienten ab
 					aQuery.where = "GASL is not null";
 					aQuery.outFields = ["*"];
@@ -196,18 +198,21 @@ define([
 
 						for (const feature of featureSet.features) {
 							var obj = {};
-							obj["WERT_AKS"] = feature.attributes.WERT_AKS;
-							obj["EIGN_AKS"] = feature.attributes.EIGN_AKS;
-							obj["WERT_BORIS"] = feature.attributes.WERT_BORIS;
-							obj["EIGN_BORIS"] = feature.attributes.EIGN_BORIS;
-							obj["KOEFF"] = feature.attributes.KOEFF;
-							obj["GASL"] = feature.attributes.GASL;
-							obj["IRWTYP"] = feature.attributes.IRWTYP;
-							obj["TEILMA"] = feature.attributes.TEILMA;
-							obj["STAG"] = me.engine.convertDate(feature.attributes.STAG);
-							obj["STEUERELEM"] = feature.attributes.STEUERELEM;
-							obj["NUMZ"] = feature.attributes.NUMZ;
-							coeffArray.push(obj);
+							
+							if (me.config.maxSTAG === undefined || feature.attributes.STAG <= myDateInMillisecs) {
+								obj["WERT_AKS"] = feature.attributes.WERT_AKS;
+								obj["EIGN_AKS"] = feature.attributes.EIGN_AKS;
+								obj["WERT_BORIS"] = feature.attributes.WERT_BORIS;
+								obj["EIGN_BORIS"] = feature.attributes.EIGN_BORIS;
+								obj["KOEFF"] = feature.attributes.KOEFF;
+								obj["GASL"] = feature.attributes.GASL;
+								obj["IRWTYP"] = feature.attributes.IRWTYP;
+								obj["TEILMA"] = feature.attributes.TEILMA;
+								obj["STAG"] = me.engine.convertDate(feature.attributes.STAG);
+								obj["STEUERELEM"] = feature.attributes.STEUERELEM;
+								obj["NUMZ"] = feature.attributes.NUMZ;
+								coeffArray.push(obj);
+							}
 						}
 
 						if (coeffArray.length === 0) {
@@ -246,20 +251,26 @@ define([
 					// dynamisch, da dieser an dem Klassennamen hängt, der sich 
 					// ändern kann.
 					var whereFieldName;
+					var stagFieldName;
+					var myDateInMillisecs = new Date(me.config.maxSTAG).getTime();
 					for (const field of aZonesLayer.fields) {
 						if (field.name.endsWith("TEILMA")) {
 							whereFieldName = field.name;
-							break;
+						}
+						if (field.name.endsWith("STAG")) {
+							stagFieldName = field.name;
 						}
 					}
 
-					// Frage alle Koeffizienten ab
+					// Frage alle Zonen ab
 					aQuery.where = whereFieldName + " is not null";
 					aQuery.outFields = ["*"];
 					aZonesLayer.queryFeatures(aQuery, function (featureSet) {
 
 						for (const feature of featureSet.features) {
+							if (me.config.maxSTAG === undefined || feature.attributes[stagFieldName] <= myDateInMillisecs) {
 							zonesArray.push(feature.attributes);
+							}
 						}
 
 						if (zonesArray.length === 0) {
@@ -448,7 +459,11 @@ define([
 			 * oder durch das "X" in der Titelleiste des Panels selbst.
 			 */
 			onClose: function () {
-				console.log('onClose');
+
+				// Zerstören der Panel-Instanz, damit beim
+				// nächsten Start sicher alles zurück gesetzt ist.
+				var pm = PanelManager.getInstance();
+				pm.destroyPanel(this.id + "_panel");
 			},
 
 			onMinimize: function () {

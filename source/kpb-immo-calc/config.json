@@ -20,5 +20,6 @@
             "serviceName": "KPB_Gebietsgrenzen",
             "layerId": 0
         }
-    }
+    },
+    "maxSTAG" : "2021-01-01"
 }
