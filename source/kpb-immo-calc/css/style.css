@@ -20,21 +20,28 @@
     text-align:center;
 }
 
-.headerTextBoxSmall div {
-    width: 100%;
+.headerTextBoxSmall div{
     height: 25px; 
     background-color: lightblue;
+}
+
+.headerTextBoxSmall {
+    /* width: 60%; */
+    width: 108px;
+    height: 25px; 
     text-align:center;
 }
 
 .headerBoxLarge div {
-    width: 408%; 
+    /* width: 408%;  */
+    width: 366%;
     height: 25px; 
     background-color: lightblue; 
 }
 
 .textBoxSmall {
-    width: 100%; 
+    /* width: 60%;  */
+    width: 108px;
     height: 35px; 
 }
 
