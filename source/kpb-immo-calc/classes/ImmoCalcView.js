@@ -2,6 +2,7 @@ define([
     'dojo/_base/declare',
     "dojo/_base/lang",
     'dojo/store/Memory',
+    'dojo/number',
     'dijit/form/TextBox',
     'dijit/form/NumberSpinner',
     'dijit/Dialog',
@@ -17,6 +18,7 @@ define([
     declare,
     lang,
     Memory,
+    number,
     dijitTextbox,
     dijitNumberSpinner,
     dijitDialog,
@@ -263,8 +265,8 @@ define([
             //  Fixme Widget id hardcodiert
             var pm = PanelManager.getInstance()
             var aPanel = pm.getPanelById("_5_panel");
-            var height = this.visElements.length * 35 + 380;
-            aPanel.resize({ w: 760, h: height });
+            var height = this.visElements.length * 35 + 385;
+            aPanel.resize({ w: 686, h: height });
         },
 
         /**
@@ -622,23 +624,22 @@ define([
                 }
             })
             // Richtwert pro m*m
-            // auf 10 runden
-            var faktor = 10;
-            richtwertZone = Math.round(richtwertZone / faktor) * faktor;
+            if (this.changedInput === true) {
+                var faktor = 10;
+                richtwertZone = Math.round(richtwertZone / faktor) * faktor;
+            } else {
+                richtwertZone = Math.round(richtwertZone);
+            }
             angIRWBWO.set("value", richtwertZone + " €/m²");
 
             //  Richtwert Immobilie
             var whnflBWO = dijitRegistry.byId("whnflBWO");
             var aWertBWOValue = richtwertZone * whnflBWO.value;
             // auf 10K runden
-            faktor = 10000;
-            aWertBWOValue = Math.round(aWertBWOValue / faktor) * 10;
+            var faktor = 10000;
+            aWertBWOValue = Math.round(aWertBWOValue / faktor) * faktor;
             var wertBWO = dijitRegistry.byId("wertBWO");
-            if (aWertBWOValue > 0) {
-                wertBWO.set("value", aWertBWOValue + ".000 €")
-            } else {
-                wertBWO.set("value", "0 €")
-            };
+            wertBWO.set("value", number.format(aWertBWOValue) + " €")
         },
 
         /**
