@@ -56,7 +56,7 @@ define([
 					// auf den zentral eingestellten MODE zuzugreifen und über die aktuelle VIEW einen Dialog zu schalten.
 					"handleError": this.errorHandler()
 				});
-				this.view = new ImmoCalcView(this.engine);
+				this.view = new ImmoCalcView(this.engine,this.id);
 
 				this.readDefinitionsFromFeatureLayers();
 

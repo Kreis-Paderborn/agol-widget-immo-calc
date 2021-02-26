@@ -34,20 +34,18 @@ define([
 
     return declare(null, {
 
-        dummyOption: null,
         engine: null,
+        widgetId: null,
         visElements: new Array(),
         currentZonenIRW: null,
         coeffStore: new Map(),
         rwStore: new Map(),
         changedInput: false,
 
-        constructor: function (engine, options) {
+        constructor: function (engine, widgetId) {
 
             this.engine = engine;
-
-            if (options)
-                this.dummyOption = options.dummyOption;
+            this.widgetId = widgetId;
 
             var me = this;
 
@@ -262,10 +260,9 @@ define([
             this.calculateIRW()
 
             // Panel Breite und Höhe
-            //  Fixme Widget id hardcodiert
             var pm = PanelManager.getInstance()
-            var aPanel = pm.getPanelById("_5_panel");
-            var height = this.visElements.length * 35 + 385;
+            var aPanel = pm.getPanelById(this.widgetId + "_panel");
+            var height = this.visElements.length * 35 + 395;
             aPanel.resize({ w: 686, h: height });
         },
 
