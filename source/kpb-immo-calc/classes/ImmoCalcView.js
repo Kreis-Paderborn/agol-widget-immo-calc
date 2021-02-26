@@ -34,15 +34,13 @@ define([
 
         dummyOption: null,
         engine: null,
-        visElements: null,
+        visElements: new Array(),
         currentZonenIRW: null,
         coeffStore: new Map(),
         rwStore: new Map(),
-        changedInput: new Array(),
+        changedInput: false,
 
         constructor: function (engine, options) {
-
-            this.visElements = [];
 
             this.engine = engine;
 
@@ -89,27 +87,29 @@ define([
             this.generateTextElement(elementName, elementValue, "headerBoxLarge");
 
             elementName = "anmerkungLabel";
-            elementValue = "Der berechnete Immobilienpreis entspricht nicht dem Verkehrswert gem. §194 BauGB. Dieser kann nur duch ein Verkehrswert- gutachten ermittelt werden.";
-            document.getElementById(elementName).innerHTML = elementValue;
-
-            elementName = "anmerkungLabel2";
-            aLink = "<a href='https://www.kreis-paderborn.de/gutachterausschuss/Erreichbarkeit/erreichbarkeit.html'>Gutachterausschuss </a>";
-            elementValue = "Bei inhaltlichen Fragen wenden Sie sich bitte an den " + aLink;
-            document.getElementById(elementName).innerHTML = elementValue;
+            text1 = "Der berechnete Immobilienpreis entspricht nicht dem Verkehrswert gem. §194 BauGB. Dieser kann nur duch ein Verkehrswertgutachten ermittelt werden. ";
+            text2 = "Bei inhaltlichen Fragen wenden Sie sich bitte an den "
+            aLink = "<a href='https://www.kreis-paderborn.de/gutachterausschuss/Erreichbarkeit/erreichbarkeit.html' target='_blank'>Gutachterausschuss </a>";
+            document.getElementById(elementName).innerHTML = text1 + text2 + aLink;
 
             var standardButton = new Button({
-                label: "Standard",
+                label: "Zurücksetzen auf Richtwerte",
                 onClick: function () {
                     me.resetToRichtwert();
                 }
             }, "standardButton").startup();
 
-            var plotButton = new Button({
-                label: "Drucken",
-                onClick: function () {
-                    console.log("Drucken...");
-                }
-            }, "plotButton").startup();
+            // Erst nach bereitstellen der Funktion wieder aktivieren
+            // var plotButton = new Button({
+            //     label: "PDF erstellen",
+            //     onClick: function () {
+            //         console.log("Drucken...");
+            //     }
+            // }, "plotButton").startup();
+
+            elementName = "copyrightLabel";
+            text1 = "© Copyright auf den GA hinweisen. Der genaue Passus ist beim GA zu erfragen.";
+            document.getElementById(elementName).innerHTML = text1;
 
         },
 
@@ -231,7 +231,7 @@ define([
                 this.getStoreValuesForComboBox(aComboBox, value);
 
                 // Anpassen von InSteuerelement und RichtwertKoeffizient
-                if (this.changedInput.includes(lowerCaseValue) === false) {
+                if (this.changedInput === false) {
                     var newValue = tableConfig["Eigenschaften"][value]["WertInSteuerelement"];
                     aComboBox.textbox.value = newValue;
                     this.getCoeffForBWO(newValue, lowerCaseValue);
@@ -263,13 +263,13 @@ define([
             //  Fixme Widget id hardcodiert
             var pm = PanelManager.getInstance()
             var aPanel = pm.getPanelById("_5_panel");
-            var height = this.visElements.length * 35 + 385;
-            aPanel.resize({ w: 750, h: height });
+            var height = this.visElements.length * 35 + 380;
+            aPanel.resize({ w: 760, h: height });
         },
 
         /**
          * Erzeugt das DOM für den "Standard" Teil des HTML Dokuments
-         * @param {*} value Post- bzw Prefix des Elemetes 
+         * @param {*} value Post- bzw Prefix des Elements 
          */
         createHtmlElement: function (value) {
             var htmlFrag = document.createDocumentFragment();
@@ -322,31 +322,25 @@ define([
                     var aBWOElement = new dijitNumberSpinner({
                         value: elementBWOValue,
                         smallDelta: 1,
-                        // pattern: "###",
-                        constraints: { min: elementBWOUIControl["Min"], max: elementBWOUIControl["Max"], places: 0 },
+                        constraints: { min: elementBWOUIControl["Min"], max: elementBWOUIControl["Max"], places: 0, pattern: "#" },
                         id: elementBWOName,
                         class: "stdInputBox",
                         onChange: function (newValue) {
                             if (this.disabled === false) {
-                                me.changedInput.push(elementPrefix);
-                                me.getCoeffForBWO(newValue, elementPrefix);
-                                me.calculateIRW();
+                                var newValue = this.value;
+                                me.changeTrigger(newValue, elementPrefix);
                             }
                         },
                         onKeyUp: function (event) {
                             if (this.disabled === false) {
-                                me.changedInput.push(elementPrefix);
                                 var newValue = this.value;
-                                me.getCoeffForBWO(newValue, elementPrefix);
-                                me.calculateIRW();
+                                me.changeTrigger(newValue, elementPrefix);
                             }
                         },
                         onClick: function (event) {
                             if (this.disabled === false) {
-                                me.changedInput.push(elementPrefix);
                                 var newValue = this.value;
-                                me.getCoeffForBWO(newValue, elementPrefix);
-                                me.calculateIRW();
+                                me.changeTrigger(newValue, elementPrefix);
                             }
                         }
                     }, elementBWOName).startup();
@@ -359,9 +353,7 @@ define([
                         searchAttr: "name",
                         class: "stdInputBox",
                         onChange: function (newValue) {
-                            me.changedInput.push(elementPrefix);
-                            me.getCoeffForBWO(newValue, elementPrefix);
-                            me.calculateIRW();
+                            me.changeTrigger(newValue, elementPrefix);
                         }
                     }, elementBWOName).startup();
                     break;
@@ -370,22 +362,45 @@ define([
         },
 
         /**
-         * erzeugt die Auswahlliste für ComboBoxen oder definiert den Wertebereich für eine Zahleneingabe
-         * @param {*} aDijitElement Eingabeelement
-         * @param {*} feld Name des Eingabeelements
+         * trigger Methode für Eingaben
+         * @param {*} newValue 
+         * @param {*} elementPrefix 
          */
-        getStoreValuesForComboBox: function (aDijitElement, feld) {
+        changeTrigger: function (newValue, elementPrefix) {
+            var config = this.getCurrentConfig();
+            var aSteuerWert = config["Eigenschaften"][elementPrefix.toUpperCase()]["WertInSteuerelement"];
+            if (newValue != aSteuerWert) {
+                this.changedInput = true;
+                this.markChangedInput();
+            };
+            this.getCoeffForBWO(newValue, elementPrefix);
+            this.calculateIRW();
+        },
+
+        /**
+         * Holt den tableConfig für die im Header einestellten Werte
+         */
+        getCurrentConfig: function () {
             var StagBWO = dijitRegistry.byId("stagBWO");
             var currentStag = StagBWO.value;
             var genaBWO = dijitRegistry.byId("genaBWO");
             var currentGena = genaBWO.value;
             var teilmaBWO = dijitRegistry.byId("teilmaBWO");
             var currentTeilma = teilmaBWO.item.id;
-            var config = this.engine.getTableConfig(currentStag, currentTeilma, currentGena);
+            return this.engine.getTableConfig(currentStag, currentTeilma, currentGena);
+        },
+
+        /**
+         * erzeugt die Auswahlliste für ComboBoxen oder definiert den Wertebereich für eine Zahleneingabe
+         * @param {*} aDijitElement Eingabeelement
+         * @param {*} feld Name des Eingabeelements
+         */
+        getStoreValuesForComboBox: function (aDijitElement, feld) {
+            var config = this.getCurrentConfig();
             var aSteuerelement = config["Eigenschaften"][feld]["Steuerelement"]
             switch (aSteuerelement["Typ"]) {
                 case "ZAHLENEINGABE":
-                    aDijitElement.constraints = { min: aSteuerelement["Min"], max: aSteuerelement["Max"], places: 0 };
+                    aDijitElement.constraints = { min: aSteuerelement["Min"], max: aSteuerelement["Max"], places: 0, pattern: "#" };
                     break;
                 case "AUSWAHL":
                     var dataArray = aSteuerelement["Liste"];
@@ -575,26 +590,8 @@ define([
         getCoeffForBWO: function (newValue, elementPrefix) {
             var aCoeff;
             var IdIRW = elementPrefix + "IRW";
-
-            var StagBWO = dijitRegistry.byId("stagBWO");
-            var currentStag = StagBWO.value;
-            var genaBWO = dijitRegistry.byId("genaBWO");
-            var currentGena = genaBWO.value;
-            var teilmaBWO = dijitRegistry.byId("teilmaBWO");
-            var currentTeilma = teilmaBWO.item.id;
-            var config = this.engine.getTableConfig(currentStag, currentTeilma, currentGena);
-            var aUIControl = config["Eigenschaften"][elementPrefix.toUpperCase()]["Steuerelement"];
-
-            // Vom Richtwert abweichende Werte fett darstellen
-            var IdBWO = elementPrefix + "BWO";
-            var refValue = config["Eigenschaften"][elementPrefix.toUpperCase()]["WertInSteuerelement"];
-            var aBWOField = dijitRegistry.byId(IdBWO);
-            if (refValue == aBWOField.textbox.value) {
-                aBWOField.set("class", "stdInputBox");
-                this.changedInput.pop(elementPrefix);
-            } else {
-                aBWOField.set("class", "stdInputBoxBold");
-            };
+            var config = this.getCurrentConfig();
+            var aUIControl = config["Eigenschaften"][elementPrefix.toUpperCase()]["Steuerelement"]
 
             aCoeff = this.engine.mapValueToCoeff(newValue, aUIControl);
             aRichtwertCoeff = this.rwStore.get(elementPrefix);
@@ -605,18 +602,13 @@ define([
                 this.coeffStore.set(IdIRW, anpassungFaktor);
                 var anpassungProzent = (anpassungFaktor - 1) * 100;
                 var roundAnpassungProzent = Math.round(anpassungProzent)
-                if (roundAnpassungProzent != 0) {
-                    aIRWField.set("class", "textBoxSmallBold");
-                } else {
-                    aIRWField.set("class", "textBoxSmall");
-                }
 
                 aIRWField.set("value", roundAnpassungProzent + "%");
             }
         },
 
         /**
-         * Berechnung der angepasste Werte, gerundete Werte
+         * Berechnung der angepassten Werte, gerundeten Werte
          */
         calculateIRW: function () {
             var angIRWBWO = dijitRegistry.byId("angIRWBWO");
@@ -657,19 +649,25 @@ define([
             this.visElements.forEach(function (elementPrefix) {
                 var myName = (elementPrefix + "BWO");
                 var myBWO = dijitRegistry.byId(myName);
-                var StagBWO = dijitRegistry.byId("stagBWO");
-                var currentStag = StagBWO.value;
-                var genaBWO = dijitRegistry.byId("genaBWO");
-                var currentGena = genaBWO.value;
-                var teilmaBWO = dijitRegistry.byId("teilmaBWO");
-                var currentTeilma = teilmaBWO.item.id;
-                var config = me.engine.getTableConfig(currentStag, currentTeilma, currentGena);
+                var config = me.getCurrentConfig();
                 var richtwertValue = config["Eigenschaften"][elementPrefix.toUpperCase()]["WertInSteuerelement"];
                 myBWO.set("value", richtwertValue);
+                myBWO.set("class", "stdInputBox");
                 me.getCoeffForBWO(richtwertValue, elementPrefix);
-                me.changedInput.pop(elementPrefix);
             });
+            this.changedInput = false;
             this.calculateIRW();
+        },
+
+        /**
+         * Stezt die Ausprägung für alle sichtbaren Eingabelemente auf stdInputBoxBold
+         */
+        markChangedInput: function () {
+            this.visElements.forEach(function (elementPrefix) {
+                var IdBWO = elementPrefix + "BWO";
+                var aBWOField = dijitRegistry.byId(IdBWO);
+                aBWOField.set("class", "stdInputBoxBold");
+            })
         },
 
         /**
