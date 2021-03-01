@@ -56,7 +56,7 @@ define([
 					// auf den zentral eingestellten MODE zuzugreifen und über die aktuelle VIEW einen Dialog zu schalten.
 					"handleError": this.errorHandler()
 				});
-				this.view = new ImmoCalcView(this.engine,this.id);
+				this.view = new ImmoCalcView(this.engine, this.id);
 
 				this.readDefinitionsFromFeatureLayers();
 
@@ -198,7 +198,7 @@ define([
 
 						for (const feature of featureSet.features) {
 							var obj = {};
-							
+
 							if (me.config.maxSTAG === undefined || feature.attributes.STAG <= myDateInMillisecs) {
 								obj["WERT_AKS"] = feature.attributes.WERT_AKS;
 								obj["EIGN_AKS"] = feature.attributes.EIGN_AKS;
@@ -269,7 +269,7 @@ define([
 
 						for (const feature of featureSet.features) {
 							if (me.config.maxSTAG === undefined || feature.attributes[stagFieldName] <= myDateInMillisecs) {
-							zonesArray.push(feature.attributes);
+								zonesArray.push(feature.attributes);
 							}
 						}
 
@@ -318,7 +318,7 @@ define([
 
 				// Start mit Standard-Einstellung, wenn DB nicht geladen werden konnte.
 				// FIXME-AT: Ein zentrales FLAG auf der engine, was anzeigt, 
-				//           ob DB Daten vorhandne sind, wäre hilfreich.
+				//           ob DB Daten vorhanden sind, wäre hilfreich.
 				if (this.engine._coefficients === null) {
 					startCalculator(startSTAG, startTEILMA, startZONE);
 				} else {
@@ -330,24 +330,39 @@ define([
 						// Sicherstellen, dass es sich nicht um das Popup der Adresssuche handelt.
 						&& this.map.infoWindow.getSelectedFeature().attributes["Addr_type"] === undefined) {
 
+						// Da das Präfix bei den Feldnamen veränderlich ist, suchen wir hier zunächst
+						// die relevanten Feldnamen nach der Endung.
 						var featureFromPopup = this.map.infoWindow.getSelectedFeature();
+						var teilmaFieldName = null;
+						var stagFieldName = null;
+						var irwnameName = null;
 						for (const fullFieldname in featureFromPopup.attributes) {
-
-							if (fullFieldname.endsWith("STAG_TXT")) {
-								startSTAG = featureFromPopup.attributes[fullFieldname];
-							}
 							if (fullFieldname.endsWith("TEILMA")) {
-								startTEILMA = featureFromPopup.attributes[fullFieldname];
+								teilmaFieldName = fullFieldname;
+							}
+							if (fullFieldname.endsWith("STAG_TXT")) {
+								stagFieldName = fullFieldname;
 							}
 							if (fullFieldname.endsWith("NAME_IRW")) {
-								startZONE = featureFromPopup.attributes[fullFieldname];
+								irwnameName = fullFieldname;
 							}
 						}
-						startCalculator(startSTAG, startTEILMA, startZONE);
+						
+						if (teilmaFieldName !== null
+							&& stagFieldName !== null
+							&& irwnameName !== null) {
+
+							startSTAG = featureFromPopup.attributes[stagFieldName];
+							startTEILMA = featureFromPopup.attributes[teilmaFieldName];
+							startZONE = featureFromPopup.attributes[irwnameName];
+
+							startCalculator(startSTAG, startTEILMA, startZONE);
+							return;
+						}
 					}
 
 					// Start bei der Zone, die am Mittelpunkt der Karte liegt
-					else if (this.map.getZoom() > 1
+					if (this.map.getZoom() > 1
 						&& this.map.extent !== undefined
 						&& this.map.extent.getCenter() !== undefined) {
 
@@ -357,6 +372,27 @@ define([
 						query.outFields = ["*"];
 						var aFeatureLayer = this.featureLayers.IRW_ZONEN_AREA;
 						aFeatureLayer.queryFeatures(query, function (featureSet) {
+
+							for (const feature of featureSet.features) {
+								var numz = feature.attributes["NUMZ"];
+								var gesl = feature.attributes["GESL"];
+
+								if (gesl === "05774032") {
+									var pm = PanelManager.getInstance();
+									pm.destroyPanel(me.id + "_panel");
+									me.view.showDialog("Position im Stadtgebiet Paderborn", "Für den Bereich des Stadtgebietes Paderborn liegen in unserem System keine Immobilienrichtwerte vor.<br><br>Bitte wenden Sie sich an den Gutachterausschuss der Stadt Paderborn.");
+									return;
+								} else {
+
+									// FIXME-AT: Da wir aktuell nicht weiter prüfen, ob eine Fläche
+									//           wirklich valide ist (siehe ein Fixme weiter) verarbeiten
+									//           wir hier nur die ersten 9, welches dir für 01.01.2021 
+									//           relevanten Zonen sind.
+									if (numz <= 9) {
+										startZONE = feature.attributes["NAME_IRW"];
+									}
+								}
+							}
 							startZONE = featureSet.features[0].attributes["NAME_IRW"];
 
 							// FIXME-AT: STAG und TEILMA wird hier auf Standardwerte gelassen,
