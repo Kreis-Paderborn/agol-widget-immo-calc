@@ -466,7 +466,7 @@ define([
             return returnValue;
         },
 
-        
+
         mapDisplayNames: function (eignBoris, wertBoris) {
             var returnVal = "[" + eignBoris + ":" + wertBoris + "]"
 
@@ -712,7 +712,7 @@ define([
                 // Zeichenkette bei Zahleneingabe lässt auf eine Spanne schließen
                 if (typeof internalValue === "string") {
                     var range = this.splitRange(internalValue);
-                    internalValue = Math.round((range.Max + range.Min) / 2);
+                    internalValue = Math.round(((range.Max + range.Min) / 2)-0.1);
                 }
                 returnVal = internalValue;
 
