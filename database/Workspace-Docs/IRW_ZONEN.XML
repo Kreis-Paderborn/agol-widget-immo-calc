@@ -30,6 +30,26 @@
 <ModelName>OBJECTID</ModelName>
 </Field>
 <Field xsi:type='esri:Field'>
+<Name>GASL</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Gutachterausschusskennziffer</AliasName>
+<ModelName>GASL</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>GABE</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>140</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Bezeichnung des Gutachterausschusses</AliasName>
+<ModelName>GABE</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
 <Name>WNUM</Name>
 <Type>esriFieldTypeSmallInteger</Type>
 <IsNullable>false</IsNullable>
@@ -99,8 +119,6 @@
 <AliasName>Rechtswert</AliasName>
 <ModelName>YWERT</ModelName>
 </Field>
-
-
 <Field xsi:type='esri:Field'>
 <Name>BEZUG</Name>
 <Type>esriFieldTypeString</Type>
@@ -110,6 +128,26 @@
 <Scale>0</Scale>
 <AliasName>Bezugssystem</AliasName>
 <ModelName>BEZUG</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>IRKE</Name>
+<Type>esriFieldTypeSmallInteger</Type>
+<IsNullable>false</IsNullable>
+<Length>2</Length>
+<Precision>5</Precision>
+<Scale>0</Scale>
+<AliasName>Immobilienrichtwertkennung (Schlüssel)</AliasName>
+<ModelName>IRKE</ModelName>
+</Field>
+<Field xsi:type='esri:Field'>
+<Name>IRKE_TXT</Name>
+<Type>esriFieldTypeString</Type>
+<IsNullable>false</IsNullable>
+<Length>5</Length>
+<Precision>0</Precision>
+<Scale>0</Scale>
+<AliasName>Immobilienrichtwertkennung</AliasName>
+<ModelName>IRKE_TXT</ModelName>
 </Field>
 <Field xsi:type='esri:Field'>
 <Name>UDOK</Name>
@@ -368,7 +406,7 @@
 <Length>10</Length>
 <Precision>0</Precision>
 <Scale>0</Scale>
-<AliasName>Anzahl der Einheiten im Gebäude</AliasName>
+<AliasName>Anzahl der Wohneinheiten</AliasName>
 <ModelName>ANZEGEB</ModelName>
 </Field>
 <Field xsi:type='esri:Field'>
