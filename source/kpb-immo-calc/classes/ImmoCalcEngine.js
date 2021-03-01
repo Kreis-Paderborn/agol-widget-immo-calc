@@ -371,81 +371,102 @@ define([
 
 
         /**
-         * FIXME AT: Wir sollten hier einmal alle UIs erstellen und dann nur die 
-         *           für STAG und TEILMA zurückgeben.
-         * 
+         * Die Konfiguration der Steuerelemente wird durch die DB-Tabelle IRW_IMMOCALC_KOEFFIZIENTEN
+         * bestimmt. Diese Tabelle wird in dieser Methode ausgewertet und die Ergebnisse für weitere
+         * Anfragen gecached.
          * 
          * @param {*} stag 
          * @param {*} teilma 
          */
         deriveUiControlConfig: function (stag, teilma) {
+            var returnValue;
 
-            if (this._coefficients !== null) {
-                var config = {};
+            // Wenn die Koeffizienten nicht aus der Datenbank geladen werden konnten, 
+            // fallen wir auf die statische Dummy-Config zurück. Daher setzen wir hier bewusst "null".
+            if (this._coefficients === null) {
+                returnValue = null;
 
-                for (const row of this._coefficients) {
-                    if (row.STAG === stag && row.TEILMA === teilma) {
-                        if (config[row.EIGN_BORIS] === undefined) {
-                            config[row.EIGN_BORIS] = {};
+            } else {
+
+                // Nach dem ersten Ableiten wird das Ergebnis in 
+                // _uiControls gespeichert, sodass die Logik nur einmal
+                // durchlaufen werden muss.
+                if (this._uiControls === null) {
+
+                    var obj = {};
+
+                    for (const row of this._coefficients) {
+
+                        if (obj[row.STAG] === undefined) {
+                            obj[row.STAG] = {};
+                        }
+
+                        if (obj[row.STAG][row.TEILMA] === undefined) {
+                            obj[row.STAG][row.TEILMA] = {};
+                        }
+
+                        if (obj[row.STAG][row.TEILMA][row.EIGN_BORIS] === undefined) {
+                            obj[row.STAG][row.TEILMA][row.EIGN_BORIS] = {};
                         }
 
                         // Behandlung von Zahleneingabe
                         if (row.STEUERELEM.startsWith("ZAHLENEINGABE")) {
-                            config[row.EIGN_BORIS]["Typ"] = "ZAHLENEINGABE";
+                            obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Typ"] = "ZAHLENEINGABE";
                             var range = this.splitRange(row.WERT_BORIS);
 
                             // Alle Spannen werden gemerkt
                             // Diese kommen dann bei der Anwendung der Koeffizienten zum Einsatz
-                            if (config[row.EIGN_BORIS]["Spannen"] === undefined) {
-                                config[row.EIGN_BORIS]["Spannen"] = new Array();
+                            if (obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Spannen"] === undefined) {
+                                obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Spannen"] = new Array();
                             }
                             var rangeObj = {};
                             rangeObj["Min"] = range["Min"];
                             rangeObj["Max"] = range["Max"];
                             rangeObj["Koeffizient"] = row.KOEFF;
-                            config[row.EIGN_BORIS]["Spannen"].push(rangeObj);
+                            obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Spannen"].push(rangeObj);
 
                             // Der niedrigste MIN als Gesamt-Min
-                            if (config[row.EIGN_BORIS]["Min"] === undefined) {
-                                config[row.EIGN_BORIS]["Min"] = range["Min"];
+                            if (obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Min"] === undefined) {
+                                obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Min"] = range["Min"];
                             } else {
-                                if (config[row.EIGN_BORIS]["Min"] > range["Min"]) {
-                                    config[row.EIGN_BORIS]["Min"] = range["Min"];
+                                if (obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Min"] > range["Min"]) {
+                                    obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Min"] = range["Min"];
                                 }
                             }
 
                             // Der höchste Max als Gesamt-Ma
-                            if (config[row.EIGN_BORIS]["Max"] === undefined) {
-                                config[row.EIGN_BORIS]["Max"] = range["Max"];
+                            if (obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Max"] === undefined) {
+                                obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Max"] = range["Max"];
                             } else {
-                                if (config[row.EIGN_BORIS]["Max"] < range["Max"]) {
-                                    config[row.EIGN_BORIS]["Max"] = range["Max"];
+                                if (obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Max"] < range["Max"]) {
+                                    obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Max"] = range["Max"];
                                 }
                             }
                         }
 
                         // Behandlung von Auswahlwerten
                         else if (row.STEUERELEM.startsWith("AUSWAHL")) {
-                            config[row.EIGN_BORIS]["Typ"] = "AUSWAHL";
+                            obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Typ"] = "AUSWAHL";
 
                             // Alle Listeeinträge werden samt Koeffizienten gemerkt
-                            if (config[row.EIGN_BORIS]["Liste"] === undefined) {
-                                config[row.EIGN_BORIS]["Liste"] = new Array();
+                            if (obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Liste"] === undefined) {
+                                obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Liste"] = new Array();
                             }
                             var rangeObj = {};
                             rangeObj["name"] = this.mapDisplayNames(row.EIGN_BORIS, row.WERT_BORIS);
                             rangeObj["id"] = row.WERT_BORIS;
                             rangeObj["value"] = row.KOEFF;
-                            config[row.EIGN_BORIS]["Liste"].push(rangeObj);
+                            obj[row.STAG][row.TEILMA][row.EIGN_BORIS]["Liste"].push(rangeObj);
                         }
-
                     }
+                    this._uiControls = obj;
                 }
+                returnValue = this._uiControls[stag][teilma];
             }
-
-            return config;
+            return returnValue;
         },
 
+        
         mapDisplayNames: function (eignBoris, wertBoris) {
             var returnVal = "[" + eignBoris + ":" + wertBoris + "]"
 
