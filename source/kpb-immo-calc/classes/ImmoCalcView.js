@@ -49,6 +49,7 @@ define([
 
             var me = this;
 
+            // Überschriften Zeile
             var elementName = "firstLabel";
             var elementValue = "";
             this.generateTextElement(elementName, elementValue, "headerTextBox");
@@ -62,10 +63,12 @@ define([
             elementValue = "Anpassung";
             this.generateTextElement(elementName, elementValue, "headerTextBoxSmall");
 
+            // Trenner Zeile
             elementName = "seperatorBottom";
             elementValue = "";
             this.generateTextElement(elementName, elementValue, "headerBoxLarge");
 
+            // Ergebnisfelder
             elementName = "angIRWLabel";
             elementValue = "angepasster Richtwert IRW pro m² (gerundet)";
             this.generateTextElement(elementName, elementValue, "textBoxXtraLarge");
@@ -82,10 +85,12 @@ define([
             elementValue = "berechneter Wert";
             this.generateTextElement(elementName, elementValue, "textBoxSmall");
 
+            // Trenner Zeile
             elementName = "seperatorBottom2";
             elementValue = "";
             this.generateTextElement(elementName, elementValue, "headerBoxLarge");
 
+            // Anmerkungen
             elementName = "anmerkungLabel";
             text1 = "Der berechnete Immobilienpreis entspricht nicht dem Verkehrswert gem. §194 BauGB. Dieser kann nur duch ein Verkehrswertgutachten ermittelt werden. ";
             text2 = "Bei inhaltlichen Fragen wenden Sie sich bitte an den "
@@ -107,8 +112,9 @@ define([
             //     }
             // }, "plotButton").startup();
 
+            // Copyright Bemerkung
             elementName = "copyrightLabel";
-            text1 = "© Copyright auf den GA hinweisen. Der genaue Passus ist beim GA zu erfragen.";
+            text1 = "© Gutachterausschuss für Grundstückswerte im Kreis Paderborn, 2021";
             document.getElementById(elementName).innerHTML = text1;
 
         },
@@ -118,12 +124,12 @@ define([
          */
         initialiseHeader: function () {
             var me = this;
-            // teilmaLabel
+            // Beschriftung Teilmarkt
             var elementName = "teilmaLabel";
             var elementValue = "Teilmarkt";
             this.generateTextElement(elementName, elementValue, "stdTextBox");
 
-            // teilmaBWO
+            // Auswahlbox Teilmarkt
             var teilmaBWO = new FormComboBox({
                 id: "teilmaBWO",
                 name: "teilmaBWO",
@@ -134,12 +140,12 @@ define([
                 },
             }, "teilmaBWO").startup();
 
-            // genaLabel
+            // Beschriftung Zone/Gemeindename 
             elementName = "genaLabel";
             elementValue = "Name der Zone";
             this.generateTextElement(elementName, elementValue, "stdTextBox");
 
-            // genaBWO
+            // Auswahlbox Zone/Gemeindename 
             var genaBWO = new FormComboBox({
                 id: "genaBWO",
                 name: "genaBWO",
@@ -151,17 +157,17 @@ define([
                 }
             }, "genaBWO").startup();
 
-            // genaIRW
+            // Testbox für IRW
             elementName = "genaIRW";
             elementValue = "aValue";
             this.generateTextElement(elementName, elementValue, "textBoxSmall");
 
-            // stagLabel
+            // Beschriftung Stichtag
             elementName = "stagLabel";
             elementValue = "Stichtag des Immobilienrichtwertes";
             this.generateTextElement(elementName, elementValue, "textBoxLarge");
 
-            // stagBWO
+            // Auswahlbox Stichtag
             var stagBWO = new FormComboBox({
                 id: "stagBWO",
                 name: "stagBWO",
@@ -187,7 +193,7 @@ define([
             var genaIRW = dijitRegistry.byId("genaIRW");
             genaIRW.set("value", tableConfig["zonenIrw_txt"]);
             this.currentZonenIRW = tableConfig["zonenIrw"];
-            // initialer Aufruf der Gui
+            // initialer Aufruf der Gui aus dem Widget
             if (setControlsToNorm) {
                 this.setValuesInHeaderGui(stag, teilma, zone);
             };
@@ -226,7 +232,7 @@ define([
                     var elementNormValue = tableConfig["Eigenschaften"][value]["Richtwert"];
                     aNormTextBox.set("value", elementNormValue);
                 };
-                // Fixme die Auswahlmöglichkeiten und Spannen müssen nur bei einer Änderung des Teilmarktes angepasst werden.
+                // Anpassen der Auswahlmöglichkeiten und Spannen
                 var aComboBox = dijitRegistry.byId(lowerCaseValue + "BWO");
                 this.getStoreValuesForComboBox(aComboBox, value);
 
@@ -239,7 +245,6 @@ define([
                     newValue = aComboBox.value;
                     this.getCoeffForBWO(newValue, lowerCaseValue);
                 };
-
             }
             // aktuelle Elemente sichtbar schalten
             this.visElements.forEach(function (aValue) {
@@ -247,7 +252,6 @@ define([
                 var aElement = document.getElementById(elementId);
                 aElement.style = "display: true;"
             });
-
             // Bestimmen der Element die Unsichtbar geschaltet werden müssen
             var visDiff = oldVisElements.filter(x => this.visElements.indexOf(x) === -1);
             visDiff.forEach(function (aValue) {
@@ -255,14 +259,12 @@ define([
                 var aElement = document.getElementById(elementId);
                 aElement.style = "display: none;"
             });
-
             // Ergebnisfelder aktualisieren
             this.calculateIRW()
-
             // Panel Breite und Höhe
             var pm = PanelManager.getInstance()
             var aPanel = pm.getPanelById(this.widgetId + "_panel");
-            var height = this.visElements.length * 35 + 395;
+            var height = this.visElements.length * 35 + 400;
             aPanel.resize({ w: 686, h: height });
         },
 
@@ -321,12 +323,18 @@ define([
                     var aBWOElement = new dijitNumberSpinner({
                         value: elementBWOValue,
                         smallDelta: 1,
-                        constraints: { min: elementBWOUIControl["Min"], max: elementBWOUIControl["Max"], places: 0, pattern: "#" },
+                        rangeMessage: "Bitte einen Wert zwischen " + elementBWOUIControl["Min"] + " und " + elementBWOUIControl["Max"] + " eingeben.",
+                        invalidMessage: "Bitte eine Zahl eingeben.",
+                        constraints: {
+                            min: elementBWOUIControl["Min"],
+                            max: elementBWOUIControl["Max"],
+                            places: 0,
+                            pattern: "#"
+                        },
                         id: elementBWOName,
                         class: "stdInputBox",
                         onChange: function (newValue) {
                             if (this.disabled === false) {
-                                var newValue = this.value;
                                 me.changeTrigger(newValue, elementPrefix);
                             }
                         },
@@ -357,7 +365,6 @@ define([
                     }, elementBWOName).startup();
                     break;
             }
-
         },
 
         /**
@@ -399,7 +406,13 @@ define([
             var aSteuerelement = config["Eigenschaften"][feld]["Steuerelement"]
             switch (aSteuerelement["Typ"]) {
                 case "ZAHLENEINGABE":
-                    aDijitElement.constraints = { min: aSteuerelement["Min"], max: aSteuerelement["Max"], places: 0, pattern: "#" };
+                    aDijitElement.set("rangeMessage", "Bitte einen Wert zwischen " + aSteuerelement["Min"] + " und " + aSteuerelement["Max"] + " eingeben.");
+                    aDijitElement.set("constraints", {
+                        min: aSteuerelement["Min"],
+                        max: aSteuerelement["Max"],
+                        places: 0,
+                        pattern: "#"
+                    });
                     break;
                 case "AUSWAHL":
                     var dataArray = aSteuerelement["Liste"];
@@ -408,7 +421,6 @@ define([
                     });
                     break;
             }
-
         },
 
         /**
@@ -545,7 +557,6 @@ define([
                     this.showTable(stag, teilma, zone);
                     break;
             };
-
         },
 
         /**
