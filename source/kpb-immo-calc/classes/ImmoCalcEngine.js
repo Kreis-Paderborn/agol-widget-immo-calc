@@ -712,7 +712,19 @@ define([
                 // Zeichenkette bei Zahleneingabe lässt auf eine Spanne schließen
                 if (typeof internalValue === "string") {
                     var range = this.splitRange(internalValue);
-                    internalValue = Math.round(((range.Max + range.Min) / 2)-0.1);
+
+                    // Runden auf Mittelwert
+                    // ---------------------
+                    // Da die Spannen etwas uneinheitlich definiert sind, können
+                    // wir nicht immer kaufmännisch runden, um auf saubere 5er-Blöcke zu kommen
+                    //
+                    //  70-119 --> 94,5 (kaufmännisch auf 95)
+                    //  51-100 --> 75,5 (nicht kaufmännisch auf 75, daher Korrekturfaktor)
+                    var correction = 0.0;
+                    if (range.Min % 2 === 1) {
+                        correction = -0.1;
+                    }
+                    internalValue = Math.round(((range.Max + range.Min) / 2)+correction);
                 }
                 returnVal = internalValue;
 
