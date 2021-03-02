@@ -14,6 +14,19 @@
     ;
 }
 
+#anzegebLabel {
+    width: 168px !important;
+}
+
+#widget_seperatorBottom {
+    border-color: transparent; 
+}
+
+#widget_seperatorBottom2 {
+    border-color: transparent; 
+}
+
+
 .headerTextBox div {
     height: 25px; 
     background-color: lightblue;
@@ -34,7 +47,7 @@
 
 .headerBoxLarge div {
     /* width: 408%;  */
-    width: 366%;
+    width: 367%;
     height: 25px; 
     background-color: lightblue; 
 }

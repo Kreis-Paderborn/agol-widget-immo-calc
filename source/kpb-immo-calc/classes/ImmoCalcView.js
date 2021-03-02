@@ -240,10 +240,12 @@ define([
                 if (this.changedInput === false) {
                     var newValue = tableConfig["Eigenschaften"][value]["WertInSteuerelement"];
                     aComboBox.textbox.value = newValue;
+                    aComboBox.set("class", "stdInputBox");
                     this.getCoeffForBWO(newValue, lowerCaseValue);
                 } else {
                     newValue = aComboBox.value;
                     this.getCoeffForBWO(newValue, lowerCaseValue);
+                    this.markChangedInput();
                 };
             }
             // aktuelle Elemente sichtbar schalten
@@ -257,7 +259,9 @@ define([
             visDiff.forEach(function (aValue) {
                 var elementId = "row" + aValue;
                 var aElement = document.getElementById(elementId);
-                aElement.style = "display: none;"
+                if (aElement != null) {
+                    aElement.style = "display: none;"
+                }
             });
             // Ergebnisfelder aktualisieren
             this.calculateIRW()
