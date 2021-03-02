@@ -380,7 +380,7 @@ define([
 								if (gesl === "05774032") {
 									var pm = PanelManager.getInstance();
 									pm.destroyPanel(me.id + "_panel");
-									me.view.showDialog("Position im Stadtgebiet Paderborn", "Für den Bereich des Stadtgebietes Paderborn liegen in unserem System keine Immobilienrichtwerte vor.<br><br>Bitte wenden Sie sich an den Gutachterausschuss der Stadt Paderborn.");
+									me.view.showDialog("Position im Stadtgebiet Paderborn", "Für den Bereich des Stadtgebietes Paderborn liegen in unserem System keine Immobilienrichtwerte vor.<br><br>Der Kalkulator kann daher in diesem Bereich nicht gestartet werden.");
 									return;
 								} else {
 
