@@ -35,7 +35,7 @@ define([
     return declare(null, {
 
         engine: null,
-        widgetId: null,
+        myPanel: null,
         visElements: new Array(),
         currentZonenIRW: null,
         coeffStore: new Map(),
@@ -45,10 +45,25 @@ define([
         constructor: function (engine, widgetId) {
 
             this.engine = engine;
-            this.widgetId = widgetId;
+            // Gui auf spätere Größe initialisieren
+            var pm = PanelManager.getInstance()
+            this.myPanel = pm.getPanelById(widgetId + "_panel");
+            this.myPanel.resize({ w: 686, h: 540 });
 
+            // Anzeige während des Aufbaus der Gui
+            var elementName = "anmerkungLabel";
+            var text = "<font size='4'> Hole Daten...</font>";
+            document.getElementById(elementName).innerHTML = text;
+            document.getElementById("rowStag").style = "display: none";
+            document.getElementById("rowTeilma").style = "display: none";
+            document.getElementById("rowGena").style = "display: none";
+        },
+
+        /**
+         * Erzeugt den statischen Teil der Gui
+         */
+        buildBaseGui: function () {
             var me = this;
-
             // Überschriften Zeile
             var elementName = "firstLabel";
             var elementValue = "";
@@ -116,7 +131,6 @@ define([
             elementName = "copyrightLabel";
             text1 = "© Gutachterausschuss für Grundstückswerte im Kreis Paderborn, 2021";
             document.getElementById(elementName).innerHTML = text1;
-
         },
 
         /**
@@ -179,6 +193,13 @@ define([
                 }
             }, "stagBWO").startup();
 
+            // Sichtbar schalten der Header Elemente
+            document.getElementById("rowStag").style = "display: true";
+            document.getElementById("rowTeilma").style = "display: true";
+            document.getElementById("rowGena").style = "display: true";
+
+            // Erzeugen der statischen GUI Elemente unterhalb des Headers
+            this.buildBaseGui();
         },
 
         /**
@@ -265,11 +286,9 @@ define([
             });
             // Ergebnisfelder aktualisieren
             this.calculateIRW()
-            // Panel Breite und Höhe
-            var pm = PanelManager.getInstance()
-            var aPanel = pm.getPanelById(this.widgetId + "_panel");
+            // Panel Höhe
             var height = this.visElements.length * 35 + 400;
-            aPanel.resize({ w: 686, h: height });
+            this.myPanel.resize({ h: height });
         },
 
         /**
