@@ -327,6 +327,10 @@ define([
 					if (this.map.infoWindow !== undefined
 						&& this.map.infoWindow.getSelectedFeature() !== undefined
 
+						// Wenn das Popup weggeklickt wurde, berücksichtigen wir es nicht
+						// Dann würde die CSS-Klasse "esriPopupHidden" enthalten sein.
+						&& this.map.infoWindow.domNode.className.includes("esriPopupVisible")
+
 						// Sicherstellen, dass es sich nicht um das Popup der Adresssuche handelt.
 						&& this.map.infoWindow.getSelectedFeature().attributes["Addr_type"] === undefined) {
 
