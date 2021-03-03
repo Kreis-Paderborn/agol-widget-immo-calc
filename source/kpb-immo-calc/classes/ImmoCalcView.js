@@ -260,7 +260,7 @@ define([
                 // Anpassen von InSteuerelement und RichtwertKoeffizient
                 if (this.changedInput === false) {
                     var newValue = tableConfig["Eigenschaften"][value]["WertInSteuerelement"];
-                    aComboBox.textbox.value = newValue;
+                    aComboBox.set("value", newValue);
                     aComboBox.set("class", "stdInputBox");
                     this.getCoeffForBWO(newValue, lowerCaseValue);
                 } else {
