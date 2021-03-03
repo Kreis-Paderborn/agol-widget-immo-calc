@@ -5,3 +5,4 @@ CODE    TITEL                               BEMERKUNG
 0002    Ungültiger Steuerelement-Typ        Es werden nur die Typen AUSWAHL und ZAHLENEINGABE unterstützt. Andere Werte in der DB führen zu einem Fehler.
 0003    Leerer FeatureLayer                 Ein benötigter FeatureLayer ist zwar vorhanden, enthält aber keine Daten.
 0004    Benötigtes Feld nicht belegt        Ein Feld, welches in der DB nicht als Pflichtfeld definiert ist, wird benötigt. Enthält aber keine Daten.
+0005    Zonenflächen nicht verfügbar        Beim Start des Kalkulators wird anhand von IRW_ZONEN_AREA die initilae Zone ermittelt. Mit diesem Layer besteht ein Problem.

@@ -1,10 +1,8 @@
 define([
 	'dojo/_base/declare',
 	"dojo/_base/lang",
-	'dojo/store/Memory',
 	'jimu/BaseWidget',
 	'jimu/PanelManager',
-	'esri/layers/FeatureLayer',
 	'./classes/ImmoCalcEngine',
 	'./classes/ImmoCalcView',
 	'dijit/layout/TabContainer',
@@ -13,10 +11,8 @@ define([
 	function (
 		declare,
 		lang,
-		Memory,
 		BaseWidget,
 		PanelManager,
-		FeatureLayer,
 		ImmoCalcEngine,
 		ImmoCalcView
 	) {
@@ -39,17 +35,6 @@ define([
 				this.inherited(arguments);
 				this.featureLayers = this.collectFeatureLayersFromMap();
 
-				// var aFeatureLayer = new FeatureLayer("https://giscloud.gkdpb.de/geodienste/rest/services/open/KPB_Gebietsgrenzen/MapServer/2");
-				// this.map.on('click', function (mouseEvent) {
-				// 	var query = new esri.tasks.Query();
-				// 	query.geometry = mouseEvent.mapPoint;
-				// 	query.outFields = ["*"];
-
-				// 	aFeatureLayer.queryFeatures(query, function (featureSet) {
-				// 		test = featureSet.features[0].attributes;
-				// 	});
-				// });
-
 				this.engine = new ImmoCalcEngine({
 
 					// Wir übergeben hier den ErrorHandler, um der Engine die Möglichkeit zu geben,
@@ -59,19 +44,6 @@ define([
 				this.view = new ImmoCalcView(this.engine, this.id);
 
 				this.readDefinitionsFromFeatureLayers();
-
-				// Definiere eine globale Variable, um festzustellen ob
-				// der Anwender ein Gerät mit Touch benutzt.
-				// Achtung: der Wert kann frühestens nach der ersten Benutzerinteraktion
-				// auf TRUE gesetzt sein.
-				window.userIsTouching = false;
-				window.addEventListener('touchstart', function onFirstTouch() {
-					// we could use a class
-					window.userIsTouching = true;
-
-					// we only need to know once that a human touched the screen, so we can stop listening now
-					window.removeEventListener('touchstart', onFirstTouch, false);
-				}, false);
 
 			},
 
@@ -297,7 +269,12 @@ define([
 			},
 
 			ready: function () {
-				console.log("Fertig!");
+				console.log("");
+				console.log("--------------------------");
+				console.log("Daten erfolgreich geladen!");
+				console.log("--------------------------");
+				console.log("");
+
 				gEngine = this.engine;
 				var me = this;
 
@@ -351,7 +328,7 @@ define([
 								irwnameName = fullFieldname;
 							}
 						}
-						
+
 						if (teilmaFieldName !== null
 							&& stagFieldName !== null
 							&& irwnameName !== null) {
@@ -374,47 +351,63 @@ define([
 						var query = new esri.tasks.Query();
 						query.geometry = centerPoint;
 						query.outFields = ["*"];
-						var aFeatureLayer = this.featureLayers.IRW_ZONEN_AREA;
-						aFeatureLayer.queryFeatures(query, function (featureSet) {
+						var anAreaFeatureLayer = this.featureLayers.IRW_ZONEN_AREA;
+						if (anAreaFeatureLayer !== undefined) {
 
-							for (const feature of featureSet.features) {
-								var numz = feature.attributes["NUMZ"];
-								var gesl = feature.attributes["GESL"];
+							anAreaFeatureLayer.queryFeatures(query, function (featureSet) {
 
-								if (gesl === "05774032") {
-									var pm = PanelManager.getInstance();
-									pm.destroyPanel(me.id + "_panel");
-									me.view.showDialog("Position im Stadtgebiet Paderborn", "Für den Bereich des Stadtgebietes Paderborn liegen in unserem System keine Immobilienrichtwerte vor.<br><br>Der Kalkulator kann daher in diesem Bereich nicht gestartet werden.");
-									return;
-								} else {
+								if (featureSet.features.length > 0) {
+									for (const feature of featureSet.features) {
+										var numz = feature.attributes["NUMZ"];
+										var gesl = feature.attributes["GESL"];
 
-									// FIXME-AT: Da wir aktuell nicht weiter prüfen, ob eine Fläche
-									//           wirklich valide ist (siehe ein Fixme weiter) verarbeiten
-									//           wir hier nur die ersten 9, welches dir für 01.01.2021 
-									//           relevanten Zonen sind.
-									if (numz <= 9) {
-										startZONE = feature.attributes["NAME_IRW"];
+										if (gesl === "05774032") {
+											var pm = PanelManager.getInstance();
+											pm.destroyPanel(me.id + "_panel");
+											me.view.showDialog("Position im Stadtgebiet Paderborn", "Für den Bereich des Stadtgebietes Paderborn liegen in unserem System keine Immobilienrichtwerte vor.<br><br>Der Kalkulator kann daher in diesem Bereich nicht gestartet werden.");
+											return;
+										} else {
+
+											// FIXME-AT: Da wir aktuell nicht weiter prüfen, ob eine Fläche
+											//           wirklich valide ist (siehe ein Fixme weiter) verarbeiten
+											//           wir hier nur die ersten 9, welches dir für 01.01.2021 
+											//           relevanten Zonen sind.
+											if (numz <= 9) {
+												startZONE = feature.attributes["NAME_IRW"];
+											}
+										}
+									}
+									startZONE = featureSet.features[0].attributes["NAME_IRW"];
+
+									// FIXME-AT: STAG und TEILMA wird hier auf Standardwerte gelassen,
+									//           ohne zu prüfe, ob es die Komination für die Zone gibt.
+									//           Außerdem könnten auch mehrer Zonen an einer Steller vorkommen.
+									//           Wie verwenden aber nur das 1. aus den gefundenen Features.
+									startCalculator(startSTAG, startTEILMA, startZONE);
+								}
+
+								else {
+									var continueAfterError = this.handleError("0005", "Zonenflächen nicht verfügbar", "FeatureLayer IRW_ZONEN_AREA ist vorhanden, enthält aber keine Daten.", true);
+									if (continueAfterError) {
+										startCalculator(startSTAG, startTEILMA, startZONE);
 									}
 								}
+							});
+							return;
+						} else {
+							var continueAfterError = this.handleError("0005", "Zonenflächen nicht verfügbar", "FeatureLayer IRW_ZONEN_AREA nicht verfügbar.", true);
+							if (continueAfterError) {
+								startCalculator(startSTAG, startTEILMA, startZONE);
+								return;
 							}
-							startZONE = featureSet.features[0].attributes["NAME_IRW"];
+						}
 
-							// FIXME-AT: STAG und TEILMA wird hier auf Standardwerte gelassen,
-							//           ohne zu prüfe, ob es die Komination für die Zone gibt.
-							//           Außerdem könnten auch mehrer Zonen an einer Steller vorkommen.
-							//           Wie verwenden aber nur das 1. aus den gefundenen Features.
-							startCalculator(startSTAG, startTEILMA, startZONE);
-						});
 
 					}
 
 					// Rückfallebene: Start mit Standardwert "Borchen"
-					else {
-						startCalculator(startSTAG, startTEILMA, startZONE);
-					}
+					startCalculator(startSTAG, startTEILMA, startZONE);
 				}
-
-
 			},
 			readyHandler: function () {
 				me = this;
@@ -476,23 +469,6 @@ define([
 				}
 			},
 
-
-
-
-
-
-			// onReceiveData: function (name, widgetId, data, historyData) {
-
-			// 	if (name === "Search"
-			// 		&& data.selectResult
-			// 		&& data.selectResult.result
-			// 		&& data.selectResult.result.name) {
-			// 		console.log(data.selectResult.result.name);
-			// 		console.log(data.selectResult.result.feature.geometry);
-			// 	}
-			// },
-
-
 			/**
 			 * Wird beim Schließen des Panels aufgerufen.
 			 * Entweder durch die Schaltfläche in der Toolbar
@@ -507,28 +483,27 @@ define([
 			},
 
 			onMinimize: function () {
-				console.log('onMinimize');
+				//console.log('onMinimize');
 			},
 
 			onMaximize: function () {
-				console.log('onMaximize');
+				//console.log('onMaximize');
 			},
 
 			onSignIn: function (credential) {
-				/* jshint unused:false*/
-				console.log('onSignIn');
+				//console.log('onSignIn');
 			},
 
 			onSignOut: function () {
-				console.log('onSignOut');
+				//console.log('onSignOut');
 			},
 
 			onPositionChange: function () {
-				console.log('onPositionChange');
+				//console.log('onPositionChange');
 			},
 
 			resize: function () {
-				console.log('resize');
+				// console.log('resize');
 			}
 
 			//methods to communication between widgets:
