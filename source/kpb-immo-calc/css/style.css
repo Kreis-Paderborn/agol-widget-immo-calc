@@ -30,6 +30,10 @@
     visibility: hidden !important;
 }
 
+.max-btn {
+    visibility: hidden;
+}
+
 .headerTextBox div {
     height: 25px; 
     background-color: lightblue;
