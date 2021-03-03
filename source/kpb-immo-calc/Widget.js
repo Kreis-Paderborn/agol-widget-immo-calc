@@ -1,10 +1,8 @@
 define([
 	'dojo/_base/declare',
 	"dojo/_base/lang",
-	'dojo/store/Memory',
 	'jimu/BaseWidget',
 	'jimu/PanelManager',
-	'esri/layers/FeatureLayer',
 	'./classes/ImmoCalcEngine',
 	'./classes/ImmoCalcView',
 	'dijit/layout/TabContainer',
@@ -13,10 +11,8 @@ define([
 	function (
 		declare,
 		lang,
-		Memory,
 		BaseWidget,
 		PanelManager,
-		FeatureLayer,
 		ImmoCalcEngine,
 		ImmoCalcView
 	) {
@@ -39,17 +35,6 @@ define([
 				this.inherited(arguments);
 				this.featureLayers = this.collectFeatureLayersFromMap();
 
-				// var aFeatureLayer = new FeatureLayer("https://giscloud.gkdpb.de/geodienste/rest/services/open/KPB_Gebietsgrenzen/MapServer/2");
-				// this.map.on('click', function (mouseEvent) {
-				// 	var query = new esri.tasks.Query();
-				// 	query.geometry = mouseEvent.mapPoint;
-				// 	query.outFields = ["*"];
-
-				// 	aFeatureLayer.queryFeatures(query, function (featureSet) {
-				// 		test = featureSet.features[0].attributes;
-				// 	});
-				// });
-
 				this.engine = new ImmoCalcEngine({
 
 					// Wir übergeben hier den ErrorHandler, um der Engine die Möglichkeit zu geben,
@@ -59,19 +44,6 @@ define([
 				this.view = new ImmoCalcView(this.engine, this.id);
 
 				this.readDefinitionsFromFeatureLayers();
-
-				// Definiere eine globale Variable, um festzustellen ob
-				// der Anwender ein Gerät mit Touch benutzt.
-				// Achtung: der Wert kann frühestens nach der ersten Benutzerinteraktion
-				// auf TRUE gesetzt sein.
-				window.userIsTouching = false;
-				window.addEventListener('touchstart', function onFirstTouch() {
-					// we could use a class
-					window.userIsTouching = true;
-
-					// we only need to know once that a human touched the screen, so we can stop listening now
-					window.removeEventListener('touchstart', onFirstTouch, false);
-				}, false);
 
 			},
 
@@ -297,7 +269,12 @@ define([
 			},
 
 			ready: function () {
-				console.log("Fertig!");
+				console.log("");
+				console.log("--------------------------");
+				console.log("Daten erfolgreich geladen!");
+				console.log("--------------------------");
+				console.log("");
+
 				gEngine = this.engine;
 				var me = this;
 
@@ -413,8 +390,6 @@ define([
 						startCalculator(startSTAG, startTEILMA, startZONE);
 					}
 				}
-
-
 			},
 			readyHandler: function () {
 				me = this;
@@ -476,23 +451,6 @@ define([
 				}
 			},
 
-
-
-
-
-
-			// onReceiveData: function (name, widgetId, data, historyData) {
-
-			// 	if (name === "Search"
-			// 		&& data.selectResult
-			// 		&& data.selectResult.result
-			// 		&& data.selectResult.result.name) {
-			// 		console.log(data.selectResult.result.name);
-			// 		console.log(data.selectResult.result.feature.geometry);
-			// 	}
-			// },
-
-
 			/**
 			 * Wird beim Schließen des Panels aufgerufen.
 			 * Entweder durch die Schaltfläche in der Toolbar
@@ -507,28 +465,27 @@ define([
 			},
 
 			onMinimize: function () {
-				console.log('onMinimize');
+				//console.log('onMinimize');
 			},
 
 			onMaximize: function () {
-				console.log('onMaximize');
+				//console.log('onMaximize');
 			},
 
 			onSignIn: function (credential) {
-				/* jshint unused:false*/
-				console.log('onSignIn');
+				//console.log('onSignIn');
 			},
 
 			onSignOut: function () {
-				console.log('onSignOut');
+				//console.log('onSignOut');
 			},
 
 			onPositionChange: function () {
-				console.log('onPositionChange');
+				//console.log('onPositionChange');
 			},
 
 			resize: function () {
-				console.log('resize');
+				// console.log('resize');
 			}
 
 			//methods to communication between widgets:
