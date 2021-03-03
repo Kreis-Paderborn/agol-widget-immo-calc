@@ -328,7 +328,7 @@ define([
 								irwnameName = fullFieldname;
 							}
 						}
-						
+
 						if (teilmaFieldName !== null
 							&& stagFieldName !== null
 							&& irwnameName !== null) {
@@ -351,44 +351,62 @@ define([
 						var query = new esri.tasks.Query();
 						query.geometry = centerPoint;
 						query.outFields = ["*"];
-						var aFeatureLayer = this.featureLayers.IRW_ZONEN_AREA;
-						aFeatureLayer.queryFeatures(query, function (featureSet) {
+						var anAreaFeatureLayer = this.featureLayers.IRW_ZONEN_AREA;
+						if (anAreaFeatureLayer !== undefined) {
 
-							for (const feature of featureSet.features) {
-								var numz = feature.attributes["NUMZ"];
-								var gesl = feature.attributes["GESL"];
+							anAreaFeatureLayer.queryFeatures(query, function (featureSet) {
 
-								if (gesl === "05774032") {
-									var pm = PanelManager.getInstance();
-									pm.destroyPanel(me.id + "_panel");
-									me.view.showDialog("Position im Stadtgebiet Paderborn", "Für den Bereich des Stadtgebietes Paderborn liegen in unserem System keine Immobilienrichtwerte vor.<br><br>Der Kalkulator kann daher in diesem Bereich nicht gestartet werden.");
-									return;
-								} else {
+								if (featureSet.features.length > 0) {
+									for (const feature of featureSet.features) {
+										var numz = feature.attributes["NUMZ"];
+										var gesl = feature.attributes["GESL"];
 
-									// FIXME-AT: Da wir aktuell nicht weiter prüfen, ob eine Fläche
-									//           wirklich valide ist (siehe ein Fixme weiter) verarbeiten
-									//           wir hier nur die ersten 9, welches dir für 01.01.2021 
-									//           relevanten Zonen sind.
-									if (numz <= 9) {
-										startZONE = feature.attributes["NAME_IRW"];
+										if (gesl === "05774032") {
+											var pm = PanelManager.getInstance();
+											pm.destroyPanel(me.id + "_panel");
+											me.view.showDialog("Position im Stadtgebiet Paderborn", "Für den Bereich des Stadtgebietes Paderborn liegen in unserem System keine Immobilienrichtwerte vor.<br><br>Der Kalkulator kann daher in diesem Bereich nicht gestartet werden.");
+											return;
+										} else {
+
+											// FIXME-AT: Da wir aktuell nicht weiter prüfen, ob eine Fläche
+											//           wirklich valide ist (siehe ein Fixme weiter) verarbeiten
+											//           wir hier nur die ersten 9, welches dir für 01.01.2021 
+											//           relevanten Zonen sind.
+											if (numz <= 9) {
+												startZONE = feature.attributes["NAME_IRW"];
+											}
+										}
+									}
+									startZONE = featureSet.features[0].attributes["NAME_IRW"];
+
+									// FIXME-AT: STAG und TEILMA wird hier auf Standardwerte gelassen,
+									//           ohne zu prüfe, ob es die Komination für die Zone gibt.
+									//           Außerdem könnten auch mehrer Zonen an einer Steller vorkommen.
+									//           Wie verwenden aber nur das 1. aus den gefundenen Features.
+									startCalculator(startSTAG, startTEILMA, startZONE);
+								}
+
+								else {
+									var continueAfterError = this.handleError("0005", "Zonenflächen nicht verfügbar", "FeatureLayer IRW_ZONEN_AREA ist vorhanden, enthält aber keine Daten.", true);
+									if (continueAfterError) {
+										startCalculator(startSTAG, startTEILMA, startZONE);
 									}
 								}
+							});
+							return;
+						} else {
+							var continueAfterError = this.handleError("0005", "Zonenflächen nicht verfügbar", "FeatureLayer IRW_ZONEN_AREA nicht verfügbar.", true);
+							if (continueAfterError) {
+								startCalculator(startSTAG, startTEILMA, startZONE);
+								return;
 							}
-							startZONE = featureSet.features[0].attributes["NAME_IRW"];
+						}
 
-							// FIXME-AT: STAG und TEILMA wird hier auf Standardwerte gelassen,
-							//           ohne zu prüfe, ob es die Komination für die Zone gibt.
-							//           Außerdem könnten auch mehrer Zonen an einer Steller vorkommen.
-							//           Wie verwenden aber nur das 1. aus den gefundenen Features.
-							startCalculator(startSTAG, startTEILMA, startZONE);
-						});
 
 					}
 
 					// Rückfallebene: Start mit Standardwert "Borchen"
-					else {
-						startCalculator(startSTAG, startTEILMA, startZONE);
-					}
+					startCalculator(startSTAG, startTEILMA, startZONE);
 				}
 			},
 			readyHandler: function () {
