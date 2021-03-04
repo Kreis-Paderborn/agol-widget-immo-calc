@@ -108,8 +108,8 @@ define([
             // Anmerkungen
             elementName = "anmerkungLabel";
             text1 = "Der berechnete Immobilienpreis entspricht nicht dem Verkehrswert gem. §194 BauGB. Dieser kann nur duch ein Verkehrswertgutachten ermittelt werden. ";
-            text2 = "Bei inhaltlichen Fragen wenden Sie sich bitte an den "
-            aLink = "<a href='https://www.kreis-paderborn.de/gutachterausschuss/Erreichbarkeit/erreichbarkeit.html' target='_blank'>Gutachterausschuss </a>";
+            text2 = "Erläuterungen zu den Merkmalen und Informationen zu Ansprechpartnern finden Sie auf den ";
+            aLink = "<a href='https://www.kreis-paderborn.de/gutachterausschuss/Produkte/Immobilienrichtwerte---Kalkula/immobilienrichtwerte---kalkulator.html' target='_blank'> Internetseiten des Gutachterausschusses</a>.";
             document.getElementById(elementName).innerHTML = text1 + text2 + aLink;
 
             var standardButton = new Button({
