@@ -387,7 +387,7 @@ define([
 								}
 
 								else {
-									var continueAfterError = this.handleError("0005", "Zonenflächen nicht verfügbar", "FeatureLayer IRW_ZONEN_AREA ist vorhanden, enthält aber keine Daten.", true);
+									var continueAfterError = me.handleError("0005", "Zonenflächen nicht verfügbar", "FeatureLayer IRW_ZONEN_AREA ist vorhanden, enthält aber keine Daten.", true);
 									if (continueAfterError) {
 										startCalculator(startSTAG, startTEILMA, startZONE);
 									}
@@ -448,7 +448,7 @@ define([
 					prodTitle = "Es ist ein Fehler aufgetreten";
 					prodMessage = "Aktuell besteht ein Problem mit der Anzeige des Immobilien-Preis-Kalkulators.<br><br>"
 						+ "Bitte versuchen Sie es später noch einmal.<br>"
-						+ "Wenn das Problem weiterhin besteht, wenden Sie sich bitte an<br>GIS@Kreis-Paderborn.de.<br><br>Fehlercode: " + errorCode;
+						+ "Wenn das Problem weiterhin besteht, wenden Sie sich bitte an<br><a href=\"mailto:GIS@Kreis-Paderborn.de\">GIS@Kreis-Paderborn.de</a>.<br><br>Fehlercode: " + errorCode;
 
 					this.view.showDialog(prodTitle, prodMessage);
 
