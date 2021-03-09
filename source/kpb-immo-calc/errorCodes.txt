@@ -6,3 +6,4 @@ CODE    TITEL                               BEMERKUNG
 0003    Leerer FeatureLayer                 Ein benötigter FeatureLayer ist zwar vorhanden, enthält aber keine Daten.
 0004    Benötigtes Feld nicht belegt        Ein Feld, welches in der DB nicht als Pflichtfeld definiert ist, wird benötigt. Enthält aber keine Daten.
 0005    Zonenflächen nicht verfügbar        Beim Start des Kalkulators wird anhand von IRW_ZONEN_AREA die initilae Zone ermittelt. Mit diesem Layer besteht ein Problem.
+0006    Richtwert nicht auf Zone            Es wurden Koeffizienten für Merkmale hochgeladen, die für den Jahrgang nicht auf den Zonen verfügbar sind.

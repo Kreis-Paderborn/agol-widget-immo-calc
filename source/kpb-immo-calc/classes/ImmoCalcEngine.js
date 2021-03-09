@@ -669,8 +669,19 @@ define([
                 for (const eign in eignObj) {
                     var obj = {};
                     var uiControlConfig = uiControls[eign];
-                    var internalValue = fieldsObj[eign];
+                    var internalValue = null;
                     var valueInControl = null;
+
+                    if (fieldsObj[eign] !== undefined) {
+                        internalValue = fieldsObj[eign];
+                    } else {
+                        // Wenn ein Koeffizient hinzugefügt wurde, ohne 
+                        // des dafür ein Feld mit Richtwerten auf der Zone gibt,
+                        // so bekommen wir hier werder internen noh externen Wert.
+                        // Um das System nicht zum Absturz zu bringen wird hier der erste
+                        // Wert aus der Auswahlliste verwendet.
+                         this.handleError("0006", "Richtwert nicht auf Zone", "Für den Stichtag '"+stag+"' wurden Koeffizienten für das Merkmal '"+eign+"' hochgeladen. Diese sind aber nicht als Richtwerte auf den Zonen vorhanden.", true);
+                    }
 
                     obj["Titel"] = this._externalFieldNames[eign];
                     obj["Steuerelement"] = uiControlConfig;
@@ -724,7 +735,7 @@ define([
                     if (range.Min % 2 === 1) {
                         correction = -0.1;
                     }
-                    internalValue = Math.round(((range.Max + range.Min) / 2)+correction);
+                    internalValue = Math.round(((range.Max + range.Min) / 2) + correction);
                 }
                 returnVal = internalValue;
 
