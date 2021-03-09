@@ -20,9 +20,11 @@ define([
         _coefficients: null,
 
         handleError: null,
+        buildTimestamp: null,
 
         constructor: function (options) {
             this.handleError = options.handleError;
+            this.buildTimestamp = options.buildTimestamp;
         },
 
         getHeaderConfig() {

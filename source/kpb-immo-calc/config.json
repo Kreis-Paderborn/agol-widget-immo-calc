@@ -17,5 +17,7 @@
             "layerId": 4
         }
     },
-    "maxSTAG" : "2021-01-01"
+    "maxSTAG" : "${MAX_STAG}",
+    "applicationMode": "${APPLICATION_MODE}",
+    "buildTimestamp": "${BUILD_TIMESTAMP}"
 }

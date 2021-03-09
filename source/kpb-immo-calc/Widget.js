@@ -25,21 +25,25 @@ define([
 			featureLayers: null,
 
 			modes: {
-				"PRODUCTION": 1,
-				"TEST": 2,
-				"DEVELOPMENT": 3,
+				"PRODUCTION": "1",
+				"TEST": "2",
+				"DEVELOPMENT": "3",
 			},
-			mode: 3,
+			mode: null,
 
 			startup: function () {
 				this.inherited(arguments);
 				this.featureLayers = this.collectFeatureLayersFromMap();
+				this.mode = this.config.applicationMode;
 
 				this.engine = new ImmoCalcEngine({
 
 					// Wir übergeben hier den ErrorHandler, um der Engine die Möglichkeit zu geben,
 					// auf den zentral eingestellten MODE zuzugreifen und über die aktuelle VIEW einen Dialog zu schalten.
-					"handleError": this.errorHandler()
+					"handleError": this.errorHandler(),
+
+					// Zeitpunkt des Builds, um in der Anwendung prüfen zu können, um welchen Build es sich handelt.
+					"buildTimestamp": this.config.buildTimestamp
 				});
 				this.view = new ImmoCalcView(this.engine, this.id);
 
@@ -270,9 +274,9 @@ define([
 
 			ready: function () {
 				console.log("");
-				console.log("--------------------------");
-				console.log("Daten erfolgreich geladen!");
-				console.log("--------------------------");
+				console.log("---------------------------------");
+				console.log("Kalkulator erfolgreich gestartet!");
+				console.log("---------------------------------");
 				console.log("");
 
 				gEngine = this.engine;

@@ -1,0 +1,44 @@
+.jimu-widget-onscreen-icon img{
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+  }
+  
+  .jimu-widget-onscreen-icon{
+    background-color: #FF0000;
+    background-color: rgba(FF,0,0,1);
+    border: 1px solid #000000;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+  }
+  
+  
+  .jimu-widget-homebutton .HomeButton .home {
+      
+    /* HOMEButton in Theme-Farbe  */ 
+    background-color: rgba(0,78,151,1);
+    /*BUILD background-color: rgba(${THEME_COLOR_RED}, ${THEME_COLOR_GREEN}, ${THEME_COLOR_BLUE},1);   BUILD*/
+  }
+  
+  
+  .jimu-widget-mylocation .place-holder{
+    /* Button "MyLocation" in Theme-Farbe  */ 
+    background-color: rgba(0,78,151,1);
+    /*BUILD background-color: rgba(${THEME_COLOR_RED}, ${THEME_COLOR_GREEN}, ${THEME_COLOR_BLUE},1);   BUILD*/
+  }
+  
+  .jimu-widget-mylocation.onLocate .place-holder{
+      
+    /* Button "MyLocation" in Theme-Farbe  */ 
+    background-color: rgba(0,78,151,1);
+    /*BUILD background-color: rgba(${THEME_COLOR_RED}, ${THEME_COLOR_GREEN}, ${THEME_COLOR_BLUE},1);   BUILD*/
+  }
+  
+  
+  .jimu-widget-zoomslider .zoom{
+    width: 30px;
+    height: 30px;
+    
+    /* ZoomButtons in Theme-Farbe  */ 
+    background-color: rgba(0,78,151,1);
+    /*BUILD background-color: rgba(${THEME_COLOR_RED}, ${THEME_COLOR_GREEN}, ${THEME_COLOR_BLUE},1);   BUILD*/
+  }
