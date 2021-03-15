@@ -36,6 +36,11 @@ define([
 				this.featureLayers = this.collectFeatureLayersFromMap();
 				this.mode = this.config.applicationMode;
 
+				// Um zu verhindern, dass Eingaben über den Nummernblock im Widget 
+				// die Kartennavigation triggert (passiert, wenn der Mauszeiger über der Karte steht)
+				// wird hier die Keyboard-Navigation der Karte deaktiviert.
+				this.map.disableKeyboardNavigation();
+
 				this.engine = new ImmoCalcEngine({
 
 					// Wir übergeben hier den ErrorHandler, um der Engine die Möglichkeit zu geben,
@@ -484,6 +489,12 @@ define([
 				// nächsten Start sicher alles zurück gesetzt ist.
 				var pm = PanelManager.getInstance();
 				pm.destroyPanel(this.id + "_panel");
+
+				// Um zu verhindern, dass Eingaben über den Nummernblock im Widget 
+				// die Kartennavigation triggert (passiert, wenn der Mauszeiger über der Karte steht)
+				// wurde beim Start des Widget die Keyboard-Navigation der Karte deaktiviert.
+				// Diese kann nun wieder aktiviert werden.
+				this.map.enableKeyboardNavigation();
 			},
 
 			onMinimize: function () {
