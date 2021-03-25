@@ -1,35 +1,35 @@
 define([
     'dojo/_base/declare',
-    "dojo/_base/lang",
+    'dojo/_base/lang',
     'dojo/store/Memory',
     'dojo/number',
     'dijit/form/TextBox',
     'dijit/form/NumberSpinner',
     'dijit/Dialog',
-    "dijit/form/Button",
+    'dijit/form/Button',
     'dijit/form/ComboBox',
-    "dijit/_WidgetBase",
-    "jimu/PanelManager",
-    "dojo/dom-style",
-    "dijit/_Container",
+    'dijit/_WidgetBase',
+    'jimu/PanelManager',
+    'dojo/dom-style',
+    'dijit/_Container',
     'dijit/registry',
     'jimu/loaderplugins/jquery-loader!https://code.jquery.com/jquery-git1.min.js'
 ], function (
     declare,
-    lang,
+    _lang,
     Memory,
     number,
-    dijitTextbox,
-    dijitNumberSpinner,
-    dijitDialog,
+    TextBox,
+    NumberSpinner,
+    Dialog,
     Button,
-    FormComboBox,
+    ComboBox,
     _WidgetBase,
     PanelManager,
-    domStyle,
+    _domStyle,
     _Container,
-    dijitRegistry,
-    $
+    Registry,
+    _$
 ) {
 
     return declare(null, {
@@ -45,7 +45,7 @@ define([
         constructor: function (engine, widgetId) {
 
             this.engine = engine;
-            // Gui auf spätere Größe initialisieren
+            // Gui auf spätere Breite initialisieren
             var pm = PanelManager.getInstance()
             this.myPanel = pm.getPanelById(widgetId + "_panel");
             this.myPanel.resize({ w: 686, h: 540 });
@@ -144,7 +144,7 @@ define([
             this.generateTextElement(elementName, elementValue, "stdTextBox");
 
             // Auswahlbox Teilmarkt
-            var teilmaBWO = new FormComboBox({
+            var teilmaBWO = new ComboBox({
                 id: "teilmaBWO",
                 name: "teilmaBWO",
                 searchAttr: "name",
@@ -160,7 +160,7 @@ define([
             this.generateTextElement(elementName, elementValue, "stdTextBox");
 
             // Auswahlbox Zone/Gemeindename 
-            var genaBWO = new FormComboBox({
+            var genaBWO = new ComboBox({
                 id: "genaBWO",
                 name: "genaBWO",
                 value: "Aus Karte vorbelegt",
@@ -182,7 +182,7 @@ define([
             this.generateTextElement(elementName, elementValue, "textBoxLarge");
 
             // Auswahlbox Stichtag
-            var stagBWO = new FormComboBox({
+            var stagBWO = new ComboBox({
                 id: "stagBWO",
                 name: "stagBWO",
                 value: "Bitte wählen",
@@ -211,7 +211,7 @@ define([
          */
         showTable: function (stag, teilma, zone, setControlsToNorm) {
             var tableConfig = this.engine.getTableConfig(stag, teilma, zone);
-            var genaIRW = dijitRegistry.byId("genaIRW");
+            var genaIRW = Registry.byId("genaIRW");
             genaIRW.set("value", tableConfig["zonenIrw_txt"]);
             this.currentZonenIRW = tableConfig["zonenIrw"];
             // initialer Aufruf der Gui aus dem Widget
@@ -249,12 +249,12 @@ define([
                     this.generateTextElement(elementIRWName, elementIRWValue, "textBoxSmall");
                 } else {
                     // für die bestehenden Zeilen den Richtwert aktualisieren
-                    var aNormTextBox = dijitRegistry.byId(lowerCaseValue + "Norm");
+                    var aNormTextBox = Registry.byId(lowerCaseValue + "Norm");
                     var elementNormValue = tableConfig["Eigenschaften"][value]["Richtwert"];
                     aNormTextBox.set("value", elementNormValue);
                 };
                 // Anpassen der Auswahlmöglichkeiten und Spannen
-                var aComboBox = dijitRegistry.byId(lowerCaseValue + "BWO");
+                var aComboBox = Registry.byId(lowerCaseValue + "BWO");
                 this.getStoreValuesForComboBox(aComboBox, value);
 
                 // Anpassen von InSteuerelement und RichtwertKoeffizient
@@ -322,7 +322,7 @@ define([
          * @param {*} aClass Klasse aus style.css 
          */
         generateTextElement: function (elementTextName, elementTextValue, aClass) {
-            var aTextElement = new dijitTextbox({
+            var aTextElement = new TextBox({
                 id: elementTextName,
                 name: elementTextName,
                 class: aClass,
@@ -343,7 +343,7 @@ define([
 
             switch (elementBWOUIControl["Typ"]) {
                 case "ZAHLENEINGABE":
-                    var aBWOElement = new dijitNumberSpinner({
+                    var aBWOElement = new NumberSpinner({
                         value: elementBWOValue,
                         smallDelta: 1,
                         rangeMessage: "Bitte einen Wert zwischen " + elementBWOUIControl["Min"] + " und " + elementBWOUIControl["Max"] + " eingeben.",
@@ -376,7 +376,7 @@ define([
                     }, elementBWOName).startup();
                     break;
                 case "AUSWAHL":
-                    var aBWOElement = new FormComboBox({
+                    var aBWOElement = new ComboBox({
                         id: elementBWOName,
                         name: elementBWOName,
                         value: elementBWOValue.toString(),
@@ -410,11 +410,11 @@ define([
          * Holt den tableConfig für die im Header einestellten Werte
          */
         getCurrentConfig: function () {
-            var StagBWO = dijitRegistry.byId("stagBWO");
+            var StagBWO = Registry.byId("stagBWO");
             var currentStag = StagBWO.value;
-            var genaBWO = dijitRegistry.byId("genaBWO");
+            var genaBWO = Registry.byId("genaBWO");
             var currentGena = genaBWO.value;
-            var teilmaBWO = dijitRegistry.byId("teilmaBWO");
+            var teilmaBWO = Registry.byId("teilmaBWO");
             var currentTeilma = teilmaBWO.item.id;
             return this.engine.getTableConfig(currentStag, currentTeilma, currentGena);
         },
@@ -451,7 +451,7 @@ define([
          */
         getValuesStag: function () {
             var headerConfig = this.engine.getHeaderConfig();
-            var stagBWO = dijitRegistry.byId("stagBWO");
+            var stagBWO = Registry.byId("stagBWO");
             var stagArray = headerConfig["STAG"];
             stagBWO.store = new Memory({
                 data: stagArray
@@ -466,7 +466,7 @@ define([
          */
         getValuesGena: function (teilma, stag) {
             var headerConfig = this.engine.getHeaderConfig();
-            var genaBWO = dijitRegistry.byId("genaBWO");
+            var genaBWO = Registry.byId("genaBWO");
             // alle Zonen zu dem Stichtag und Teilmarkt
             var zonenArray = headerConfig["ZONEN"][stag][teilma];
             genaBWO.store = new Memory({
@@ -481,7 +481,7 @@ define([
          */
         getValuesTeilma: function (stag) {
             var headerConfig = this.engine.getHeaderConfig();
-            var teilmaBWO = dijitRegistry.byId("teilmaBWO");
+            var teilmaBWO = Registry.byId("teilmaBWO");
             // alle Teilmärkte zu dem Stichtag
             var teilmaArray = headerConfig["TEILMA"][stag];
             teilmaBWO.store = new Memory({
@@ -495,13 +495,13 @@ define([
          * @param {*} changedElement stag, teilma, zone
          */
         refreshTable: function (changedElement) {
-            var stagBWO = dijitRegistry.byId("stagBWO");
+            var stagBWO = Registry.byId("stagBWO");
             var stag = stagBWO.value;
 
-            var teilmaBWO = dijitRegistry.byId("teilmaBWO");
+            var teilmaBWO = Registry.byId("teilmaBWO");
             var teilma = teilmaBWO.item.id;
 
-            var genaBWO = dijitRegistry.byId("genaBWO");
+            var genaBWO = Registry.byId("genaBWO");
             var zone = genaBWO.value;
 
             // Auswahllisten für Headerelemente aktualsieren
@@ -588,7 +588,7 @@ define([
          */
         disableBWOElements: function (disable) {
             this.visElements.forEach(function (lowerCaseValue) {
-                var aBWOElement = dijitRegistry.byId(lowerCaseValue + "BWO");
+                var aBWOElement = Registry.byId(lowerCaseValue + "BWO");
                 aBWOElement.set("disabled", disable);
             })
         },
@@ -601,17 +601,17 @@ define([
          */
         setValuesInHeaderGui: function (stag, teilma, zone) {
             this.getValuesStag();
-            var genaBWO = dijitRegistry.byId("genaBWO");
+            var genaBWO = Registry.byId("genaBWO");
             genaBWO.set("value", zone);
             var teilma_txt = this.engine.mapDisplayNames("TEILMA", teilma.toString());
             this.getValuesGena(teilma_txt, stag);
 
-            var teilmaBWO = dijitRegistry.byId("teilmaBWO");
+            var teilmaBWO = Registry.byId("teilmaBWO");
             teilmaBWO.set("value", teilma_txt);
             teilmaBWO.item = { name: teilma_txt, id: teilma };
             this.getValuesTeilma(stag);
 
-            var stagBWO = dijitRegistry.byId("stagBWO");
+            var stagBWO = Registry.byId("stagBWO");
             stagBWO.set("value", stag);
         },
 
@@ -629,7 +629,7 @@ define([
             aCoeff = this.engine.mapValueToCoeff(newValue, aUIControl);
             aRichtwertCoeff = this.rwStore.get(elementPrefix);
             if (aCoeff != undefined && aRichtwertCoeff != undefined) {
-                var aIRWField = dijitRegistry.byId(IdIRW);
+                var aIRWField = Registry.byId(IdIRW);
                 var anpassungFaktor = (aCoeff / aRichtwertCoeff);
 
                 this.coeffStore.set(IdIRW, anpassungFaktor);
@@ -644,7 +644,7 @@ define([
          * Berechnung der angepassten Werte, gerundeten Werte
          */
         calculateIRW: function () {
-            var angIRWBWO = dijitRegistry.byId("angIRWBWO");
+            var angIRWBWO = Registry.byId("angIRWBWO");
             var richtwertZone = this.currentZonenIRW;
             var myCoeffs = this.coeffStore;
             this.visElements.forEach(function (prefix) {
@@ -664,12 +664,12 @@ define([
             angIRWBWO.set("value", richtwertZone + " €/m²");
 
             //  Richtwert Immobilie
-            var whnflBWO = dijitRegistry.byId("whnflBWO");
+            var whnflBWO = Registry.byId("whnflBWO");
             var aWertBWOValue = richtwertZone * whnflBWO.value;
             // auf 10K runden
             var faktor = 10000;
             aWertBWOValue = Math.round(aWertBWOValue / faktor) * faktor;
-            var wertBWO = dijitRegistry.byId("wertBWO");
+            var wertBWO = Registry.byId("wertBWO");
             wertBWO.set("value", number.format(aWertBWOValue) + " €")
         },
 
@@ -680,7 +680,7 @@ define([
             me = this;
             this.visElements.forEach(function (elementPrefix) {
                 var myName = (elementPrefix + "BWO");
-                var myBWO = dijitRegistry.byId(myName);
+                var myBWO = Registry.byId(myName);
                 var config = me.getCurrentConfig();
                 var richtwertValue = config["Eigenschaften"][elementPrefix.toUpperCase()]["WertInSteuerelement"];
                 myBWO.set("value", richtwertValue);
@@ -697,7 +697,7 @@ define([
         markChangedInput: function () {
             this.visElements.forEach(function (elementPrefix) {
                 var IdBWO = elementPrefix + "BWO";
-                var aBWOField = dijitRegistry.byId(IdBWO);
+                var aBWOField = Registry.byId(IdBWO);
                 aBWOField.set("class", "stdInputBoxBold");
             })
         },
@@ -712,7 +712,7 @@ define([
          */
         showDialog: function (title, message) {
             var okButtonOnlyHide = "<br><button data-dojo-type=\"dijit/form/Button\" type=\"submit\">OK</button>";
-            var dialog = new dijitDialog({
+            var dialog = new Dialog({
                 title: title,
                 style: "width: 250px;text-align:center",
                 content: message + "<br/>" + okButtonOnlyHide,
