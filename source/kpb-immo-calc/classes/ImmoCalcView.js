@@ -630,10 +630,16 @@ define([
             aRichtwertCoeff = this.rwStore.get(elementPrefix);
             if (aCoeff != undefined && aRichtwertCoeff != undefined) {
                 var aIRWField = Registry.byId(IdIRW);
+                aCoeff = Math.round(aCoeff*1000)/1000;
                 var anpassungFaktor = (aCoeff / aRichtwertCoeff);
 
                 this.coeffStore.set(IdIRW, anpassungFaktor);
                 var anpassungProzent = (anpassungFaktor - 1) * 100;
+                
+                // negative Werte mit genau 0.5 zur kleineren Zahl runden 
+                if (anpassungProzent < 0 && anpassungProzent % 1 == -0.5){
+                    anpassungProzent = anpassungProzent - 0.1;
+                }
                 var roundAnpassungProzent = Math.round(anpassungProzent)
 
                 aIRWField.set("value", roundAnpassungProzent + "%");
@@ -654,9 +660,10 @@ define([
                     richtwertZone = richtwertZone * myCoeff;
                 }
             })
+            var faktor;
             // Richtwert pro m*m
             if (this.changedInput === true) {
-                var faktor = 10;
+                faktor = 10;
                 richtwertZone = Math.round(richtwertZone / faktor) * faktor;
             } else {
                 richtwertZone = Math.round(richtwertZone);
@@ -666,8 +673,12 @@ define([
             //  Richtwert Immobilie
             var whnflBWO = Registry.byId("whnflBWO");
             var aWertBWOValue = richtwertZone * whnflBWO.value;
-            // auf 10K runden
-            var faktor = 10000;
+            // unter 200000 auf 5k runden, darüber auf 10k
+            if (aWertBWOValue < 200000) {
+                faktor = 5000;
+            } else {
+                faktor = 10000;
+            }
             aWertBWOValue = Math.round(aWertBWOValue / faktor) * faktor;
             var wertBWO = Registry.byId("wertBWO");
             wertBWO.set("value", number.format(aWertBWOValue) + " €")
