@@ -76,13 +76,13 @@ IF "%APPLICATION_MODE%"=="" (
 )
 
 REM Maximal zu verwendender Jahrgang
-IF "%MAX_STAG%"=="" (
+IF "%USE_STAG_NULL_AS%"=="" (
     IF "%1"=="PROD" (
-        SET MAX_STAG=%MAX_STAG_PROD%
+        SET USE_STAG_NULL_AS=%USE_STAG_NULL_AS_PROD%
     ) ELSE IF "%1"=="TEST" (
-        SET MAX_STAG=%MAX_STAG_TEST%
+        SET USE_STAG_NULL_AS=%USE_STAG_NULL_AS_TEST%
     ) ELSE (
-        SET MAX_STAG=%MAX_STAG_DEV%
+        SET USE_STAG_NULL_AS=%USE_STAG_NULL_AS_DEV%
     )
 )
 
@@ -149,7 +149,7 @@ goto :end1
     REM Platzhalter in der kopierten Konfig-Datei ersetzen
     call replace.bat "%CONFIG_TARGET_FILE%" ${APPLICATION_MODE} %APPLICATION_MODE%
     call replace.bat "%CONFIG_TARGET_FILE%" ${BUILD_TIMESTAMP} %BUILD_TIMESTAMP%
-    call replace.bat "%CONFIG_TARGET_FILE%" ${MAX_STAG} %MAX_STAG%
+    call replace.bat "%CONFIG_TARGET_FILE%" ${USE_STAG_NULL_AS} %USE_STAG_NULL_AS%
 
     REM Platzhalter in CSS-Datei THEME_COMMON_ADDS ersetzen
     SET CSS_TARGET_FILE=%APP_TARGET_DIR%\css\theme_common_adds.css
@@ -163,7 +163,7 @@ goto :end1
 
 SET "APPLICATION_FOLDER="
 SET "APPLICATION_MODE="
-SET "MAX_STAG="
+SET "USE_STAG_NULL_AS="
 SET "THEME_COLOR_RED="
 SET "THEME_COLOR_GREEN="
 SET "THEME_COLOR_BLUE="

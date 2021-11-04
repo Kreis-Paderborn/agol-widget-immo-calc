@@ -17,7 +17,7 @@
             "layerId": 4
         }
     },
-    "maxSTAG" : "${MAX_STAG}",
+    "useStagNullAs" : "${USE_STAG_NULL_AS}",
     "applicationMode": "${APPLICATION_MODE}",
     "buildTimestamp": "${BUILD_TIMESTAMP}"
 }

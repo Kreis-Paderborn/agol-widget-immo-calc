@@ -21,10 +21,12 @@ define([
 
         handleError: null,
         buildTimestamp: null,
+        useStagNullAs: null,
 
         constructor: function (options) {
             this.handleError = options.handleError;
             this.buildTimestamp = options.buildTimestamp;
+            this.useStagNullAs = options.useStagNullAs;
         },
 
         getHeaderConfig() {
@@ -582,7 +584,7 @@ define([
             var usedZoneFieldsArray = this.detectUsedZoneFields(zonesArray);
 
             // Da die Konfiguration nur vollständig aufgebaut werden kann,
-            // wenn auch die Koeffizienten geladen wurden, pürfen wir das hier als Erstes.
+            // wenn auch die Koeffizienten geladen wurden, prüfen wir das hier als Erstes.
             if (zonesArray !== null
                 && zonesArray !== undefined
                 && zonesArray.length > 0
@@ -601,8 +603,16 @@ define([
                     // Die erste Ebene ist immer STAG. Mit dieser werden 
                     // alle Liste initialisiert.
                     var stagMilliSec = fieldsObj["STAG"];
-                    var stagId = new Date(stagMilliSec).getFullYear();
-                    var stag = this.convertDate(stagMilliSec);
+                    var stagId;
+                    var stag;
+                    if (stagMilliSec === this.useStagNullAs) {
+                        stagId = 9999;
+                        stag = this.useStagNullAs;
+                    } else {
+                        stagId = new Date(stagMilliSec).getFullYear();
+                        stag = this.convertDate(stagMilliSec);
+                    }
+
 
                     if (this._tableConfig[stag] === undefined) {
                         this._tableConfig[stag] = {};
@@ -682,7 +692,7 @@ define([
                         // so bekommen wir hier werder internen noh externen Wert.
                         // Um das System nicht zum Absturz zu bringen wird hier der erste
                         // Wert aus der Auswahlliste verwendet.
-                         this.handleError("0006", "Richtwert nicht auf Zone", "Für den Stichtag '"+stag+"' wurden Koeffizienten für das Merkmal '"+eign+"' hochgeladen. Diese sind aber nicht als Richtwerte auf den Zonen vorhanden.", true);
+                        this.handleError("0006", "Richtwert nicht auf Zone", "Für den Stichtag '" + stag + "' wurden Koeffizienten für das Merkmal '" + eign + "' hochgeladen. Diese sind aber nicht als Richtwerte auf den Zonen vorhanden.", true);
                     }
 
                     obj["Titel"] = this._externalFieldNames[eign];
@@ -859,16 +869,20 @@ define([
             var date = new Date(DateInMilliseconds);
             var returnStr = "";
 
-            var day = date.getDate();
-            returnStr += day.toString().padStart(2, '0');
-            returnStr += '.';
+            if (DateInMilliseconds === null) {
+                returnStr = this.useStagNullAs;
+            } else {
+                var day = date.getDate();
+                returnStr += day.toString().padStart(2, '0');
+                returnStr += '.';
 
-            var month = date.getMonth() + 1;
-            returnStr += month.toString().padStart(2, '0');
-            returnStr += '.';
+                var month = date.getMonth() + 1;
+                returnStr += month.toString().padStart(2, '0');
+                returnStr += '.';
 
-            var year = date.getFullYear();
-            returnStr += year.toString()
+                var year = date.getFullYear();
+                returnStr += year.toString()
+            }
 
             return returnStr;
         },

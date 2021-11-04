@@ -48,7 +48,13 @@ define([
 					"handleError": this.errorHandler(),
 
 					// Zeitpunkt des Builds, um in der Anwendung prüfen zu können, um welchen Build es sich handelt.
-					"buildTimestamp": this.config.buildTimestamp
+					"buildTimestamp": this.config.buildTimestamp,
+
+					// Bei STAG=NULL muss ein Wert für die Oberfläche gesetzt werden. Dieser wird in der Config
+					// festgelegt und bestimmt gleichzeitig, ob STAG=NULL überhaupt verwendet werden soll.
+					// (Das wäre z.B. nicht der Fall bei der PROD-Umgebung)
+					"useStagNullAs": this.config.useStagNullAs
+
 				});
 				this.view = new ImmoCalcView(this.engine, this.id);
 
@@ -170,8 +176,6 @@ define([
 
 				if (aKoeffFeatureLayer !== undefined) {
 
-					var myDateInMillisecs = new Date(me.config.maxSTAG).getTime();
-
 					// Frage alle Koeffizienten ab
 					aQuery.where = "GASL is not null";
 					aQuery.outFields = ["*"];
@@ -180,7 +184,7 @@ define([
 						for (const feature of featureSet.features) {
 							var obj = {};
 
-							if (me.config.maxSTAG === undefined || feature.attributes.STAG <= myDateInMillisecs) {
+							if (feature.attributes.STAG !== null || me.config.useStagNullAs !== "--none--") {
 								obj["WERT_AKS"] = feature.attributes.WERT_AKS;
 								obj["EIGN_AKS"] = feature.attributes.EIGN_AKS;
 								obj["WERT_BORIS"] = feature.attributes.WERT_BORIS;
@@ -233,7 +237,6 @@ define([
 					// ändern kann.
 					var whereFieldName;
 					var stagFieldName;
-					var myDateInMillisecs = new Date(me.config.maxSTAG).getTime();
 					for (const field of aZonesLayer.fields) {
 						if (field.name.endsWith("TEILMA")) {
 							whereFieldName = field.name;
@@ -249,7 +252,10 @@ define([
 					aZonesLayer.queryFeatures(aQuery, function (featureSet) {
 
 						for (const feature of featureSet.features) {
-							if (me.config.maxSTAG === undefined || feature.attributes[stagFieldName] <= myDateInMillisecs) {
+							if (feature.attributes[stagFieldName] !== null || me.config.useStagNullAs !== "--none--") {
+								if (feature.attributes[stagFieldName] === null) {
+									feature.attributes[stagFieldName] = me.config.useStagNullAs;
+								}
 								zonesArray.push(feature.attributes);
 							}
 						}
@@ -343,6 +349,9 @@ define([
 							&& irwnameName !== null) {
 
 							startSTAG = featureFromPopup.attributes[stagFieldName];
+							if (startSTAG === null) {
+								startSTAG = me.config.useStagNullAs;
+							}
 							startTEILMA = featureFromPopup.attributes[teilmaFieldName];
 							startZONE = featureFromPopup.attributes[irwnameName];
 
@@ -389,8 +398,8 @@ define([
 									startZONE = featureSet.features[0].attributes["NAME_IRW"];
 
 									// FIXME-AT: STAG und TEILMA wird hier auf Standardwerte gelassen,
-									//           ohne zu prüfe, ob es die Komination für die Zone gibt.
-									//           Außerdem könnten auch mehrer Zonen an einer Steller vorkommen.
+									//           ohne zu prüfen, ob es die Kombination für die Zone tatsächlich gibt.
+									//           Außerdem könnten auch mehrere Zonen an einer Stelle vorkommen.
 									//           Wie verwenden aber nur das 1. aus den gefundenen Features.
 									startCalculator(startSTAG, startTEILMA, startZONE);
 								}
