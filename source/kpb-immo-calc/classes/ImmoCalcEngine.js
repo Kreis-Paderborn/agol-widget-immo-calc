@@ -18,6 +18,7 @@ define([
         _tableConfig: null,
         _uiControls: null,
         _coefficients: null,
+        _zoneArray: null,
 
         handleError: null,
         buildTimestamp: null,
@@ -575,6 +576,14 @@ define([
         },
 
         /**
+         * Hier werden die Zonen zurück gegeben, die aus der DB gelesen wurden.
+         * Der Vorteil hier ist, dass die Feldnamen schon um die Präfixe bereinigt wurden.
+         */
+        getZones: function() {
+            return this._zoneArray;
+        },
+
+        /**
          * Ziel dieser Methode ist, aus dem Array der Zonen einfach zu verwendende Konfig-Objekte
          * für den Header und die Tabellen-Konfiguration zu erstellen.         
          * 
@@ -582,6 +591,8 @@ define([
          */
         setZones: function (zonesArray) {
             var usedZoneFieldsArray = this.detectUsedZoneFields(zonesArray);
+
+            this._zoneArray = usedZoneFieldsArray;
 
             // Da die Konfiguration nur vollständig aufgebaut werden kann,
             // wenn auch die Koeffizienten geladen wurden, prüfen wir das hier als Erstes.

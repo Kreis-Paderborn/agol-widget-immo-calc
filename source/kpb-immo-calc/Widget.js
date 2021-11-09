@@ -367,40 +367,80 @@ define([
 
 						var centerPoint = this.map.extent.getCenter();
 						var query = new esri.tasks.Query();
+						var now = Date.now();
 						query.geometry = centerPoint;
 						query.outFields = ["*"];
 						var anAreaFeatureLayer = this.featureLayers.IRW_ZONEN_AREA;
+						
 						if (anAreaFeatureLayer !== undefined) {
 
 							anAreaFeatureLayer.queryFeatures(query, function (featureSet) {
 
 								if (featureSet.features.length > 0) {
+
+									var zoneArray = me.engine.getZones();
+									var hits = new Array();
+
 									for (const feature of featureSet.features) {
 										var numz = feature.attributes["NUMZ"];
 										var gesl = feature.attributes["GESL"];
 
+										// Der Sonderfall "Paderborn" ist solange gültig, wie es von dort noch keine Daten gibt.
 										if (gesl === "05774032") {
 											var pm = PanelManager.getInstance();
 											pm.destroyPanel(me.id + "_panel");
 											me.view.showDialog("Position im Stadtgebiet Paderborn", "Für den Bereich des Stadtgebietes Paderborn liegen in unserem System keine Immobilienrichtwerte vor.<br><br>Der Kalkulator kann daher in diesem Bereich nicht gestartet werden.");
 											return;
-										} else {
+										}
 
-											// FIXME-AT: Da wir aktuell nicht weiter prüfen, ob eine Fläche
-											//           wirklich valide ist (siehe ein Fixme weiter) verarbeiten
-											//           wir hier nur die ersten 9, welches dir für 01.01.2021 
-											//           relevanten Zonen sind.
-											if (numz <= 9) {
-												startZONE = feature.attributes["NAME_IRW"];
+										// alle anderen Gemeinden/Städte
+										else {
+
+											// Wir suchen über NUMZ von unserer getroffenen Fläche aus die Zonen.
+											// Denn es muss nicht zu jeder in der DB vorhandenen Fläche einen Jahrgang / Teilmarkt geben.
+											for (const zone of zoneArray) {
+
+												// Für die Zonen, die mit der getroffenen Fläche verbunden sind...
+												if (zone.NUMZ === numz) {
+
+													// Wenn das Datum numerisch ist, nehmen wir es auf jeden Fall für die weitere Betrachtung mit.	
+													// Denn das sind die veröffentlichten Jahrgänge-											
+													if (!isNaN(zone.STAG)) {
+														hits.push(zone);
+													}
+
+													// Wenn nicht numerisch, handelt es sich im den Bearbeitungslayer.
+													// Dann muss der Text zu dem konfigurierten Wert in "useStagNullAs" passen.
+													else {
+														if (zone.STAG === me.config.useStagNullAs) {
+															zone.STAG_TXT = zone.STAG;
+															zone.STAG = now;
+															hits.push(zone);
+														}
+													}
+												}
+
 											}
 										}
 									}
-									startZONE = featureSet.features[0].attributes["NAME_IRW"];
 
-									// FIXME-AT: STAG und TEILMA wird hier auf Standardwerte gelassen,
-									//           ohne zu prüfen, ob es die Kombination für die Zone tatsächlich gibt.
-									//           Außerdem könnten auch mehrere Zonen an einer Stelle vorkommen.
-									//           Wie verwenden aber nur das 1. aus den gefundenen Features.
+									// Sortiere den aktuellsten STAG nach oben. Wenn gleich dann nach TEILAMA.
+									// Somit nehmen wir standardmäßig den TEILMA=2. 
+									// Falls es TEILMA=2 für einen Bereich nicht gäbe, würde auf die vorhandenen Werte zurückgegriffen.
+									hits.sort(function (a, b) {
+										if (b.STAG === a.STAG) {
+											return b.TEILMA - a.TEILMA
+										} else {
+											return b.STAG - a.STAG
+										}
+									});
+
+									// Wir nehmen alle drei Werte aus der tatsächlich vorhandenen Zone.
+									// Somit stellen wir sicher, dass es die Konstellation auch wirklich gibt.
+									startZONE = hits[0].NAME_IRW;
+									startSTAG = hits[0].STAG_TXT;
+									startTEILMA = hits[0].TEILMA;
+
 									startCalculator(startSTAG, startTEILMA, startZONE);
 								}
 
