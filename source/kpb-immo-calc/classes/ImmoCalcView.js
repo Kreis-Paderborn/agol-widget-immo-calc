@@ -119,7 +119,7 @@ define([
                 }
             }, "standardButton").startup();
 
-            // Erst nach bereitstellen der Funktion wieder aktivieren
+            // Erst nach bereitstellen der html to pdf Funktion wieder aktivieren
             // var plotButton = new Button({
             //     label: "PDF erstellen",
             //     onClick: function () {
