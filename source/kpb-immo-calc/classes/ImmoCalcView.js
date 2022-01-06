@@ -112,6 +112,7 @@ define([
             aLink = "<a href='https://www.kreis-paderborn.de/gutachterausschuss/Produkte/Immobilienrichtwerte---Kalkula/immobilienrichtwerte---kalkulator.html' target='_blank'> Internetseiten des Gutachterausschusses</a>.";
             document.getElementById(elementName).innerHTML = text1 + text2 + aLink;
 
+            // Button Zurücksetzen auf Richtwerte
             var standardButton = new Button({
                 label: "Zurücksetzen auf Richtwerte",
                 onClick: function () {
@@ -119,13 +120,13 @@ define([
                 }
             }, "standardButton").startup();
 
-            // Erst nach bereitstellen der html to pdf Funktion wieder aktivieren
-            // var plotButton = new Button({
-            //     label: "PDF erstellen",
-            //     onClick: function () {
-            //         console.log("Drucken...");
-            //     }
-            // }, "plotButton").startup();
+            // Button PDF esrstellen
+            var plotButton = new Button({
+                label: "PDF erstellen",
+                onClick: function () {
+                    me.plotPdf();
+                }
+            }, "plotButton").startup();
 
             // Copyright Bemerkung
             elementName = "copyrightLabel";
@@ -630,14 +631,14 @@ define([
             aRichtwertCoeff = this.rwStore.get(elementPrefix);
             if (aCoeff != undefined && aRichtwertCoeff != undefined) {
                 var aIRWField = Registry.byId(IdIRW);
-                aCoeff = Math.round(aCoeff*1000)/1000;
+                aCoeff = Math.round(aCoeff * 1000) / 1000;
                 var anpassungFaktor = (aCoeff / aRichtwertCoeff);
 
                 this.coeffStore.set(IdIRW, anpassungFaktor);
                 var anpassungProzent = (anpassungFaktor - 1) * 100;
-                
+
                 // negative Werte mit genau 0.5 zur kleineren Zahl runden 
-                if (anpassungProzent < 0 && anpassungProzent % 1 == -0.5){
+                if (anpassungProzent < 0 && anpassungProzent % 1 == -0.5) {
                     anpassungProzent = anpassungProzent - 0.1;
                 }
                 var roundAnpassungProzent = Math.round(anpassungProzent)
@@ -730,6 +731,55 @@ define([
                 closable: false
             });
             dialog.show();
+        },
+
+        /**
+        * Ruft den FME Prozess zum PDF Plot auf.
+        *
+        */
+        plotPdf: function () {
+            var paramHeader = "param_header = ";
+            var paramFeature = "param_feature = ";
+            var paramResult = "param_result = ";
+            var paramFooter = "param_footer = ";
+
+            var headerElementList = ["stagLabel", "stagBWO", "teilmaLabel", "teilmaBWO", "genaLabel", "genaBWO", "genaIRW"];
+            var featurePostfixList = ["Label", "Norm", "BWO", "IRW"];
+            var resultElementList = ["angIRWLabel", "angIRWBWO", "wertLabel", "wertBWO"];
+
+            // paramHeader aus den Headerelementen zusammenstellen
+            headerElementList.forEach(function (aName) {
+                var aElement = document.getElementById(aName);
+                paramHeader += String(aElement.value + " , ");
+            });
+            paramHeader = encodeURI(paramHeader);
+
+            // paramFeature aus sichtbaren Elementen zusammenstellen          
+            this.visElements.forEach(function (aValue) {
+                featurePostfixList.forEach(function (aName) {
+                    var aElement = document.getElementById(aValue + aName);
+                    paramFeature += String(aElement.value + " , ");
+                });
+            });
+            paramFeature = encodeURI(paramFeature);
+
+            // paramResult aus berechneten Werten zusammenstellen
+            resultElementList.forEach(function (aName) {
+                var aElement = document.getElementById(aName);
+                paramResult += String(aElement.value + " , ");
+            });
+            paramResult = encodeURI(paramResult);
+
+            // paramFooter aus gegebenen Texten generieren
+            var anmerkung = document.getElementById("anmerkungLabel").innerHTML;
+            var copyright = document.getElementById("copyrightLabel").innerHTML;
+            paramFooter += anmerkung + "\n \r" + copyright;
+            paramFooter = encodeURI(paramFooter);
+
+            // FME Url mit Parametern aufrufen
+            var token = "token=a1b48af5f75d6dcef5096162c31e30bed47c9e48";
+            var url = "https://fmeprod.gkdpb.de/fmedatastreaming/Kreis%20PB%20-%20Gutachter/108%20Berechnung%20als%20PDF%20streamen.fmw";
+            var myWindow = window.open(url + "?" + paramHeader + "&" + paramFeature + "&" + paramResult + "&" + paramFooter + "&" + token);
         }
     })
 }
