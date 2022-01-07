@@ -738,42 +738,54 @@ define([
         *
         */
         plotPdf: function () {
-            var paramHeader = "param_header = ";
-            var paramFeature = "param_feature = ";
-            var paramResult = "param_result = ";
-            var paramFooter = "param_footer = ";
+            var paramHeader = "param_header=";
+            var paramFeature = "param_feature=";
+            var paramResult = "param_result=";
+            var paramFooter = "param_footer=";
+            var seperatorNext = ";;";
+            var seperatorNewLine = "~";
 
-            var headerElementList = ["stagLabel", "stagBWO", "teilmaLabel", "teilmaBWO", "genaLabel", "genaBWO", "genaIRW"];
+            var headerElementList = [["stagLabel", seperatorNext], ["stagBWO", seperatorNewLine],
+                                    ["teilmaLabel", seperatorNext], ["teilmaBWO", seperatorNewLine],
+                                    ["genaLabel", seperatorNext], ["genaBWO", seperatorNext], ["genaIRW", seperatorNewLine]];
+
             var featurePostfixList = ["Label", "Norm", "BWO", "IRW"];
-            var resultElementList = ["angIRWLabel", "angIRWBWO", "wertLabel", "wertBWO"];
+            
+            var resultElementList = [["angIRWLabel", seperatorNext], ["angIRWBWO", seperatorNewLine], 
+                                    ["wertLabel", seperatorNext], ["wertBWO", seperatorNewLine]];
 
             // paramHeader aus den Headerelementen zusammenstellen
             headerElementList.forEach(function (aName) {
-                var aElement = document.getElementById(aName);
-                paramHeader += String(aElement.value + " , ");
+                var aElement = document.getElementById(aName[0]);
+                paramHeader += String(aElement.value + aName[1]);
             });
             paramHeader = encodeURI(paramHeader);
 
             // paramFeature aus sichtbaren Elementen zusammenstellen          
             this.visElements.forEach(function (aValue) {
                 featurePostfixList.forEach(function (aName) {
+                    if (aName == "IRW") {
+                        seperator = seperatorNewLine;
+                    } else {
+                        seperator = seperatorNext;
+                    }
                     var aElement = document.getElementById(aValue + aName);
-                    paramFeature += String(aElement.value + " , ");
+                    paramFeature += String(aElement.value + seperator);
                 });
             });
             paramFeature = encodeURI(paramFeature);
 
             // paramResult aus berechneten Werten zusammenstellen
             resultElementList.forEach(function (aName) {
-                var aElement = document.getElementById(aName);
-                paramResult += String(aElement.value + " , ");
+                var aElement = document.getElementById(aName[0]);
+                paramResult += String(aElement.value + aName[1]);
             });
             paramResult = encodeURI(paramResult);
 
             // paramFooter aus gegebenen Texten generieren
             var anmerkung = document.getElementById("anmerkungLabel").innerHTML;
             var copyright = document.getElementById("copyrightLabel").innerHTML;
-            paramFooter += anmerkung + "\n \r" + copyright;
+            paramFooter += anmerkung + seperatorNewLine + copyright;
             paramFooter = encodeURI(paramFooter);
 
             // FME Url mit Parametern aufrufen
