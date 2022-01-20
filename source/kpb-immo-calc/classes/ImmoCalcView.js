@@ -741,7 +741,6 @@ define([
             var paramHeader = "param_header=";
             var paramFeature = "param_feature=";
             var paramResult = "param_result=";
-            var paramFooter = "param_footer=";
             var seperatorNext = ";;";
             var seperatorNewLine = "~";
 
@@ -782,16 +781,10 @@ define([
             });
             paramResult = encodeURI(paramResult);
 
-            // paramFooter aus gegebenen Texten generieren
-            var anmerkung = document.getElementById("anmerkungLabel").innerHTML;
-            var copyright = document.getElementById("copyrightLabel").innerHTML;
-            paramFooter += anmerkung + seperatorNewLine + copyright;
-            paramFooter = encodeURI(paramFooter);
-
             // FME Url mit Parametern aufrufen
             var token = "token=a1b48af5f75d6dcef5096162c31e30bed47c9e48";
             var url = "https://fmeprod.gkdpb.de/fmedatastreaming/Kreis%20PB%20-%20Gutachter/108%20Berechnung%20als%20PDF%20streamen.fmw";
-            var myWindow = window.open(url + "?" + paramHeader + "&" + paramFeature + "&" + paramResult + "&" + paramFooter + "&" + token);
+            var myWindow = window.open(url + "?" + paramHeader + "&" + paramFeature + "&" + paramResult + "&" + token);
         }
     })
 }
