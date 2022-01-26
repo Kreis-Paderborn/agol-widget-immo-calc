@@ -130,7 +130,7 @@ define([
 
             // Copyright Bemerkung
             elementName = "copyrightLabel";
-            text1 = "© Gutachterausschuss für Grundstückswerte im Kreis Paderborn, 2021";
+            text1 = "© Gutachterausschuss für Grundstückswerte im Kreis Paderborn, 2022";
             document.getElementById(elementName).innerHTML = text1;
         },
 
@@ -288,7 +288,7 @@ define([
             // Ergebnisfelder aktualisieren
             this.calculateIRW()
             // Panel Höhe
-            var height = this.visElements.length * 35 + 400;
+            var height = this.visElements.length * 36 + 405;
             this.myPanel.resize({ h: height });
         },
 
