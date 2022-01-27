@@ -42,7 +42,7 @@ define([
         rwStore: new Map(),
         changedInput: false,
 
-        constructor: function (engine, widgetId) {
+        constructor: function (engine, widgetId, copyright) {
 
             this.engine = engine;
             // Gui auf spätere Breite initialisieren
@@ -57,6 +57,8 @@ define([
             document.getElementById("rowStag").style = "display: none";
             document.getElementById("rowTeilma").style = "display: none";
             document.getElementById("rowGena").style = "display: none";
+
+            console.log("Quellennachweis durch Widget aus Map gelesen: >>" + copyright + "<<");
         },
 
         /**

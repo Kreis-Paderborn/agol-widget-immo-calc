@@ -56,10 +56,35 @@ define([
 					"useStagNullAs": this.config.useStagNullAs
 
 				});
-				this.view = new ImmoCalcView(this.engine, this.id);
+				this.view = new ImmoCalcView(this.engine, this.id, this.getCopyrightFromMap());
 
 				this.readDefinitionsFromFeatureLayers();
 
+			},
+
+			/**
+			 * Die Map enthält in der Variablen "attribution" alle Quellenangeben der enthaltenen Dienste.
+			 * Aus diesen suchen wir uns anhand des serviceNames unseres zentralen Layers IRW_ZONEN
+			 * den Quellenvermerk für die IRW-Dienste raus.
+			 */
+			getCopyrightFromMap: function () {
+
+				var returnVal = "";
+				var serviceName = this.config.featureLayersFromMap.IRW_ZONEN.serviceName;
+
+				if (this.map.attribution && this.map.attribution._attributions) {
+
+					var allCopyights = this.map.attribution._attributions;
+					for (key in allCopyights) {
+
+						// Die Key der Attributions besteht aus dem Dienstnamen ergänzt
+						// um eine temporäre System-ID. Daher suchen wir hier mit "startWith".
+						if (key.startsWith(serviceName)) {
+							returnVal = allCopyights[key];
+						}
+					}
+				}
+				return returnVal;
 			},
 
 
@@ -371,7 +396,7 @@ define([
 						query.geometry = centerPoint;
 						query.outFields = ["*"];
 						var anAreaFeatureLayer = this.featureLayers.IRW_ZONEN_AREA;
-						
+
 						if (anAreaFeatureLayer !== undefined) {
 
 							anAreaFeatureLayer.queryFeatures(query, function (featureSet) {
