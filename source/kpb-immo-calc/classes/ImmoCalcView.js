@@ -45,6 +45,7 @@ define([
         constructor: function (engine, widgetId, copyright) {
 
             this.engine = engine;
+            this.copyright = copyright;
             // Gui auf spätere Breite initialisieren
             var pm = PanelManager.getInstance()
             this.myPanel = pm.getPanelById(widgetId + "_panel");
@@ -57,8 +58,6 @@ define([
             document.getElementById("rowStag").style = "display: none";
             document.getElementById("rowTeilma").style = "display: none";
             document.getElementById("rowGena").style = "display: none";
-
-            console.log("Quellennachweis durch Widget aus Map gelesen: >>" + copyright + "<<");
         },
 
         /**
@@ -743,6 +742,7 @@ define([
             var paramHeader = "param_header=";
             var paramFeature = "param_feature=";
             var paramResult = "param_result=";
+            var paramCopyright = "param_copyright=";
             var seperatorNext = ";;";
             var seperatorNewLine = "~";
 
@@ -783,11 +783,14 @@ define([
             });
             paramResult = encodeURI(paramResult);
 
+            // paramCopyright zusmmenstellen
+            paramCopyright +=this.copyright;
+
             // FME Url mit Parametern aufrufen
             var token = "token=a1b48af5f75d6dcef5096162c31e30bed47c9e48";
             var url = "https://fmeprod.gkdpb.de/fmedatastreaming/Kreis%20PB%20-%20Gutachter/108%20Berechnung%20als%20PDF%20streamen.fmw";
 
-            var myWindow = window.open(url + "?tm_tag=Tagsueber_Kurze_Jobs&" + paramHeader + "&" + paramFeature + "&" + paramResult + "&" + token);
+            var myWindow = window.open(url + "?tm_tag=Tagsueber_Kurze_Jobs&" + paramHeader + "&" + paramFeature + "&" + paramResult + "&" + paramCopyright + "&" + token);
         }
     })
 }
