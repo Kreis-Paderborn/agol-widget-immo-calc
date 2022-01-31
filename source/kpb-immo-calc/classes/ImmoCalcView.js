@@ -289,7 +289,7 @@ define([
             // Ergebnisfelder aktualisieren
             this.calculateIRW()
             // Panel Höhe
-            var height = this.visElements.length * 36 + 405;
+            var height = this.visElements.length * 36 + 415;
             this.myPanel.resize({ h: height });
         },
 
@@ -790,7 +790,7 @@ define([
             var token = "token=a1b48af5f75d6dcef5096162c31e30bed47c9e48";
             var url = "https://fmeprod.gkdpb.de/fmedatastreaming/Kreis%20PB%20-%20Gutachter/108%20Berechnung%20als%20PDF%20streamen.fmw";
 
-            var myWindow = window.open(url + "?tm_tag=Tagsueber_Kurze_Jobs&" + paramHeader + "&" + paramFeature + "&" + paramResult + "&" + paramCopyright + "&" + token);
+            document.getElementById('pdfDruck').src = url + "?tm_tag=Tagsueber_Kurze_Jobs&" + paramHeader + "&" + paramFeature + "&" + paramResult + "&" + paramCopyright + "&" + token;
         }
     })
 }
