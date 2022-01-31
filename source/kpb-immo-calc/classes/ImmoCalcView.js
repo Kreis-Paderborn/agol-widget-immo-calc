@@ -789,7 +789,7 @@ define([
             // FME Url mit Parametern aufrufen
             var token = "token=a1b48af5f75d6dcef5096162c31e30bed47c9e48";
             var url = "https://fmeprod.gkdpb.de/fmedatastreaming/Kreis%20PB%20-%20Gutachter/108%20Berechnung%20als%20PDF%20streamen.fmw";
-
+            // Url an iframe uebergeben
             document.getElementById('pdfDruck').src = url + "?tm_tag=Tagsueber_Kurze_Jobs&" + paramHeader + "&" + paramFeature + "&" + paramResult + "&" + paramCopyright + "&" + token;
         }
     })
