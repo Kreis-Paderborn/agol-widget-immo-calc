@@ -19,5 +19,6 @@
     },
     "useStagNullAs" : "${USE_STAG_NULL_AS}",
     "applicationMode": "${APPLICATION_MODE}",
-    "buildTimestamp": "${BUILD_TIMESTAMP}"
+    "buildTimestamp": "${BUILD_TIMESTAMP}",
+    "fmeServerBaseUrl" : "${FME_SERVER_BASE_URL}"
 }

@@ -35,6 +35,7 @@ define([
     return declare(null, {
 
         engine: null,
+        fmeServerBaseUrl: null,
         myPanel: null,
         visElements: new Array(),
         currentZonenIRW: null,
@@ -42,9 +43,10 @@ define([
         rwStore: new Map(),
         changedInput: false,
 
-        constructor: function (engine, widgetId, copyright) {
+        constructor: function (engine, widgetId, fmeServerBaseUrl, copyright) {
 
             this.engine = engine;
+            this.fmeServerBaseUrl = fmeServerBaseUrl;
             this.copyright = copyright;
             // Gui auf spätere Breite initialisieren
             var pm = PanelManager.getInstance()
@@ -787,10 +789,9 @@ define([
             paramCopyright +=this.copyright;
 
             // FME Url mit Parametern aufrufen
-            var token = "token=a1b48af5f75d6dcef5096162c31e30bed47c9e48";
-            var url = "https://fmeprod.gkdpb.de/fmedatastreaming/Kreis%20PB%20-%20Gutachter/108%20Berechnung%20als%20PDF%20streamen.fmw";
+            var url = this.fmeServerBaseUrl + "fmedatastreaming/Kreis%20PB%20-%20Gutachter%20-%20Gast/101%20IRW-Berechnung%20als%20PDF%20streamen.fmw";
             // Url an iframe uebergeben
-            document.getElementById('pdfDruck').src = url + "?tm_tag=Tagsueber_Kurze_Jobs&" + paramHeader + "&" + paramFeature + "&" + paramResult + "&" + paramCopyright + "&" + token;
+            document.getElementById('pdfDruck').src = url + "?tm_tag=Tagsueber_Kurze_Jobs&" + paramHeader + "&" + paramFeature + "&" + paramResult + "&" + paramCopyright;
         }
     })
 }

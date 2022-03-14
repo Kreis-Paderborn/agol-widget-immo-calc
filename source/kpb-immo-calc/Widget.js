@@ -56,7 +56,12 @@ define([
 					"useStagNullAs": this.config.useStagNullAs
 
 				});
-				this.view = new ImmoCalcView(this.engine, this.id, this.getCopyrightFromMap());
+				this.view = new ImmoCalcView(
+					this.engine,
+					this.id,
+					this.config.fmeServerBaseUrl,
+					this.getCopyrightFromMap()
+				);
 
 				this.readDefinitionsFromFeatureLayers();
 

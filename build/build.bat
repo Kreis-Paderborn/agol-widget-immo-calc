@@ -64,6 +64,17 @@ echo Baue %1 nach %APPLICATION_FOLDER%
 echo ===============================================
 echo.
 
+REM Basispfad zum FME-Server
+IF "%FME_SERVER_BASE_URL%"=="" (
+    IF "%1"=="PROD" (
+        SET FME_SERVER_BASE_URL=%FME_SERVER_BASE_URL_PROD%
+    ) ELSE IF "%1"=="TEST" (
+        SET FME_SERVER_BASE_URL=%FME_SERVER_BASE_URL_TEST%
+    ) ELSE (
+        SET FME_SERVER_BASE_URL=%FME_SERVER_BASE_URL_DEV%
+    )
+)
+
 REM Applikationsmodus je nach Parameter festlegen
 IF "%APPLICATION_MODE%"=="" (
     IF "%1"=="PROD" (
@@ -150,6 +161,7 @@ goto :end1
     call replace.bat "%CONFIG_TARGET_FILE%" ${APPLICATION_MODE} %APPLICATION_MODE%
     call replace.bat "%CONFIG_TARGET_FILE%" ${BUILD_TIMESTAMP} %BUILD_TIMESTAMP%
     call replace.bat "%CONFIG_TARGET_FILE%" ${USE_STAG_NULL_AS} %USE_STAG_NULL_AS%
+    call replace.bat "%CONFIG_TARGET_FILE%" ${FME_SERVER_BASE_URL} %FME_SERVER_BASE_URL%
 
     REM Platzhalter in CSS-Datei THEME_COMMON_ADDS ersetzen
     SET CSS_TARGET_FILE=%APP_TARGET_DIR%\css\theme_common_adds.css
