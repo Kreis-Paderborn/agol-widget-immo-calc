@@ -1,0 +1,24 @@
+{
+  "name": "kpb-search-listener",
+  "2D": true,
+  "3D": false,
+  "platform": "HTML",
+  "version": "2.8",
+  "wabVersion": "2.8",
+  "author": "Kreis Paderborn",
+  "description": "Listens to search widget results",
+  "copyright": "(c) Kreis Paderborn",
+  "license": "MIT License",
+  "properties": {
+		"inPanel":false,
+		"hasLocale": true,
+		"hasStyle":true,
+		"hasConfig":true,
+		"hasUIFile":true,
+		"hasSettingPage":true,
+		"hasSettingUIFile":true,
+		"hasSettingLocale":true,
+		"hasSettingStyle":true,
+		"IsController":false		
+  }
+}

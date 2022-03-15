@@ -138,6 +138,20 @@ define([
         },
 
         /**
+         * Das Widget übergibt hier die Adresse, die zuletzt über das Adress-Suche-Widget "Search" gefunden wurde.
+         */
+        initialiseAddressLocation: function (addressObject) {
+
+            if (addressObject) {
+                console.log("Adresse:   " + addressObject.Match_addr);
+                console.log("X:         " + addressObject.X);
+                console.log("Y:         " + addressObject.Y);
+            } else {
+                console.log("Einstieg in den Kalkulator erfolgte nicht über die Adresssuche.");
+            }
+        },
+
+        /**
          * genreriert die Headerelemente
          */
         initialiseHeader: function () {
@@ -749,13 +763,13 @@ define([
             var seperatorNewLine = "~";
 
             var headerElementList = [["stagLabel", seperatorNext], ["stagBWO", seperatorNewLine],
-                                    ["teilmaLabel", seperatorNext], ["teilmaBWO", seperatorNewLine],
-                                    ["genaLabel", seperatorNext], ["genaBWO", seperatorNext], ["genaIRW", seperatorNewLine]];
+            ["teilmaLabel", seperatorNext], ["teilmaBWO", seperatorNewLine],
+            ["genaLabel", seperatorNext], ["genaBWO", seperatorNext], ["genaIRW", seperatorNewLine]];
 
             var featurePostfixList = ["Label", "Norm", "BWO", "IRW"];
-            
-            var resultElementList = [["angIRWLabel", seperatorNext], ["angIRWBWO", seperatorNewLine], 
-                                    ["wertLabel", seperatorNext], ["wertBWO", seperatorNewLine]];
+
+            var resultElementList = [["angIRWLabel", seperatorNext], ["angIRWBWO", seperatorNewLine],
+            ["wertLabel", seperatorNext], ["wertBWO", seperatorNewLine]];
 
             // paramHeader aus den Headerelementen zusammenstellen
             headerElementList.forEach(function (aName) {
@@ -786,7 +800,7 @@ define([
             paramResult = encodeURI(paramResult);
 
             // paramCopyright zusmmenstellen
-            paramCopyright +=this.copyright;
+            paramCopyright += this.copyright;
 
             // FME Url mit Parametern aufrufen
             var url = this.fmeServerBaseUrl + "fmedatastreaming/Kreis%20PB%20-%20Gutachter%20-%20Gast/101%20IRW-Berechnung%20als%20PDF%20streamen.fmw";

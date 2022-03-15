@@ -5,7 +5,7 @@ SET ENV_LOGDATE=%xDATE:~6,4%-%xDATE:~3,2%-%xDATE:~0,2%
 SET ENV_LOGDATETIME=%xDATE:~6,4%-%xDATE:~3,2%-%xDATE:~0,2%_%xtime:~0,2%-%xtime:~3,2%
 
 REM Diese Liste der Namen repräsentiert die zu kopierenden Widgets
-SET WIDGET_NAMES=kpb-immo-calc
+SET WIDGET_NAMES=kpb-immo-calc kpb-search-listener
 
 REM Vorbelegung von Variablen mit dummy-Werten
 SET BUILDER_WIDGET_FOLDER=[PATH-TO-WEBAPP-BUILDER-CLIENT-STEMAPP-WIDGETS-FOLDER]

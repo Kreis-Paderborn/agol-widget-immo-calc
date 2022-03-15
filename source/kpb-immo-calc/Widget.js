@@ -23,6 +23,8 @@ define([
 			engine: null,
 			view: null,
 			featureLayers: null,
+			currentAddress: null,
+			started: null,
 
 			modes: {
 				"PRODUCTION": "1",
@@ -35,6 +37,7 @@ define([
 				this.inherited(arguments);
 				this.featureLayers = this.collectFeatureLayersFromMap();
 				this.mode = this.config.applicationMode;
+				this.started = false;
 
 				// Um zu verhindern, dass Eingaben über den Nummernblock im Widget 
 				// die Kartennavigation triggert (passiert, wenn der Mauszeiger über der Karte steht)
@@ -56,6 +59,7 @@ define([
 					"useStagNullAs": this.config.useStagNullAs
 
 				});
+
 				this.view = new ImmoCalcView(
 					this.engine,
 					this.id,
@@ -63,8 +67,26 @@ define([
 					this.getCopyrightFromMap()
 				);
 
-				this.readDefinitionsFromFeatureLayers();
+				// Die Abfrage der aktuellen Adresse wird immer beantwortet.
+				// Zur Not mit NULL, wenn keine Adresse vorliegt.
+				// Daher können wir das in "onReceiveData" als Trigger für den Start des Kalkulators nehmen.
+				this.publishData({
+					'request': "getSearchResults"
+				});
 
+
+			},
+
+			onReceiveData: function (name, widgetId, data, historyData) {
+
+				if (data
+					&& data.searchResults
+					&& data.searchResults.Match_addr) {
+
+					this.currentAddress = data.searchResults;
+				}
+
+				this.readDefinitionsFromFeatureLayers();
 			},
 
 			/**
@@ -118,7 +140,6 @@ define([
 							featureLayers[configLayerName] = aGraphicsLayer;
 						}
 					}
-
 				}
 
 				return featureLayers;
@@ -127,16 +148,21 @@ define([
 
 			readDefinitionsFromFeatureLayers: function () {
 
-				this.readExternalFieldnames();
+				// Auch wenn mehrmals der Trigger über die Adresssuche kommt, 
+				// wenn der IPK schon gestartet war, wird er nicht nochmals gestartet.
+				if (!this.started) {
+					this.started = true;
 
-				this.readDisplayNames(
-					this.readCoefficientsHandler(
-						this.readZonesHandler(
-							this.readyHandler()
+					this.readExternalFieldnames();
+
+					this.readDisplayNames(
+						this.readCoefficientsHandler(
+							this.readZonesHandler(
+								this.readyHandler()
+							)
 						)
-					)
-				);
-
+					);
+				}
 			},
 
 			readExternalFieldnames: function () {
@@ -325,6 +351,7 @@ define([
 
 				var startCalculator = function (startSTAG, startTEILMA, startZONE) {
 					me.view.initialiseHeader();
+					me.view.initialiseAddressLocation(me.currentAddress);
 					me.view.showTable(
 						startSTAG, 		   // Stichtag
 						startTEILMA,  	   // Teilmarkt
@@ -391,7 +418,7 @@ define([
 					}
 
 					// Start bei der Zone, die am Mittelpunkt der Karte liegt
-					if (this.map.getZoom() > 1
+					if (this.map.getZoom() > 0
 						&& this.map.extent !== undefined
 						&& this.map.extent.getCenter() !== undefined) {
 
