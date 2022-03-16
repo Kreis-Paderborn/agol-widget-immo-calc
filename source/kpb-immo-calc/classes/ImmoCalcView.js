@@ -42,6 +42,7 @@ define([
         coeffStore: new Map(),
         rwStore: new Map(),
         changedInput: false,
+        currentAddress: null,
 
         constructor: function (engine, widgetId, fmeServerBaseUrl, copyright) {
 
@@ -143,11 +144,9 @@ define([
         initialiseAddressLocation: function (addressObject) {
 
             if (addressObject) {
-                console.log("Adresse:   " + addressObject.Match_addr);
-                console.log("X:         " + addressObject.X);
-                console.log("Y:         " + addressObject.Y);
+                this.currentAddress = addressObject;
             } else {
-                console.log("Einstieg in den Kalkulator erfolgte nicht über die Adresssuche.");
+                this.currentAddress = null;
             }
         },
 
@@ -755,10 +754,13 @@ define([
         *
         */
         plotPdf: function () {
+
+            var paramAddress = "param_address=";    
             var paramHeader = "param_header=";
             var paramFeature = "param_feature=";
             var paramResult = "param_result=";
             var paramCopyright = "param_copyright=";
+            var pdfParams = "";
             var seperatorNext = ";;";
             var seperatorNewLine = "~";
 
@@ -771,12 +773,24 @@ define([
             var resultElementList = [["angIRWLabel", seperatorNext], ["angIRWBWO", seperatorNewLine],
             ["wertLabel", seperatorNext], ["wertBWO", seperatorNewLine]];
 
+            // paramAddress aus dem adressObject aufbauen (Addresse, x, y, Zonenname, Stichtag, Teilmarkt)
+            if (this.currentAddress != null) {
+            paramAddress += String(this.currentAddress.Match_addr + seperatorNext + 
+                this.currentAddress.X + seperatorNext + 
+                this.currentAddress.Y + seperatorNext + 
+                document.getElementById("genaBWO").value + seperatorNext + 
+                document.getElementById("stagBWO").value + seperatorNext + 
+                document.getElementById("teilmaBWO").value + seperatorNewLine);
+            
+                pdfParams += "&" + encodeURI(paramAddress);
+            }
+
             // paramHeader aus den Headerelementen zusammenstellen
             headerElementList.forEach(function (aName) {
                 var aElement = document.getElementById(aName[0]);
                 paramHeader += String(aElement.value + aName[1]);
             });
-            paramHeader = encodeURI(paramHeader);
+            pdfParams += "&" + encodeURI(paramHeader);
 
             // paramFeature aus sichtbaren Elementen zusammenstellen          
             this.visElements.forEach(function (aValue) {
@@ -790,22 +804,23 @@ define([
                     paramFeature += String(aElement.value + seperator);
                 });
             });
-            paramFeature = encodeURI(paramFeature);
+            pdfParams += "&" + encodeURI(paramFeature);
 
             // paramResult aus berechneten Werten zusammenstellen
             resultElementList.forEach(function (aName) {
                 var aElement = document.getElementById(aName[0]);
                 paramResult += String(aElement.value + aName[1]);
             });
-            paramResult = encodeURI(paramResult);
+            pdfParams += "&" + encodeURI(paramResult);
 
             // paramCopyright zusmmenstellen
             paramCopyright += this.copyright;
+            pdfParams += "&" + paramCopyright;
 
             // FME Url mit Parametern aufrufen
             var url = this.fmeServerBaseUrl + "fmedatastreaming/Kreis%20PB%20-%20Gutachter%20-%20Gast/101%20IRW-Berechnung%20als%20PDF%20streamen.fmw";
             // Url an iframe uebergeben
-            document.getElementById('pdfDruck').src = url + "?tm_tag=Tagsueber_Kurze_Jobs&" + paramHeader + "&" + paramFeature + "&" + paramResult + "&" + paramCopyright;
+            document.getElementById('pdfDruck').src = url + "?tm_tag=Tagsueber_Kurze_Jobs" + pdfParams;
         }
     })
 }

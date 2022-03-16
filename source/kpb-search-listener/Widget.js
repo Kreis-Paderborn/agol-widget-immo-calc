@@ -27,9 +27,6 @@ define([
 			 */
 			onReceiveData: function (name, widgetId, data, historyData) {
 
-				console.log(name);
-				console.log(data);
-
 				// Wenn das Widget der Adresssuche (Widgetname ist "Search") ein Adressergebnis sendet,
 				// merken wir uns dieses als letztes Ergebnis.
 				if (name === "Search") {
