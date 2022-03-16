@@ -128,7 +128,7 @@ define([
             var plotButton = new Button({
                 label: "PDF erstellen",
                 onClick: function () {
-                    me.plotPdf();
+                    me.printPdf();
                 }
             }, "plotButton").startup();
 
@@ -753,9 +753,14 @@ define([
         * Ruft den FME Prozess zum PDF Plot auf.
         *
         */
-        plotPdf: function () {
+        printPdf: function () {
 
             var paramAddress = "param_address=";    
+            var paramAddressX = "param_address_x=";    
+            var paramAddressY = "param_address_y=";
+            var paramAddressStag = "param_address_stag";
+            var paramAddressTeilma = "param_address_teilma";
+            var paramAddressGena = "param_address_gena";
             var paramHeader = "param_header=";
             var paramFeature = "param_feature=";
             var paramResult = "param_result=";
@@ -773,16 +778,20 @@ define([
             var resultElementList = [["angIRWLabel", seperatorNext], ["angIRWBWO", seperatorNewLine],
             ["wertLabel", seperatorNext], ["wertBWO", seperatorNewLine]];
 
-            // paramAddress aus dem adressObject aufbauen (Addresse, x, y, Zonenname, Stichtag, Teilmarkt)
+            // Uebergabe Parameter fuer Adresse dem adressObject aufbauen (Addresse, x, y, Zonenname, Stichtag, Teilmarkt), optionaler Parameter
             if (this.currentAddress != null) {
-            paramAddress += String(this.currentAddress.Match_addr + seperatorNext + 
-                this.currentAddress.X + seperatorNext + 
-                this.currentAddress.Y + seperatorNext + 
-                document.getElementById("genaBWO").value + seperatorNext + 
-                document.getElementById("stagBWO").value + seperatorNext + 
-                document.getElementById("teilmaBWO").value + seperatorNewLine);
-            
+                paramAddress += String(this.currentAddress.Match_addr);
                 pdfParams += "&" + encodeURI(paramAddress);
+                paramAddressX += this.currentAddress.X; 
+                pdfParams += "&" + encodeURI(paramAddressX); 
+                paramAddressY += this.currentAddress.Y;
+                pdfParams += "&" + encodeURI(paramAddressY); 
+                paramAddressGena += document.getElementById("genaBWO").value;
+                pdfParams += "&" + encodeURI(paramAddressGena); 
+                paramAddressStag += document.getElementById("stagBWO").value;
+                pdfParams += "&" + encodeURI(paramAddressStag); 
+                paramAddressTeilma += document.getElementById("teilmaBWO").value;
+                pdfParams += "&" + encodeURI(paramAddressTeilma); 
             }
 
             // paramHeader aus den Headerelementen zusammenstellen
@@ -818,7 +827,7 @@ define([
             pdfParams += "&" + paramCopyright;
 
             // FME Url mit Parametern aufrufen
-            var url = this.fmeServerBaseUrl + "fmedatastreaming/Kreis%20PB%20-%20Gutachter%20-%20Gast/101%20IRW-Berechnung%20als%20PDF%20streamen.fmw";
+            var url = this.fmeServerBaseUrl + "/fmedatastreaming/Kreis%20PB%20-%20Gutachter%20-%20Gast/101%20IRW-Berechnung%20als%20PDF%20streamen.fmw";
             // Url an iframe uebergeben
             document.getElementById('pdfDruck').src = url + "?tm_tag=Tagsueber_Kurze_Jobs" + pdfParams;
         }
