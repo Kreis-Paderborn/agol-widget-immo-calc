@@ -758,9 +758,9 @@ define([
             var paramAddress = "param_address=";    
             var paramAddressX = "param_address_x=";    
             var paramAddressY = "param_address_y=";
-            var paramAddressStag = "param_address_stag";
-            var paramAddressTeilma = "param_address_teilma";
-            var paramAddressGena = "param_address_gena";
+            var paramAddressStag = "param_address_stag=";
+            var paramAddressTeilma = "param_address_teilma=";
+            var paramAddressGena = "param_address_gena=";
             var paramHeader = "param_header=";
             var paramFeature = "param_feature=";
             var paramResult = "param_result=";
@@ -786,13 +786,13 @@ define([
                 pdfParams += "&" + encodeURI(paramAddressX); 
                 paramAddressY += this.currentAddress.Y;
                 pdfParams += "&" + encodeURI(paramAddressY); 
-                paramAddressGena += document.getElementById("genaBWO").value;
-                pdfParams += "&" + encodeURI(paramAddressGena); 
-                paramAddressStag += document.getElementById("stagBWO").value;
-                pdfParams += "&" + encodeURI(paramAddressStag); 
-                paramAddressTeilma += document.getElementById("teilmaBWO").value;
-                pdfParams += "&" + encodeURI(paramAddressTeilma); 
             }
+            paramAddressGena += document.getElementById("genaBWO").value;
+            pdfParams += "&" + encodeURI(paramAddressGena); 
+            paramAddressStag += document.getElementById("stagBWO").value;
+            pdfParams += "&" + encodeURI(paramAddressStag); 
+            paramAddressTeilma += document.getElementById("teilmaBWO").item.ide;
+            pdfParams += "&" + encodeURI(paramAddressTeilma); 
 
             // paramHeader aus den Headerelementen zusammenstellen
             headerElementList.forEach(function (aName) {
