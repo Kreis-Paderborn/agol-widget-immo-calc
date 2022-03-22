@@ -791,7 +791,7 @@ define([
             pdfParams += "&" + encodeURI(paramAddressGena); 
             paramAddressStag += document.getElementById("stagBWO").value;
             pdfParams += "&" + encodeURI(paramAddressStag); 
-            paramAddressTeilma += document.getElementById("teilmaBWO").item.ide;
+            paramAddressTeilma += Registry.byId("teilmaBWO").item.id;
             pdfParams += "&" + encodeURI(paramAddressTeilma); 
 
             // paramHeader aus den Headerelementen zusammenstellen
@@ -820,7 +820,8 @@ define([
                 var aElement = document.getElementById(aName[0]);
                 paramResult += String(aElement.value + aName[1]);
             });
-            pdfParams += "&" + encodeURI(paramResult);
+            // Eingestellte Sprache im Browser kann Tausendertrennpunkt gegen Komma ersetzt haben            
+            pdfParams += "&" + encodeURI(paramResult.replace(",","."));
 
             // paramCopyright zusmmenstellen
             paramCopyright += this.copyright;
