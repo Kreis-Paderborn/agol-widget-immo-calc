@@ -361,7 +361,7 @@ define([
 
 				}
 
-				var startSTAG = "01.01.2021";
+				var startSTAG = "01.01.2022";
 				var startTEILMA = 2;
 				var startZONE = "Borchen";
 
