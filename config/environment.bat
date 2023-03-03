@@ -20,11 +20,10 @@ SET APPLICATION_MODE_PROD=1
 SET APPLICATION_MODE_TEST=2
 SET APPLICATION_MODE_DEV=3
 
-REM Festlegen, ob STAG=NULL angezeigt werden soll und wenn ja, als was ("--none--" bedeutet, keine Verwendung)
+REM Festlegen, mit welcher Beschriftung STAG=NULL angezeigt werden soll ("--none--" bedeutet, keine Verwendung)
 SET USE_STAG_NULL_AS_PROD=--none--
 SET USE_STAG_NULL_AS_TEST=Bearbeitung
 SET USE_STAG_NULL_AS_DEV=Bearbeitung
-
 
 REM Hauptfarbe des verwendeten Themes
 SET THEME_COLOR_RED_PROD=0

@@ -628,7 +628,7 @@ define([
                     if (this._tableConfig[stag] === undefined) {
                         this._tableConfig[stag] = {};
                         this._headerConfig["STAG"].push({ "name": stag, "id": stagId });
-                        this._headerConfig["STAG"].sort(function (a, b) { return a.id - b.id });
+                        this._headerConfig["STAG"].sort(function (a, b) { return b.id - a.id });
                         this._headerConfig["TEILMA"][stag] = new Array();
                         this._headerConfig["ZONEN"][stag] = {};
                     }

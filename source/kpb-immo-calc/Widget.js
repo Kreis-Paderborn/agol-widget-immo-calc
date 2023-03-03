@@ -25,6 +25,7 @@ define([
 			featureLayers: null,
 			currentAddress: null,
 			started: null,
+			supportedStag: null,
 
 			modes: {
 				"PRODUCTION": "1",
@@ -53,9 +54,7 @@ define([
 					// Zeitpunkt des Builds, um in der Anwendung prüfen zu können, um welchen Build es sich handelt.
 					"buildTimestamp": this.config.buildTimestamp,
 
-					// Bei STAG=NULL muss ein Wert für die Oberfläche gesetzt werden. Dieser wird in der Config
-					// festgelegt und bestimmt gleichzeitig, ob STAG=NULL überhaupt verwendet werden soll.
-					// (Das wäre z.B. nicht der Fall bei der PROD-Umgebung)
+					// Bei STAG=NULL muss ein Wert für die Oberfläche gesetzt werden. Dieser wird in der environment.bar festgelegt.
 					"useStagNullAs": this.config.useStagNullAs
 
 				});
@@ -155,13 +154,44 @@ define([
 
 					this.readExternalFieldnames();
 
-					this.readDisplayNames(
-						this.readCoefficientsHandler(
-							this.readZonesHandler(
-								this.readyHandler()
+					this.readSupportedStagFromMap();
+
+					if (this.supportedStag.length > 0) {
+						this.readDisplayNames(
+							this.readCoefficientsHandler(
+								this.readZonesHandler(
+									this.readyHandler()
+								)
 							)
-						)
-					);
+						);
+					} else {
+						this.handleError("0007", "Layer in Map falsch benannt", "Die Layer der Immobilienrichtwerte müssen das Muster <br><b>'Immobilienrichtwerte - [STAG]'</b><br> aufweisen. Das ist für keinen Layer der Fall.", true);
+					}
+
+				}
+			},
+
+			/**
+			 * In der verwendeten WebMap müssen MapImageLayer mit dem Namen "Immobilienrichtwerte - XXX" enthalten sein.
+			 * XXX ist dabei der Stichtag des Immobilienrichtwertes (STAG). 
+			 * Dieser wird an dieser Stelle extrahiert und als Grundlage für die auszulesenden STAG verwendet.
+			 * Damit wird sichergestellt, dass im Kalkulator nicht mehr Daten zu sehen sind, als die WebMAp als Layer anzeigt.
+			 */
+			readSupportedStagFromMap: function () {
+
+				this.supportedStag = new Array();
+
+				for (const aLayerId in this.map.layerIds) {
+					var aLayer = this.map.getLayer(this.map.layerIds[aLayerId]);
+					var aLayerTitle = aLayer.arcgisProps.title;
+
+					if (aLayerTitle.startsWith("Immobilienrichtwerte")) {
+						var lastSpace = aLayerTitle.lastIndexOf(" ");
+						if (lastSpace > -1) {
+							var supportedStag = aLayerTitle.substring(lastSpace + 1);
+							this.supportedStag.push(supportedStag);
+						}
+					}
 				}
 			},
 
@@ -240,7 +270,15 @@ define([
 						for (const feature of featureSet.features) {
 							var obj = {};
 
-							if (feature.attributes.STAG !== null || me.config.useStagNullAs !== "--none--") {
+							// Wir ermitteln hier den Anzeigewerte für STAG. In der DB steht ein Datumswert in Millisec oder NULL	
+							var searchStag = me.config.useStagNullAs;
+							if (feature.attributes.STAG !== null) {
+								searchStag = me.engine.convertDate(feature.attributes.STAG);
+							}
+
+							// Wenn der Anzeigewert für STAG in der Map als Immobilienrichtwert-Layer enthalten
+							// ist, wird dieser auch im Kalkulator berücksichtigt Siehe readSupportedStagFromMap().
+							if (me.supportedStag.includes(searchStag)) {
 								obj["WERT_AKS"] = feature.attributes.WERT_AKS;
 								obj["EIGN_AKS"] = feature.attributes.EIGN_AKS;
 								obj["WERT_BORIS"] = feature.attributes.WERT_BORIS;
@@ -249,7 +287,7 @@ define([
 								obj["GASL"] = feature.attributes.GASL;
 								obj["IRWTYP"] = feature.attributes.IRWTYP;
 								obj["TEILMA"] = feature.attributes.TEILMA;
-								obj["STAG"] = me.engine.convertDate(feature.attributes.STAG);
+								obj["STAG"] = searchStag;
 								obj["STEUERELEM"] = feature.attributes.STEUERELEM;
 								obj["NUMZ"] = feature.attributes.NUMZ;
 								coeffArray.push(obj);
@@ -293,12 +331,16 @@ define([
 					// ändern kann.
 					var whereFieldName;
 					var stagFieldName;
+					var stagTextFieldName;
 					for (const field of aZonesLayer.fields) {
 						if (field.name.endsWith("TEILMA")) {
 							whereFieldName = field.name;
 						}
 						if (field.name.endsWith("STAG")) {
 							stagFieldName = field.name;
+						}
+						if (field.name.endsWith("STAG_TXT")) {
+							stagTextFieldName = field.name;
 						}
 					}
 
@@ -308,7 +350,16 @@ define([
 					aZonesLayer.queryFeatures(aQuery, function (featureSet) {
 
 						for (const feature of featureSet.features) {
-							if (feature.attributes[stagFieldName] !== null || me.config.useStagNullAs !== "--none--") {
+
+							// Wir ermitteln hier den Anzeigewerte für STAG. 
+							var searchStag = me.config.useStagNullAs;
+							if (feature.attributes[stagTextFieldName] !== null) {
+								searchStag = feature.attributes[stagTextFieldName];
+							}
+
+							// Wenn der Anzeigewert für STAG in der Map als Immobilienrichtwert-Layer enthalten
+							// ist, wird dieser auch im Kalkulator berücksichtigt Siehe readSupportedStagFromMap().
+							if (me.supportedStag.includes(searchStag)) {
 								if (feature.attributes[stagFieldName] === null) {
 									feature.attributes[stagFieldName] = me.config.useStagNullAs;
 								}
@@ -361,7 +412,11 @@ define([
 
 				}
 
-				var startSTAG = "01.01.2022";
+				// Ermittle den aktuellsten STAG
+				var stagLength = me.supportedStag.length;
+				me.supportedStag.sort();
+
+				var startSTAG = me.supportedStag[stagLength - 1];
 				var startTEILMA = 2;
 				var startZONE = "Borchen";
 
