@@ -20,5 +20,7 @@
     "useStagNullAs" : "${USE_STAG_NULL_AS}",
     "applicationMode": "${APPLICATION_MODE}",
     "buildTimestamp": "${BUILD_TIMESTAMP}",
-    "fmeServerBaseUrl" : "${FME_SERVER_BASE_URL}"
+    "fmeFlowBaseUrl" : "${FME_SERVER_BASE_URL}",
+    "fmeFlowTokenKpbGuest" : "${FME_SERVER_KPBGUEST_TOKEN}"
+
 }

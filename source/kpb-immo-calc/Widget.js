@@ -62,7 +62,8 @@ define([
 				this.view = new ImmoCalcView(
 					this.engine,
 					this.id,
-					this.config.fmeServerBaseUrl,
+					this.config.fmeFlowBaseUrl,
+					this.config.fmeFlowTokenKpbGuest,
 					this.getCopyrightFromMap()
 				);
 
