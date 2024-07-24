@@ -64,7 +64,7 @@ define([
         },
 
         /**
-         * Erzeugt den statischen Teil der Gui
+         * Erzeugt den statischen Teil der Gui xx
          */
         buildBaseGui: function () {
             var me = this;
