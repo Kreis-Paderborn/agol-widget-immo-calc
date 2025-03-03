@@ -136,7 +136,8 @@ define([
 
             // Copyright Bemerkung
             elementName = "copyrightLabel";
-            text1 = "© Gutachterausschuss für Grundstückswerte im Kreis Paderborn, 2022";
+            var yearString = new Date(Date.now()).getFullYear();
+            text1 = "© Gutachterausschuss für Grundstückswerte im Kreis Paderborn, " + yearString;
             document.getElementById(elementName).innerHTML = text1;
         },
 
