@@ -64,7 +64,7 @@ echo Baue %1 nach %APPLICATION_FOLDER%
 echo ===============================================
 echo.
 
-REM Basispfad zum FME-Server
+REM Basispfad zum FME-Flow
 IF "%FME_SERVER_BASE_URL%"=="" (
     IF "%1"=="PROD" (
         SET FME_SERVER_BASE_URL=%FME_SERVER_BASE_URL_PROD%
@@ -72,6 +72,17 @@ IF "%FME_SERVER_BASE_URL%"=="" (
         SET FME_SERVER_BASE_URL=%FME_SERVER_BASE_URL_TEST%
     ) ELSE (
         SET FME_SERVER_BASE_URL=%FME_SERVER_BASE_URL_DEV%
+    )
+)
+
+REM Token für FME-Flow Gast-Aufrufe
+IF "%FME_SERVER_KPBGUEST_TOKEN%"=="" (
+    IF "%1"=="PROD" (
+        SET FME_SERVER_KPBGUEST_TOKEN=%FME_SERVER_KPBGUEST_TOKEN_PROD%
+    ) ELSE IF "%1"=="TEST" (
+        SET FME_SERVER_KPBGUEST_TOKEN=%FME_SERVER_KPBGUEST_TOKEN_TEST%
+    ) ELSE (
+        SET FME_SERVER_KPBGUEST_TOKEN=%FME_SERVER_KPBGUEST_TOKEN_DEV%
     )
 )
 
@@ -168,6 +179,7 @@ goto :end1
     call replace.bat "%CONFIG_TARGET_FILE%" ${BUILD_TIMESTAMP} %BUILD_TIMESTAMP%
     call replace.bat "%CONFIG_TARGET_FILE%" ${USE_STAG_NULL_AS} %USE_STAG_NULL_AS%
     call replace.bat "%CONFIG_TARGET_FILE%" ${FME_SERVER_BASE_URL} %FME_SERVER_BASE_URL%
+    call replace.bat "%CONFIG_TARGET_FILE%" ${FME_SERVER_KPBGUEST_TOKEN} %FME_SERVER_KPBGUEST_TOKEN%
 
     REM Platzhalter in CSS-Datei THEME_COMMON_ADDS ersetzen
     SET CSS_TARGET_FILE=%APP_TARGET_DIR%\css\theme_common_adds.css

@@ -35,7 +35,8 @@ define([
     return declare(null, {
 
         engine: null,
-        fmeServerBaseUrl: null,
+        fmeFlowBaseUrl: null,
+        fmeFlowTokenKpbGuest: null,
         myPanel: null,
         visElements: new Array(),
         currentZonenIRW: null,
@@ -44,10 +45,11 @@ define([
         changedInput: false,
         currentAddress: null,
 
-        constructor: function (engine, widgetId, fmeServerBaseUrl, copyright) {
+        constructor: function (engine, widgetId, fmeFlowBaseUrl, fmeFlowTokenKpbGuest, copyright) {
 
             this.engine = engine;
-            this.fmeServerBaseUrl = fmeServerBaseUrl;
+            this.fmeFlowBaseUrl = fmeFlowBaseUrl;
+            this.fmeFlowTokenKpbGuest = fmeFlowTokenKpbGuest;
             this.copyright = copyright;
             // Gui auf spätere Breite initialisieren
             var pm = PanelManager.getInstance()
@@ -64,7 +66,7 @@ define([
         },
 
         /**
-         * Erzeugt den statischen Teil der Gui xx
+         * Erzeugt den statischen Teil der Gui
          */
         buildBaseGui: function () {
             var me = this;
@@ -134,7 +136,8 @@ define([
 
             // Copyright Bemerkung
             elementName = "copyrightLabel";
-            text1 = "© Gutachterausschuss für Grundstückswerte im Kreis Paderborn, 2022";
+            var yearString = new Date(Date.now()).getFullYear();
+            text1 = "© Gutachterausschuss für Grundstückswerte im Kreis Paderborn, " + yearString;
             document.getElementById(elementName).innerHTML = text1;
         },
 
@@ -826,11 +829,11 @@ define([
             // paramCopyright zusmmenstellen
             paramCopyright += this.copyright;
             pdfParams += "&" + paramCopyright;
-
+            tokenParam = "&token=" + this.fmeFlowTokenKpbGuest;
             // FME Url mit Parametern aufrufen
-            var url = this.fmeServerBaseUrl + "/fmedatastreaming/Kreis%20PB%20-%20Gutachter%20-%20Gast/101%20IRW-Berechnung%20als%20PDF%20streamen.fmw";
+            var url = this.fmeFlowBaseUrl + "/fmedatastreaming/Kreis%20PB%20-%20Gutachter%20-%20Gast/0101%20IRW-Berechnung%20als%20PDF%20streamen.fmw";
             // Url an iframe uebergeben
-            document.getElementById('pdfDruck').src = url + "?tm_tag=Tagsueber_Kurze_Jobs" + pdfParams;
+            document.getElementById('pdfDruck').src = url + "?tm_tag=Tagsueber_Kurze_Jobs" + pdfParams + tokenParam;
         }
     })
 }
