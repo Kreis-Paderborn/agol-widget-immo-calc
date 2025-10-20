@@ -387,7 +387,7 @@ define([
             var returnValue;
 
             // Wenn die Koeffizienten nicht aus der Datenbank geladen werden konnten, 
-            // fallen wir auf die statische Dummy-Config zurück. Daher setzen wir hier bewusst "null".
+            // fallen wir auf die statische Dummy-Config zurück. Daher setzen wir hier "null".
             if (this._coefficients === null) {
                 returnValue = null;
 
