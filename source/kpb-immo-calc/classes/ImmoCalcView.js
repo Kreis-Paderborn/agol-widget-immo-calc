@@ -693,8 +693,10 @@ define([
             //  Richtwert Immobilie
             var whnflBWO = Registry.byId("whnflBWO");
             var aWertBWOValue = richtwertZone * whnflBWO.value;
-            // unter 200000 auf 5k runden, darüber auf 10k
-            if (aWertBWOValue < 200000) {
+            // unter 100000 auf 1k runden, bis 200000 auf 5k runden, darüber auf 10k
+            if (aWertBWOValue < 100000) {
+                faktor = 1000;
+            } else if (aWertBWOValue < 200000) {
                 faktor = 5000;
             } else {
                 faktor = 10000;
